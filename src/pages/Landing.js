@@ -71,7 +71,7 @@ const Landing = () => {
             <section className="welcome">
                 <nav className="nav">
                     <div className="logo">
-                        <h1>Traverse 3</h1>
+                        <h1>Traverse</h1>
                     </div>
                     <div className="typewriter2">
                         <h1 id="typetext2">Planning made simple.</h1>
@@ -95,17 +95,34 @@ const Landing = () => {
                                 show={loginModal}
                                 setModalStatus={setLoginModal}
                             >
+                                <h1 style={{textAlign: "center", color: "rgb(127, 86, 217)", fontWeight: "bolder"}}>Login</h1>
+                                <br/>
+                                <div className="icon-input-container">
+                                    <div className="edge"></div>
+                                <i className="fa-solid fa-user" style={{color: "rgb(127, 86, 217)"}}></i>
                                 <input
                                     id="email"
-                                    placeholder="email"
+                                    className="auth-input"
+                                    placeholder="Email"
                                     onChange={loginInfoHandler}
-                                />
+                                /> <div className="edge"></div></div>
+                                    <br />
+                                <div className="icon-input-container">
+                                    <div className="edge"></div>
+                                <i className="fa-solid fa-lock" style={{color: "rgb(127, 86, 217)"}}></i>
                                 <input
                                     id="password"
-                                    placeholder="password"
+                                    className="auth-input"
+                                    placeholder="Password"
                                     onChange={loginInfoHandler}
-                                />
-                                <button onClick={loginHandler}>Login</button>
+                                /><div className="edge"></div>
+                                </div> <br />
+                                <button className="auth-btn" onClick={loginHandler}>Login</button>
+                                <br /><br />
+                                <p style={{fontSize: "12px", textAlign: "center"}}>Dont' have an account? <span style={{color: "rgb(127, 86, 217)", cursor: "pointer"}} onClick={() => {
+                                    setLoginModal(false)
+                                    setCreateModal(true)
+                                }}>Create Account.</span></p>
                             </Modal>
                             <button
                                 className="btn"
@@ -119,29 +136,54 @@ const Landing = () => {
                                 show={createModal}
                                 setModalStatus={setCreateModal}
                             >
+                                <h1 style={{textAlign: "center", color: "rgb(127, 86, 217)", fontWeight: "bolder"}}>Register</h1>
+                                <br/>
+                                <div className="icon-input-container">
+                                    <div className="edge"></div>
+                                    <i className="fa-solid fa-user" style={{color: "rgb(127, 86, 217)"}}></i>
                                 <input
                                     id="firstName"
+                                    className="auth-input"
                                     placeholder="First Name"
                                     onChange={userInfoHandler}
-                                />
+                                /><div className="edge"></div></div> <br />
+
+                                <div className="icon-input-container">
+                                    <div className="edge"></div>
+                                    <i className="fa-solid fa-user" style={{color: "rgb(127, 86, 217)"}}></i>
                                 <input
                                     id="lastName"
+                                    className="auth-input"
                                     placeholder="Last Name"
                                     onChange={userInfoHandler}
-                                />
+                                /><div className="edge"></div></div> <br />
+
+                                <div className="icon-input-container">
+                                    <div className="edge"></div>
+                                    <i className="fa-solid fa-envelope" style={{color: "rgb(127, 86, 217)"}}></i>
                                 <input
                                     id="email"
-                                    placeholder="email"
+                                    className="auth-input"
+                                    placeholder="Email"
                                     onChange={userInfoHandler}
-                                />
+                                /><div className="edge"></div></div> <br />
+                                <div className="icon-input-container">
+                                    <div className="edge"></div>
+                                    <i className="fa-solid fa-lock" style={{color: "rgb(127, 86, 217)"}}></i>
                                 <input
                                     id="password"
-                                    placeholder="password"
+                                    className="auth-input"
+                                    placeholder="Password"
                                     onChange={userInfoHandler}
-                                />
-                                <button onClick={registerHandler}>
+                                /><div className="edge"></div></div> <br />
+                                <button onClick={registerHandler} className="auth-btn">
                                     Register
                                 </button>
+                                <br /><br />
+                                <p style={{fontSize: "12px", textAlign: "center"}}>Already have an account? <span style={{color: "rgb(127, 86, 217)", cursor: "pointer"}} onClick={() => {
+                                    setCreateModal(false)
+                                    setLoginModal(true)
+                                }}>Log in.</span></p>
                             </Modal>
                         </div>
                     </div>
