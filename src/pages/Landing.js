@@ -71,7 +71,7 @@ const Landing = () => {
             <section className="welcome">
                 <nav className="nav">
                     <div className="logo">
-                        <h1>Traverse 2</h1>
+                        <h1>Traverse 3</h1>
                     </div>
                     <div className="typewriter2">
                         <h1 id="typetext2">Planning made simple.</h1>
