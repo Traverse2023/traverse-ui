@@ -17,7 +17,6 @@ const Landing = () => {
     const [userInfo, setUserInfo] = React.useState({});
 
     const userInfoHandler = (event) => {
-        console.log(auth);
         setUserInfo((prev) => {
             return {
                 ...prev,
@@ -36,7 +35,6 @@ const Landing = () => {
                 userInfo.lastName
             )
                 .then((value) => {
-                    console.log("value", value);
                     setCreateModal(false)
                     toast.update(registerToast.current, {
                         position: "top-right",
@@ -71,15 +69,10 @@ const Landing = () => {
         }
     };
 
-    React.useEffect(() => {
-        console.log(userInfo);
-    }, [userInfo]);
-
     const [loginModal, setLoginModal] = React.useState(false);
     const [loginInfo, setLoginInfo] = React.useState({});
 
     const loginInfoHandler = (event) => {
-        console.log(event.target.id, event.target.value);
         setLoginInfo((prev) => {
             return {
                 ...prev,
@@ -93,7 +86,6 @@ const Landing = () => {
             loginToast.current = toast.loading("Logging In...")
             login(loginInfo.email, loginInfo.password)
                 .then((value) => {
-                    console.log("val", value);
                     auth.acceptLogin(loginInfo.email, value.token);
                     toast.update(loginToast.current, {
                         position: "top-right",
