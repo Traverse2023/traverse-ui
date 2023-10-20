@@ -4,7 +4,7 @@ class FriendsSocket {
     socket
     constructor(email) {
         this.email = email
-        this.socket = io("http://localhost:8000/friends", {
+        this.socket = io(`${process.env.REACT_APP_BACKEND_URL}friends`, {
             query: {
                 email: email
             }
