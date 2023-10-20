@@ -6,10 +6,23 @@ import {
     sendFriendRequest,
 } from "../api/withToken";
 import { AuthContext } from "../context/auth-context";
+import {SocketContext} from "../context/friends-socket-context";
 
 const FriendOpts = ({ user2Email, locationState = null, component = null }) => {
     const auth = useContext(AuthContext);
+    const { friendsSocketApi } = useContext(SocketContext)
+
     const [friendshipStatusState, setFriendshipStatusState] = useState(false);
+
+    friendsSocketApi.friendRequestListener((senderEmail) => {
+        console.log(senderEmail)
+        setFriendshipStatusState({friendshipStatus: 'FRIEND_REQUEST', initiatedUser: senderEmail})
+    })
+
+    friendsSocketApi.acceptListener((senderEmail) => {
+        console.log(senderEmail)
+        setFriendshipStatusState({friendshipStatus: 'FRIENDS', initiatedUser: senderEmail})
+    })
 
     useEffect(() => {
         console.log(friendshipStatusState);
@@ -26,11 +39,12 @@ const FriendOpts = ({ user2Email, locationState = null, component = null }) => {
     }, [locationState]);
 
     const addFriend = (potentialFriend) => {
-        sendFriendRequest(auth.token, auth.email, potentialFriend);
+        // sendFriendRequest(auth.token, auth.email, potentialFriend);
         setFriendshipStatusState({
             friendshipStatus: "FRIEND_REQUEST",
             initiatedUser: auth.email,
         });
+        friendsSocketApi.sendFriendRequest(potentialFriend)
     };
 
     const removeFriendRequestHandler = (potentialFriend) => {
@@ -39,11 +53,12 @@ const FriendOpts = ({ user2Email, locationState = null, component = null }) => {
     };
 
     const acceptFriendRequestHandler = (potentialFriend) => {
-        acceptFriendRequest(auth.token, auth.email, potentialFriend);
+        // acceptFriendRequest(auth.token, auth.email, potentialFriend);
         setFriendshipStatusState({
             friendshipStatus: "FRIENDS",
             initiatedUser: null,
         });
+        friendsSocketApi.acceptFriendRequest(potentialFriend)
     };
 
     if (user2Email === auth.email) {
