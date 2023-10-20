@@ -34,7 +34,7 @@ const UserRes = () => {
 
     return (
         <ul className="people">
-            {userResults.map((result, i) => {
+            {userResults.length ? userResults.map((result, i) => {
                 return (
                     <>
                         <li className="person">
@@ -54,7 +54,7 @@ const UserRes = () => {
                         <br />
                     </>
                 );
-            })}
+            }) : <Spinner/>}
         </ul>
     );
 };
