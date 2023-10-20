@@ -133,7 +133,6 @@ const Landing = () => {
                             <Link to={"#"}>About</Link>
                             <Link to={"#"}>Features</Link>
                             <Link to={"#"}>Partners</Link>
-                            <button onClick={notify}>Notify!</button>
                             <ToastContainer/>
                         </div>
                         <div className="authOpt">
