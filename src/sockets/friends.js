@@ -20,6 +20,10 @@ class FriendsSocket {
         this.socket.emit('unfriend', potentialFriend)
     }
 
+    unfriendListener(callback) {
+        this.socket.on('receiveUnfriendNotification', callback);
+    }
+
     friendRequestListener(callback) {
         this.socket.on('receiveFriendRequest', callback);
     }
@@ -34,7 +38,7 @@ class FriendsSocket {
 
     declineFriendRequest(potentialFriend) {
         console.log('here31declinefriend', potentialFriend)
-        this.socket.emit('remReq', potentialFriend)
+        this.socket.emit('declineFriendRequest', potentialFriend)
     }
 
     declineFriendRequestListener(callback) {

@@ -35,6 +35,13 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null 
         }
     })
 
+    friendsSocketApi.unfriendListener((senderEmail) => {
+        console.log('here32 ', senderEmail, "declinedFriendRequest")
+        if (user2Email === senderEmail) {
+            setFriendshipStatusState({friendshipStatusState: undefined})
+        }
+    })
+
     useEffect(() => {
         console.log(friendshipStatusState);
         getFriendshipStatus(auth.token, auth.email, user2Email)
