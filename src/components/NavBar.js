@@ -1,24 +1,43 @@
 import React, {useContext} from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import useSound from 'use-sound';
 import { AuthContext } from "../context/auth-context";
 import {SocketContext} from "../context/friends-socket-context";
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import {Button} from "react-bootstrap";
 
 const NavBar = () => {
     const auth = React.useContext(AuthContext);
     const { friendsSocketApi } = useContext(SocketContext)
-
+    const [play] = useSound("/audio/notificationsound.mp3");
     const navigate = useNavigate();
 
     const [search, setSearch] = React.useState();
     const [notifications, setNotifications] = React.useState([])
 
     friendsSocketApi.friendRequestListener((senderEmail) => {
-
-        const updatedNotifications = [...notifications, senderEmail]
+        const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST"}]
         setNotifications(updatedNotifications)
+        play()
     })
+
+    friendsSocketApi.acceptListener((senderEmail) => {
+        const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST_ACCEPTED"}]
+        setNotifications(updatedNotifications)
+        play()
+    })
+
+    // friendsSocketApi.declineFriendRequestListener((senderEmail) => {
+    //     console.log('here32 ', senderEmail, "declinedFriendRequest")
+    //     const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST"}]
+    //     setNotifications(updatedNotifications)
+    // })
+    //
+    // friendsSocketApi.unfriendListener((senderEmail) => {
+    //     console.log('here32 ', senderEmail, "declinedFriendRequest")
+    //     const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST"}]
+    //     setNotifications(updatedNotifications)
+    // })
 
     const logout = () => {
         auth.acceptLogout();
@@ -63,7 +82,22 @@ const NavBar = () => {
                         <Link to={"/profile"}>Profile</Link>
                     </li>
                     <li>
-                        <Link onClick={() => console.log(notifications)}>Notifications</Link>
+                        <div className="dropdown">
+                            <button className="dropbtn">Notifications {notifications.length ? `(${notifications.length})`: null}</button>
+                            <div className="dropdown-content">
+                                {notifications.map(notification => {
+                                    if (notification.notificationType === "FRIEND_REQUEST") {
+                                        return (
+                                            <Link to="/">{notification.senderEmail} has sent you a friend request.</Link>
+                                        )
+                                    } else if (notification.notificationType === "FRIEND_REQUEST_ACCEPTED") {
+                                        return (
+                                            <Link to="/">{notification.senderEmail} has accepted your friend request friend request.</Link>
+                                        )
+                                    }
+                                })}
+                            </div>
+                        </div>
                     </li>
                     <li>
                         <Link onClick={logout}>Sign Out</Link>

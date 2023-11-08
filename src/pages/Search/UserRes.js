@@ -47,6 +47,7 @@ const UserRes = () => {
                                     <FriendOpts
                                         user2Email={result.email}
                                         locationState={location}
+                                        index={i}
                                     />
                                 }
                             </div>
