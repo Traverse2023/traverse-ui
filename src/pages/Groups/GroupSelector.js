@@ -40,14 +40,14 @@ const GroupSelector = () => {
                 return (
                     <div
                         className={
-                            groupControl.selectedGroup === group.groupName
+                            groupControl.selectedGroup === group.groupId
                                 ? "groupSelected"
                                 : "group"
                         }
-                        id={group.groupName}
+                        id={group.groupId}
                         onClick={groupClickHandler}
                     >
-                        <h1 id={group.groupName} onClick={groupClickHandler}>
+                        <h1 id={group.groupId} onClick={groupClickHandler}>
                             {group.groupName}
                         </h1>
                     </div>
