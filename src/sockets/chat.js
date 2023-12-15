@@ -11,9 +11,9 @@ class ChatSocket {
         });
     }
 
-    sendMessage(groupId, msg) {
+    sendMessage(groupId, message_info) {
         console.log('sendingMsg')
-        this.socket.emit("sendMessage", groupId, msg)
+        this.socket.emit("sendMessage", groupId, message_info)
     }
 
     receiveMessageListener(callback) {

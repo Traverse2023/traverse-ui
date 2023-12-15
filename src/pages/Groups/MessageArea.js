@@ -1,9 +1,11 @@
 import React, {useContext, useEffect, useState} from "react";
 import {SocketContext} from "../../context/friends-socket-context";
 import {GroupContext} from "../../context/group-context";
+import {AuthContext} from "../../context/auth-context";
 
 const MessageArea = () => {
 
+    const auth = useContext(AuthContext)
     const groupControl = useContext(GroupContext);
     const { chatsSocketApi } = useContext(SocketContext)
 
@@ -20,7 +22,13 @@ const MessageArea = () => {
             event.preventDefault()
             console.log('Enter key pressed', typedMsg)
             if (typedMsg.length > 0) {
-                chatsSocketApi.sendMessage(groupControl.selectedGroup, typedMsg)
+                const message_info = {
+                    msg: typedMsg,
+                    firstName: auth.firstName,
+                    lastName: auth.lastName
+                }
+                chatsSocketApi.sendMessage(groupControl.selectedGroup, message_info)
+                setTypedMsg('')
             }
         }
     }
@@ -76,7 +84,7 @@ const MessageArea = () => {
                                 {
                                     typeof msg === 'object' && msg !== null ?
                                         <ul>
-                                            <li>{msg.email} {msg.time}</li> <br />
+                                            <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
                                             <li>{msg.text}</li>
                                         </ul> :
                                         <ul>
@@ -91,7 +99,7 @@ const MessageArea = () => {
             </div>
             <div className="msg-input-div">
                 <button className="plus">+</button>
-                <textarea rows={0} className="msg-input" onChange={typedMsgChangeHandler} onKeyDown={sendMsg}/>
+                <textarea value={typedMsg} rows={0} className="msg-input" onChange={typedMsgChangeHandler} onKeyDown={sendMsg}/>
             </div>
         </div>
     );
