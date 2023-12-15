@@ -34,7 +34,7 @@ const UserRes = () => {
 
     return (
         <ul className="people">
-            {userResults.map((result, i) => {
+            {userResults.length ? userResults.map((result, i) => {
                 return (
                     <>
                         <li className="person">
@@ -47,6 +47,7 @@ const UserRes = () => {
                                     <FriendOpts
                                         user2Email={result.email}
                                         locationState={location}
+                                        index={i}
                                     />
                                 }
                             </div>
@@ -54,7 +55,7 @@ const UserRes = () => {
                         <br />
                     </>
                 );
-            })}
+            }) : <Spinner/>}
         </ul>
     );
 };

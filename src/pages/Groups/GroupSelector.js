@@ -2,10 +2,13 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { getGroups } from "../../api/withToken";
 import { AuthContext } from "../../context/auth-context";
 import { GroupContext } from "../../context/group-context";
+import ChatSocket from "../../sockets/chat";
+import {SocketContext} from "../../context/friends-socket-context";
 
 const GroupSelector = () => {
     const groupControl = useContext(GroupContext);
     const auth = useContext(AuthContext);
+    const { chatsSocketApi } = useContext(SocketContext)
 
     const [groups, setGroups] = useState([]);
     useEffect(() => {
@@ -17,8 +20,10 @@ const GroupSelector = () => {
     }, []);
 
     const groupClickHandler = (event) => {
-        console.log(event.target.id);
+        console.log('23', event.target.id);
         groupControl.setSelectedGroup(event.target.id);
+        // chatsSocketApi.disconnect()
+        chatsSocketApi.joinRoom(event.target.id)
     };
 
     console.log("7", groupControl.selectedGroup);
@@ -47,7 +52,7 @@ const GroupSelector = () => {
                         id={group.groupId}
                         onClick={groupClickHandler}
                     >
-                        <h1 id={group.groupId} onClick={groupClickHandler}>
+                        <h1 id={group.groupId}>
                             {group.groupName}
                         </h1>
                     </div>

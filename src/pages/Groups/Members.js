@@ -3,6 +3,7 @@ import {getGroups, getMembers, getFriendsWhoAreNotMembers} from "../../api/withT
 import {AuthContext} from "../../context/auth-context";
 import {GroupContext} from "../../context/group-context";
 import Modal from "../../components/Modal";
+import {SocketContext} from "../../context/friends-socket-context";
 // import {Dropdown} from 'react-searchable-dropdown-component';
 
 const FriendsComponent = ({ arr }) => {
@@ -21,6 +22,7 @@ const FriendsComponent = ({ arr }) => {
 };
 
 const Members = () => {
+    const { chatsSocketApi } = useContext(SocketContext)
     const auth = useContext(AuthContext);
     const groupControl = useContext(GroupContext);
     const [members, setMembers] = useState([])
@@ -37,7 +39,12 @@ const Members = () => {
     }, [addMemberModal]);
 
     const addMemberHandler = () => {
-
+        console.log('42', potentialMember.email)
+        chatsSocketApi.addMember(potentialMember.email, groupControl.selectedGroup)
+        setAddMemberModal(false)
+        const currMembers = [...members]
+        currMembers.push(potentialMember)
+        setMembers(currMembers)
     };
 
     useEffect(() => {
@@ -46,13 +53,15 @@ const Members = () => {
                 setMembers(response);
             })
             .catch((err) => console.error(err));
-    }, []);
+    }, [groupControl.selectedGroup]);
 
     const addMemberChangeHandler = (e) => {
         const index = e.target.selectedIndex;
         const el = e.target.childNodes[index]
-        const option =  el.getAttribute('id');
-        setPotentialMember(option)
+        const id =  el.getAttribute('id');
+        const name = el.getAttribute('name')
+        const [firstName, lastName] = name.split(' ');
+        setPotentialMember({email: id, firstName, lastName})
     }
 
     return (
@@ -75,7 +84,7 @@ const Members = () => {
                 <select onChange={addMemberChangeHandler}>
                     <option></option>
                     {friendsWhoAreNotMembers.map((friend, i) =>
-                    <option id={friend.email} key={i}>{friend.firstName} {friend.lastName}</option>)}
+                    <option id={friend.email} name={friend.firstName + " " + friend.lastName} key={i}>{friend.firstName} {friend.lastName}</option>)}
                 </select>
                 <br /><br />
                 <button onClick={addMemberHandler}>Add</button>

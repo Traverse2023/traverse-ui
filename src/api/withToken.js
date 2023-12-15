@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const backend = axios.create({
-    baseURL: process.env.BACKEND_URL || "http://localhost:8000/api/",
+    baseURL: process.env.REACT_APP_BACKEND_URL + "api/"
 });
 
 const createGroup = (token, groupInfo, user1Email) => {

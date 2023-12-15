@@ -1,34 +1,97 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
+import {SocketContext} from "../../context/friends-socket-context";
+import {GroupContext} from "../../context/group-context";
 
 const MessageArea = () => {
+
+    const groupControl = useContext(GroupContext);
+    const { chatsSocketApi } = useContext(SocketContext)
+
+    const [messages, setMessages] = useState([])
+
+    const [typedMsg, setTypedMsg] = useState("")
+
+    const typedMsgChangeHandler = (event) => {
+        setTypedMsg(event.target.value)
+    }
+
+    const sendMsg = (event) => {
+        if (event.key === 'Enter'){
+            event.preventDefault()
+            console.log('Enter key pressed', typedMsg)
+            if (typedMsg.length > 0) {
+                chatsSocketApi.sendMessage(groupControl.selectedGroup, typedMsg)
+            }
+        }
+    }
+
+    useEffect(() => {
+        setMessages([])
+    }, [groupControl.selectedGroup])
+
+    useEffect(() => {
+        // chatsSocketApi.joinMessageListener((joinMsg) => {
+        //     console.log('line9MsgArea', joinMsg)
+        //     setMessages(prevState => {
+        //         return [...prevState,  joinMsg]
+        //     })
+        // })
+
+        chatsSocketApi.receiveAddedToGroupNotificationListener((senderEmail, recipientEmail) => {
+            console.log('receiveAddedToGroupNotificationListener', senderEmail, recipientEmail)
+            setMessages(prevState => {
+                return [...prevState,  `${senderEmail} has added ${recipientEmail}`]
+            })
+        })
+
+        chatsSocketApi.receiveMessageListener((messageInfo) => {
+            console.log('44', messageInfo)
+            // const currMsgs = [...messages]
+            // currMsgs.push(messageInfo)
+            setMessages(prevState => {
+                return [...prevState, messageInfo]
+            })
+        })
+    }, []);
+
+    useEffect(() => {
+        console.log('52', messages)
+    }, [messages])
+
+
+    //
+    // chatsSocketApi.socket.on('joinMessage', (joinMsg) => {
+    //     console.log('line9MsgArea', joinMsg)
+    // });
+
     return (
         <div className="messageArea">
             <header># general</header>
             <div className="text-area">
-                {[1, 2, 3, 4, 5].map((e) => {
+                {messages.map((msg) => {
                     return (
                         <div className="msg-container">
                             <div className="pfp"></div>
                             <div className="name-msg">
-                                <ul>
-                                    <li>rox 05/11/2022 3:05 PM</li> <br />
-                                    <li>Hello My name is</li>
-                                    <li>Millie</li>
-                                    <li>Hello My name is</li>
-                                    <li>Millie</li>
-                                    <li>Hello My name is</li>
-                                    <li>Millie</li>
-                                    <li>Hello My name is</li>
-                                    <li>Millie</li>
-                                </ul>
+                                {
+                                    typeof msg === 'object' && msg !== null ?
+                                        <ul>
+                                            <li>{msg.email} {msg.time}</li> <br />
+                                            <li>{msg.text}</li>
+                                        </ul> :
+                                        <ul>
+                                            <li>{msg}</li> <br />
+                                        </ul>
+                                }
                             </div>
+                            <br />
                         </div>
                     );
                 })}
             </div>
             <div className="msg-input-div">
                 <button className="plus">+</button>
-                <textarea rows={0} className="msg-input" />
+                <textarea rows={0} className="msg-input" onChange={typedMsgChangeHandler} onKeyDown={sendMsg}/>
             </div>
         </div>
     );
