@@ -10,15 +10,17 @@ import { useAuth } from "./hooks/auth-hook";
 import Search from "./pages/Search";
 import FriendsSocket from "./sockets/friends";
 import {SocketContext} from "./context/friends-socket-context";
+import ChatSocket from "./sockets/chat";
 
 function App() {
     const { token, email, acceptLogin, acceptLogout } = useAuth();
 
     let routes;
     let friendsSocket;
+    let chatsSocket;
     if (token) {
         friendsSocket = new FriendsSocket(email)
-
+        chatsSocket = new ChatSocket(email)
         routes = (
             <Router>
                 <Routes>
@@ -52,7 +54,7 @@ function App() {
         >
             <SocketContext.Provider value={{
                 friendsSocketApi: friendsSocket,
-                chatsSocketApi: null
+                chatsSocketApi: chatsSocket
             }}>
                 <div className="App">{routes}</div>
             </SocketContext.Provider>

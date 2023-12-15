@@ -50,6 +50,48 @@ const getGroups = (token, user1Email) => {
     });
 };
 
+const getMembers = (token, groupId) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await backend.get(
+                `group/getMembers/${groupId}`,
+                config
+            );
+            console.log('withTokenline65', response.data);
+            resolve(response.data);
+        } catch (err) {
+            console.log(err);
+            reject(err);
+        }
+    });
+};
+
+const getFriendsWhoAreNotMembers = (token, user1Email, groupId) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await backend.get(
+                `group/getFriendsWhoAreNotMembers/${user1Email}/${groupId}`,
+                config
+            );
+            console.log('withTokenline65', response.data);
+            resolve(response.data);
+        } catch (err) {
+            console.log(err);
+            reject(err);
+        }
+    });
+};
+
 const getUser = (token, user1Email) => {
     const config = {
         headers: {
@@ -234,4 +276,6 @@ export {
     getUser,
     createGroup,
     getGroups,
+    getMembers,
+    getFriendsWhoAreNotMembers
 };
