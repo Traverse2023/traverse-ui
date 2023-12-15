@@ -13,7 +13,7 @@ import {SocketContext} from "./context/friends-socket-context";
 import ChatSocket from "./sockets/chat";
 
 function App() {
-    const { token, email, acceptLogin, acceptLogout } = useAuth();
+    const { token, email, firstName, lastName, acceptLogin, acceptLogout } = useAuth();
 
     let routes;
     let friendsSocket;
@@ -48,6 +48,8 @@ function App() {
                 isLoggedIn: !!token,
                 email: email,
                 token: token,
+                firstName: firstName,
+                lastName: lastName,
                 acceptLogin: acceptLogin,
                 acceptLogout: acceptLogout,
             }}
