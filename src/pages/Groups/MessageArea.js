@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {SocketContext} from "../../context/friends-socket-context";
 import {GroupContext} from "../../context/group-context";
 import {AuthContext} from "../../context/auth-context";
+import axios from "axios";
 
 const MessageArea = () => {
 
@@ -33,8 +34,11 @@ const MessageArea = () => {
         }
     }
 
-    useEffect(() => {
-        setMessages([])
+    useEffect(async () => {
+        const response = await axios.get(`http://localhost:8080/api/v1/messages/${groupControl.selectedGroup}/general`)
+        console.log('39', response)
+        if (response.data) setMessages(response.data)
+        else setMessages([])
     }, [groupControl.selectedGroup])
 
     useEffect(() => {
