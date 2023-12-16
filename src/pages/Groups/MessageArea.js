@@ -35,7 +35,7 @@ const MessageArea = () => {
     }
 
     useEffect(async () => {
-        const response = await axios.get(`http://localhost:8080/api/v1/messages/${groupControl.selectedGroup}/general`)
+        const response = await axios.get(`${REACT_APP_STORAGE_SERVICE_URL}/api/v1/messages/${groupControl.selectedGroup}/general`)
         console.log('39', response)
         if (response.data) setMessages(response.data)
         else setMessages([])
