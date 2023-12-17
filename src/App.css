@@ -1248,3 +1248,30 @@ border-radius: 8px;
   background-color: #7F56D9;
   color: white;
 }
+
+#stream-wrapper {
+  height: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+#video-streams{
+  height: 100%;
+  width: 1400px;
+}
+
+.video-container{
+  height: 100%;
+  border: 2px solid black;
+}
+
+.video-player{
+  height: 100%;
+  width: 100%;
+}
+
+#stream-controls{
+  display: none;
+}
+
+

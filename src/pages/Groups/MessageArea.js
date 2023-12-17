@@ -1,8 +1,10 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {SocketContext} from "../../context/friends-socket-context";
 import {GroupContext} from "../../context/group-context";
 import {AuthContext} from "../../context/auth-context";
 import axios from "axios";
+import AgoraRTC from "agora-rtc-sdk-ng";
+import AgoraUIKit from 'agora-react-uikit';
 
 const MessageArea = () => {
 
@@ -76,33 +78,73 @@ const MessageArea = () => {
     //     console.log('line9MsgArea', joinMsg)
     // });
 
+    const APP_ID = "9e8e8421f9a64b3d866a885f5acc1705"
+    const TOKEN = "007eJxTYODfwhcbPr25mP8Ml0OumjRTa9YHV47W1sX3l7x2DbmvwqPAYGBqlmqemmpkmppsZJJkYmphlmZonppsaG6eamhkmGKYHVOX2hDIyNCp18bKyACBID4LQ25iZh4DAwBBgxvm"
+    const CHANNEL = "main"
+
+    const AgoraUI = () => {
+        const [videoCall, setVideoCall] = useState(true);
+        const rtcProps = {
+            appId: APP_ID,
+            channel: CHANNEL,
+            token: TOKEN
+        };
+        const callbacks = {
+            EndCall: () => setVideoCall(false),
+        };
+        const rtmProps = {};
+        const styleProps = {};
+        return videoCall ? (
+            <div style={{ display: 'flex', width: '100vw', height: '100vh' }}>
+                <AgoraUIKit rtcProps={rtcProps} callbacks={callbacks} rtmProps={rtmProps} styleProps={styleProps} />
+            </div>
+        ) : (
+            <h3 onClick={() => setVideoCall(true)}>Start Call</h3>
+        );
+    };
+
+    const [streamJoined, setStreamJoined] = useState(false)
     return (
         <div className="messageArea">
             <header># general</header>
             <div className="text-area">
-                {messages.map((msg) => {
-                    return (
-                        <div className="msg-container">
-                            <div className="pfp"></div>
-                            <div className="name-msg">
-                                {
-                                    typeof msg === 'object' && msg !== null ?
-                                        <ul>
-                                            <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
-                                            <li>{msg.text}</li>
-                                        </ul> :
-                                        <ul>
-                                            <li>{msg}</li> <br />
-                                        </ul>
-                                }
-                            </div>
-                            <br />
+                {streamJoined ?
+                    <div id="stream-wrapper">
+                        <div id="video-streams">
+                            <AgoraUI />
                         </div>
-                    );
-                })}
+                        <div id="stream-controls">
+                            <button id="leave-btn">Leave Stream</button>
+                            <button id="mic-btn">Mic On</button>
+                            <button id="camera-btn">Camera On</button>
+                        </div>
+                    </div>
+                    :
+                    messages.map((msg) => {
+                        return (
+                            <div className="msg-container">
+                                <div className="pfp"></div>
+                                <div className="name-msg">
+                                    {
+                                        typeof msg === 'object' && msg !== null ?
+                                            <ul>
+                                                <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
+                                                <li>{msg.text}</li>
+                                            </ul> :
+                                            <ul>
+                                                <li>{msg}</li> <br />
+                                            </ul>
+                                    }
+                                </div>
+                                <br />
+                            </div>
+                        );
+                    })
+                }
             </div>
             <div className="msg-input-div">
                 <button className="plus">+</button>
+                <button onClick={() => setStreamJoined(prevState => !prevState)}>{streamJoined? "Leave Stream" : "Join Stream"}</button>
                 <textarea value={typedMsg} rows={0} className="msg-input" onChange={typedMsgChangeHandler} onKeyDown={sendMsg}/>
             </div>
         </div>
