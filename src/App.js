@@ -13,7 +13,7 @@ import {SocketContext} from "./context/friends-socket-context";
 import ChatSocket from "./sockets/chat";
 
 function App() {
-    const { token, email, firstName, lastName, acceptLogin, acceptLogout } = useAuth();
+    const { token, email, firstName, lastName, pfpURL, acceptLogin, acceptLogout, updatePfpUrl } = useAuth();
 
     let routes;
     let friendsSocket;
@@ -50,8 +50,10 @@ function App() {
                 token: token,
                 firstName: firstName,
                 lastName: lastName,
+                pfpURL: pfpURL,
                 acceptLogin: acceptLogin,
                 acceptLogout: acceptLogout,
+                updatePfpURL: updatePfpUrl
             }}
         >
             <SocketContext.Provider value={{

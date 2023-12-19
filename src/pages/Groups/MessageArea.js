@@ -26,7 +26,8 @@ const MessageArea = () => {
                 const message_info = {
                     msg: typedMsg,
                     firstName: auth.firstName,
-                    lastName: auth.lastName
+                    lastName: auth.lastName,
+                    pfpURL: auth.pfpURL
                 }
                 chatsSocketApi.sendMessage(groupControl.selectedGroup, message_info)
                 setTypedMsg('')
@@ -41,7 +42,7 @@ const MessageArea = () => {
         else setMessages([])
     }, [groupControl.selectedGroup])
 
-    useEffect(() => {
+    // useEffect(() => {
         // chatsSocketApi.joinMessageListener((joinMsg) => {
         //     console.log('line9MsgArea', joinMsg)
         //     setMessages(prevState => {
@@ -64,7 +65,7 @@ const MessageArea = () => {
                 return [...prevState, messageInfo]
             })
         })
-    }, []);
+    // }, []);
 
     useEffect(() => {
         console.log('52', messages)
@@ -83,7 +84,7 @@ const MessageArea = () => {
                 {messages.map((msg) => {
                     return (
                         <div className="msg-container">
-                            <div className="pfp"></div>
+                            <img className="pfp" src={msg.pfpURL}/>
                             <div className="name-msg">
                                 {
                                     typeof msg === 'object' && msg !== null ?

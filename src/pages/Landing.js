@@ -86,7 +86,8 @@ const Landing = () => {
             loginToast.current = toast.loading("Logging In...")
             login(loginInfo.email, loginInfo.password)
                 .then((value) => {
-                    auth.acceptLogin(loginInfo.email, value.firstName, value.lastName,  value.token);
+                    console.log(value)
+                    auth.acceptLogin(loginInfo.email, value.firstName, value.lastName, value.pfpURL,  value.token);
                     toast.update(loginToast.current, {
                         position: "top-right",
                         type: "success",

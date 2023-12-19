@@ -158,6 +158,30 @@ const getFriends = (token, user1Email) => {
     });
 };
 
+const getFriendRequests = (token, user1Email) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    console.log("====================================");
+    console.log("35", user1Email);
+    console.log("====================================");
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await backend.get(
+                `friends/getFriendRequests/${user1Email}`,
+                config
+            );
+            console.log(response.data);
+            resolve(response.data);
+        } catch (err) {
+            console.log(err);
+            reject(err);
+        }
+    });
+};
+
 const getMutualFriends = (token, user1Email, user2Email) => {
     const config = {
         headers: {
@@ -265,6 +289,28 @@ const acceptFriendRequest = (token, user1Email, user2Email) => {
     });
 };
 
+const savePFP = (token, user1Email, pfpURL) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await backend.post(
+                "user/savePFP",
+                { user1Email, pfpURL },
+                config
+            );
+            console.log(response.data);
+            resolve(response.data);
+        } catch (err) {
+            console.log(err);
+            reject(err);
+        }
+    });
+};
+
 export {
     searchUsers,
     sendFriendRequest,
@@ -277,5 +323,7 @@ export {
     createGroup,
     getGroups,
     getMembers,
-    getFriendsWhoAreNotMembers
+    getFriendsWhoAreNotMembers,
+    getFriendRequests,
+    savePFP
 };

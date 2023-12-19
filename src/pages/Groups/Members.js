@@ -13,7 +13,7 @@ const FriendsComponent = ({ arr }) => {
             {arr.map((user) => {
                 return (
                     <li>
-                        <div className="pfp"></div> <span>{`${user.firstName} ${user.lastName}`}</span>
+                        <img className="pfp" src={user.pfpURL} /> <span>{`${user.firstName} ${user.lastName}`}</span>
                     </li>
                 );
             })}
@@ -51,6 +51,7 @@ const Members = () => {
         getMembers(auth.token, groupControl.selectedGroup)
             .then((response) => {
                 setMembers(response);
+                console.log('54', response)
             })
             .catch((err) => console.error(err));
     }, [groupControl.selectedGroup]);

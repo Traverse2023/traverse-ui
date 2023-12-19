@@ -79,7 +79,7 @@ const NavBar = () => {
                         <Link to={"/groups"}>Groups</Link>
                     </li>
                     <li>
-                        <Link to={"/profile"}>Profile</Link>
+                        <Link to={`/profile/${auth.email}`}>Profile</Link>
                     </li>
                     <li>
                         <div className="dropdown">
