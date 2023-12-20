@@ -72,14 +72,8 @@ const MessageArea = () => {
         console.log('52', messages)
     }, [messages])
 
-
-    //
-    // chatsSocketApi.socket.on('joinMessage', (joinMsg) => {
-    //     console.log('line9MsgArea', joinMsg)
-    // });
-
-    const APP_ID = "9e8e8421f9a64b3d866a885f5acc1705"
-    const TOKEN = "007eJxTYODfwhcbPr25mP8Ml0OumjRTa9YHV47W1sX3l7x2DbmvwqPAYGBqlmqemmpkmppsZJJkYmphlmZonppsaG6eamhkmGKYHVOX2hDIyNCp18bKyACBID4LQ25iZh4DAwBBgxvm"
+    const APP_ID = "056e7ee25ec24b4586f17ec177e121d1"
+    const TOKEN = "007eJxTYBAzuFt2stBvl9GWrIYIgwXnFzSwN+6S3HQyjo2pom5TFpcCg4GpWap5aqqRaWqykUmSiamFWZqheWqyobl5qqGRYYqhjVlTakMgI8MmjuksjAwQCOKzMOQmZuYxMAAAu3Uc7A=="
     const CHANNEL = "main"
 
     const AgoraUI = () => {
@@ -89,9 +83,11 @@ const MessageArea = () => {
             channel: CHANNEL,
             token: TOKEN
         };
+
         const callbacks = {
             EndCall: () => setVideoCall(false),
         };
+
         const rtmProps = {};
         const styleProps = {};
         return videoCall ? (
