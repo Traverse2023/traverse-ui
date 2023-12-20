@@ -47,7 +47,7 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null,
     })
 
     useEffect(() => {
-        console.log(friendshipStatusState);
+        console.log('infriendsopt50', friendshipStatusState, auth.email, user2Email);
         getFriendshipStatus(auth.token, auth.email, user2Email)
             .then(({ friendshipStatus, initiatedUser }) => {
                 console.log('49fo', initiatedUser, friendshipStatus)

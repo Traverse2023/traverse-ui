@@ -19,14 +19,14 @@ const FriendsTable = ({ allFriends, location, triggers }) => {
                         friendObj ? (
                             <td>
                                 <div
-                                    onClick={() => navigate(`/profile/${friendObj.email}`)}
+                                    onClick={() => window.location = `/profile/${friendObj.email}`}
                                     style={{
                                         paddingTop: "20px",
                                         paddingLeft: "20px",
                                         paddingBottom: "20px",
                                     }}
                                 >
-                                    <div className="pfp"> </div>
+                                    <img className="pfp" src={friendObj.pfpURL}/>
                                     <div
                                         style={{
                                             paddingLeft: "20px",

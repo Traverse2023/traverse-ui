@@ -42,7 +42,7 @@ const MessageArea = () => {
         else setMessages([])
     }, [groupControl.selectedGroup])
 
-    // useEffect(() => {
+    useEffect(() => {
         // chatsSocketApi.joinMessageListener((joinMsg) => {
         //     console.log('line9MsgArea', joinMsg)
         //     setMessages(prevState => {
@@ -65,7 +65,7 @@ const MessageArea = () => {
                 return [...prevState, messageInfo]
             })
         })
-    // }, []);
+    }, []);
 
     useEffect(() => {
         console.log('52', messages)

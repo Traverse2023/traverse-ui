@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import { getFriends, getMutualFriends, getUser } from "../../api/withToken";
 import FriendOpts from "../../components/FriendsOpts";
 import NavBar from "../../components/NavBar";
 import { AuthContext } from "../../context/auth-context";
 
 const FriendsTable = ({ friends }) => {
+    const navigate = useNavigate()
     return friends ? (
         <table>
             {friends.map((arr) => (
@@ -14,11 +15,14 @@ const FriendsTable = ({ friends }) => {
                         friendObj ? (
                             <td>
                                 <div
+                                    onClick={() => window.location = `/profile/${friendObj.email}`}
                                     style={{
+                                        paddingTop: "20px",
+                                        paddingLeft: "20px",
                                         paddingBottom: "20px",
                                     }}
                                 >
-                                    <div className="pfp"> </div>
+                                    <img className="pfp" src={friendObj.pfpURL}/>
                                     <div
                                         style={{
                                             paddingLeft: "20px",
@@ -27,6 +31,7 @@ const FriendsTable = ({ friends }) => {
                                         {friendObj.firstName}{" "}
                                         {friendObj.lastName}
                                     </div>
+                                    <div style={{width:'10px'}}></div>
                                     <FriendOpts
                                         user2Email={friendObj.email}
                                         component="Profile"
@@ -48,6 +53,8 @@ const Other = () => {
     const auth = useContext(AuthContext);
     const [numOfFriends, setNumOfFriends] = useState();
     const [profile, setProfile] = useState(false);
+    const loc = useLocation()
+    const [tabState, setTabState] = useState("posts")
     useEffect(() => {
         getUser(auth.token, email).then((response) => {
             setProfile(response);
@@ -98,7 +105,6 @@ const Other = () => {
     const friendsMap = {
         ALL_FRIENDS: allFriends,
         MUTUAL_FRIENDS: mutualFriends,
-        FRIEND_REQUESTS: [],
     };
 
     const FriendsTabsComponent = () => {
@@ -109,9 +115,6 @@ const Other = () => {
                     <li onClick={() => setFriendsTabs("MUTUAL_FRIENDS")}>
                         Mutual Friends
                     </li>
-                    <li onClick={() => setFriendsTabs("FRIEND_REQUESTS")}>
-                        Friend Requests
-                    </li>
                 </ul>
             );
         } else if (friendsTabs === "MUTUAL_FRIENDS") {
@@ -121,9 +124,6 @@ const Other = () => {
                         All Friends
                     </li>
                     <li className="select-tab-horizontal">Mutual Friends</li>
-                    <li onClick={() => setFriendsTabs("FRIEND_REQUESTS")}>
-                        Friend Requests
-                    </li>
                 </ul>
             );
         } else {
@@ -141,15 +141,52 @@ const Other = () => {
         }
     };
 
+    let content
+    if (tabState === "posts") {
+        content = <section className="friends">
+            <header>
+                <div className="top">
+                    <h1>Posts</h1>
+                    <input />
+                </div>
+            </header>
+
+        </section>
+    } else if (tabState === "about") {
+        content = <section className="friends">
+            <header>
+                <div className="top">
+                    <h1>About</h1>
+                    <input />
+                </div>
+            </header>
+        </section>
+    } else if (tabState === "friends") {
+        content = <section className="friends">
+            <header>
+                <div className="top">
+                    <h1>Friends</h1>
+                    <input />
+                </div>
+            </header>
+            <div className="friends-tabs">
+                <FriendsTabsComponent />
+            </div>
+            <FriendsTable
+                friends={friendsMap[friendsTabs]}
+            />
+        </section>
+    }
+
     return (
         <div style={{ height: "100%" }}>
             <NavBar />
             <div className="top-overlay"></div>
             <div className="bottom-overlay"></div>
             <div className="profile">
-                <header>
-                    <div className="pfp-profile"></div>
-                    <div className="header-text">
+                <header className="other-header">
+                    <img className="pfp-profile" src={profile.pfpURL}/>
+                    <div className="header-text header-text-other">
                         <h1>
                             {profile.firstName} {profile.lastName}
                         </h1>
@@ -159,32 +196,26 @@ const Other = () => {
                             {numOfFriends > 1 ? "friends" : "friend"}
                         </h4>
                     </div>
+                    <div style={{marginRight: "0", marginTop: "145px"}}>
+                        <FriendOpts
+                            user2Email={loc.pathname.split('/')[loc.pathname.split('/').length-1]}
+                            locationState="other-profile"
+                            component="Profile"
+                        />
+                    </div>
                 </header>
 
                 <main>
                     <section className="profile-tabs">
                         <ul>
-                            <li className="selected-tab">Posts</li>
-                            <li>About</li>
-                            <li>Friends</li>
+                            <li className={tabState==="posts" ? "selected-tab" : null} onClick={()=>setTabState("posts")}>Posts</li>
+                            <li className={tabState==="about" ? "selected-tab" : null} onClick={()=>setTabState("about")}>About</li>
+                            <li className={tabState==="friends" ? "selected-tab" : null} onClick={()=>setTabState("friends")}>Friends</li>
                         </ul>
                     </section>
                     <section className="profile-content">
                         <div className="profile-content-div">
-                            <section className="friends">
-                                <header>
-                                    <div className="top">
-                                        <h1>Friends</h1>
-                                        <input />
-                                    </div>
-                                </header>
-                                <div className="friends-tabs">
-                                    <FriendsTabsComponent />
-                                </div>
-                                <FriendsTable
-                                    friends={friendsMap[friendsTabs]}
-                                />
-                            </section>
+                            {content}
                         </div>
                     </section>
                 </main>
