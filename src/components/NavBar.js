@@ -5,6 +5,10 @@ import { AuthContext } from "../context/auth-context";
 import {SocketContext} from "../context/friends-socket-context";
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {Button} from "react-bootstrap";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import { faHome, faUserGroup, faUser, faBell, faSignOut } from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const NavBar = () => {
     const auth = React.useContext(AuthContext);
@@ -21,11 +25,22 @@ const NavBar = () => {
         play()
     })
 
+    friendsSocketApi.globalListener( (notification) => {
+        console.log('29global', notification)
+        if (notification.notificationType === "MESSAGE_SENT") {
+            const updatedNotifications = [...notifications, notification]
+            setNotifications(updatedNotifications)
+            play()
+        }
+    })
+
     friendsSocketApi.acceptListener((senderEmail) => {
         const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST_ACCEPTED"}]
         setNotifications(updatedNotifications)
         play()
     })
+
+
 
     // friendsSocketApi.declineFriendRequestListener((senderEmail) => {
     //     console.log('here32 ', senderEmail, "declinedFriendRequest")
@@ -63,7 +78,9 @@ const NavBar = () => {
     return (
         <div className="navbar">
             <div className="logo2">
-                <h1>Traverse</h1>
+                <div className="logo-wrapper">
+                    <img src="imgs/logo-svg.svg" style={{height: '40px', paddingTop: "7px"}}/>
+                </div>
             </div>
             <input
                 placeholder="Search"
@@ -73,17 +90,47 @@ const NavBar = () => {
             <div className="right-side">
                 <ul>
                     <li>
-                        <Link to={"/"}>Feed</Link>
+                        <OverlayTrigger
+                            placement="bottom"
+                            delay={{ show: 250, hide: 400 }}
+                            overlay={
+                                <Tooltip className="tooltip" style={{backgroundColor: "lightgray", zIndex: '100'}}>
+                                    Feed
+                                </Tooltip>
+                            }
+                        >
+                            <Link to={"/"}><FontAwesomeIcon icon={faHome} /></Link>
+                        </OverlayTrigger>
                     </li>
                     <li>
-                        <Link to={"/groups"}>Groups</Link>
+                        <OverlayTrigger
+                            placement="bottom"
+                            delay={{ show: 250, hide: 400 }}
+                            overlay={
+                                <Tooltip className="tooltip" style={{backgroundColor: "lightgray", zIndex: '100'}}>
+                                    Groups
+                                </Tooltip>
+                            }
+                        >
+                            <Link to={"/groups"}><FontAwesomeIcon icon={faUserGroup} /></Link>
+                        </OverlayTrigger>
                     </li>
                     <li>
-                        <Link to={"/profile"}>Profile</Link>
+                        <OverlayTrigger
+                            placement="bottom"
+                            delay={{ show: 250, hide: 400 }}
+                            overlay={
+                                <Tooltip className="tooltip" style={{backgroundColor: "lightgray", zIndex: '100'}}>
+                                    Profile
+                                </Tooltip>
+                            }
+                        >
+                            <Link to={`/profile/${auth.email}`}><FontAwesomeIcon icon={faUser} /></Link>
+                        </OverlayTrigger>
                     </li>
                     <li>
                         <div className="dropdown">
-                            <button className="dropbtn">Notifications {notifications.length ? `(${notifications.length})`: null}</button>
+                            <button className="dropbtn"><FontAwesomeIcon icon={faBell} /> {notifications.length ? `(${notifications.length})`: null}</button>
                             <div className="dropdown-content">
                                 {notifications.map(notification => {
                                     if (notification.notificationType === "FRIEND_REQUEST") {
@@ -94,13 +141,27 @@ const NavBar = () => {
                                         return (
                                             <Link to="/">{notification.senderEmail} has accepted your friend request friend request.</Link>
                                         )
+                                    } else if (notification.notificationType === "MESSAGE_SENT") {
+                                        return (
+                                            <Link to="/groups" state={{ groupId: notification.groupId }}>{notification.message}</Link>
+                                        )
                                     }
                                 })}
                             </div>
                         </div>
                     </li>
                     <li>
-                        <Link onClick={logout}>Sign Out</Link>
+                        <OverlayTrigger
+                            placement="bottom"
+                            delay={{ show: 250, hide: 400 }}
+                            overlay={
+                                <Tooltip className="tooltip" style={{backgroundColor: "lightgray", zIndex: '100'}}>
+                                    Sign Out
+                                </Tooltip>
+                            }
+                        >
+                            <Link onClick={logout}><FontAwesomeIcon icon={faSignOut} /></Link>
+                        </OverlayTrigger>
                     </li>
                 </ul>
             </div>

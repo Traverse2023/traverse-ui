@@ -13,7 +13,7 @@ const FriendsComponent = ({ arr }) => {
             {arr.map((user) => {
                 return (
                     <li>
-                        <div className="pfp"></div> <span>{`${user.firstName} ${user.lastName}`}</span>
+                        <img className="pfp" src={user.pfpURL} /> <span>{`${user.firstName} ${user.lastName}`}</span>
                     </li>
                 );
             })}
@@ -25,13 +25,14 @@ const Members = () => {
     const { chatsSocketApi } = useContext(SocketContext)
     const auth = useContext(AuthContext);
     const groupControl = useContext(GroupContext);
-    const [members, setMembers] = useState([])
+    const {members, setMembers} = useContext(GroupContext);
+    // const [members, setMembers] = useState([])
     const [addMemberModal, setAddMemberModal] = useState(false);
     const [friendsWhoAreNotMembers, setFriendsWhoAreNotMembers] = useState([])
     const [potentialMember, setPotentialMember] = useState(null)
 
     useEffect(() => {
-        getFriendsWhoAreNotMembers(auth.token, auth.email, groupControl.selectedGroup)
+        getFriendsWhoAreNotMembers(auth.token, auth.email, groupControl.selectedGroup.groupId)
             .then((response) => {
                 setFriendsWhoAreNotMembers(response);
             })
@@ -40,7 +41,7 @@ const Members = () => {
 
     const addMemberHandler = () => {
         console.log('42', potentialMember.email)
-        chatsSocketApi.addMember(potentialMember.email, groupControl.selectedGroup)
+        chatsSocketApi.addMember(potentialMember.email, groupControl.selectedGroup.groupId)
         setAddMemberModal(false)
         const currMembers = [...members]
         currMembers.push(potentialMember)
@@ -48,12 +49,13 @@ const Members = () => {
     };
 
     useEffect(() => {
-        getMembers(auth.token, groupControl.selectedGroup)
+        getMembers(auth.token, groupControl.selectedGroup.groupId)
             .then((response) => {
                 setMembers(response);
+                console.log('54', response)
             })
             .catch((err) => console.error(err));
-    }, [groupControl.selectedGroup]);
+    }, [groupControl.selectedGroup.groupId]);
 
     const addMemberChangeHandler = (e) => {
         const index = e.target.selectedIndex;

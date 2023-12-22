@@ -8,8 +8,9 @@ export const useAuth = () => {
     const [email, setEmail] = React.useState(false);
     const [firstName, setFirstName] = React.useState(false)
     const [lastName, setLastName] = React.useState(false)
+    const [pfpURL, setPfpURL] = React.useState(false)
 
-    const acceptLogin = useCallback((email, firstName, lastName, token, expirationDate) => {
+    const acceptLogin = useCallback((email, firstName, lastName, pfpURL, token, expirationDate) => {
         const tokenExpirationDate =
             expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
         setTokenExpirationDate(tokenExpirationDate);
@@ -19,9 +20,11 @@ export const useAuth = () => {
         localStorage.setItem("firstName", firstName)
         localStorage.setItem("lastName", lastName)
         localStorage.setItem("expiration", tokenExpirationDate);
+        localStorage.setItem("pfpURL", pfpURL)
         setEmail(email);
         setFirstName(firstName)
         setLastName(lastName)
+        setPfpURL(pfpURL)
     }, []);
 
     const acceptLogout = useCallback(() => {
@@ -30,6 +33,11 @@ export const useAuth = () => {
         setEmail(null);
         setTokenExpirationDate(null);
     });
+
+    const updatePfpUrl = useCallback((location) => {
+        setPfpURL(location)
+        localStorage.setItem("pfpURL", location)
+    })
 
     useEffect(() => {
         if (
@@ -41,6 +49,7 @@ export const useAuth = () => {
                 localStorage.getItem("email"),
                 localStorage.getItem("firstName"),
                 localStorage.getItem("lastName"),
+                localStorage.getItem("pfpURL"),
                 localStorage.getItem("token"),
                 new Date(localStorage.getItem("expiration"))
             );
@@ -57,5 +66,5 @@ export const useAuth = () => {
         }
     }, [token, acceptLogout, tokenExpirationDate]);
 
-    return { token, email, firstName, lastName, acceptLogin, acceptLogout };
+    return { token, email, firstName, lastName, pfpURL, acceptLogin, acceptLogout, updatePfpUrl };
 };

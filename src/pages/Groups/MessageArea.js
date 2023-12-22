@@ -28,20 +28,23 @@ const MessageArea = () => {
                 const message_info = {
                     msg: typedMsg,
                     firstName: auth.firstName,
-                    lastName: auth.lastName
+                    lastName: auth.lastName,
+                    pfpURL: auth.pfpURL,
+                    members: groupControl.members,
+                    groupName: groupControl.selectedGroup.groupName
                 }
-                chatsSocketApi.sendMessage(groupControl.selectedGroup, message_info)
+                chatsSocketApi.sendMessage(groupControl.selectedGroup.groupId, message_info)
                 setTypedMsg('')
             }
         }
     }
 
     useEffect(async () => {
-        const response = await axios.get(`${process.env.REACT_APP_STORAGE_SERVICE_URL}/api/v1/messages/${groupControl.selectedGroup}/general`)
+        const response = await axios.get(`${process.env.REACT_APP_STORAGE_SERVICE_URL}/api/v1/messages/${groupControl.selectedGroup.groupId}/general`)
         console.log('39', response)
         if (response.data) setMessages(response.data)
         else setMessages([])
-    }, [groupControl.selectedGroup])
+    }, [groupControl.selectedGroup.groupId])
 
     useEffect(() => {
         // chatsSocketApi.joinMessageListener((joinMsg) => {
@@ -104,39 +107,35 @@ const MessageArea = () => {
         <div className="messageArea">
             <header># general</header>
             <div className="text-area">
-                {streamJoined ?
-                    <div id="stream-wrapper">
-                        <div id="video-streams">
-                            <AgoraUI />
-                        </div>
-                        <div id="stream-controls">
-                            <button id="leave-btn">Leave Stream</button>
-                            <button id="mic-btn">Mic On</button>
-                            <button id="camera-btn">Camera On</button>
-                        </div>
-                    </div>
-                    :
-                    messages.map((msg) => {
-                        return (
-                            <div className="msg-container">
-                                <div className="pfp"></div>
-                                <div className="name-msg">
-                                    {
-                                        typeof msg === 'object' && msg !== null ?
-                                            <ul>
-                                                <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
-                                                <li>{msg.text}</li>
-                                            </ul> :
-                                            <ul>
-                                                <li>{msg}</li> <br />
-                                            </ul>
-                                    }
-                                </div>
-                                <br />
+                {/*{streamJoined ?*/}
+                {/*    <div id="stream-wrapper">*/}
+                {/*        <div id="video-streams">*/}
+                {/*            <AgoraUI />*/}
+                {messages.map((msg) => {
+                    return (
+                        <div className="msg-container">
+                            <img className="pfp" src={msg.pfpURL}/>
+                            <div className="name-msg">
+                                {
+                                    typeof msg === 'object' && msg !== null ?
+                                        <ul>
+                                            <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
+                                            <li>{msg.text}</li>
+                                        </ul> :
+                                        <ul>
+                                            <li>{msg}</li> <br />
+                                        </ul>
+                                }
                             </div>
-                        );
-                    })
-                }
+                            <br />
+                        </div>)
+                        // <div id="stream-controls">
+                        //     <button id="leave-btn">Leave Stream</button>
+                        //     <button id="mic-btn">Mic On</button>
+                        //     <button id="camera-btn">Camera On</button>
+                        // </div>
+                    // </div>
+                })}
             </div>
             <div className="msg-input-div">
                 <button className="plus">+</button>

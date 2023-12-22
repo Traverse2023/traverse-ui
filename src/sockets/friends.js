@@ -11,6 +11,10 @@ class FriendsSocket {
         });
     }
 
+    globalListener(callback) {
+        this.socket.on("globalNotification", callback)
+    }
+
     sendFriendRequest(potentialFriend) {
         this.socket.emit("sendFriendRequest", potentialFriend)
     }

@@ -8,7 +8,7 @@ import {
 import { AuthContext } from "../context/auth-context";
 import {SocketContext} from "../context/friends-socket-context";
 
-const FriendOpts = ({ user2Email, locationState = null, index, component = null }) => {
+const FriendOpts = ({ user2Email, locationState = null, index, component = null, triggers=[] }) => {
     const auth = useContext(AuthContext);
     const { friendsSocketApi } = useContext(SocketContext)
 
@@ -18,6 +18,7 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null 
         console.log('line18', index, senderEmail)
         if (user2Email === senderEmail) {
             setFriendshipStatusState({friendshipStatus: 'FRIEND_REQUEST', initiatedUser: senderEmail})
+            triggers.forEach(fn => fn())
         }
         })
 
@@ -25,6 +26,7 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null 
         console.log('line23', index, senderEmail)
         if (user2Email === senderEmail) {
             setFriendshipStatusState({friendshipStatus: 'FRIENDS', initiatedUser: senderEmail})
+            triggers.forEach(fn => fn())
         }
     })
 
@@ -32,6 +34,7 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null 
         console.log('here32 ', senderEmail, "declinedFriendRequest")
         if (user2Email === senderEmail) {
             setFriendshipStatusState({friendshipStatusState: undefined})
+            triggers.forEach(fn => fn())
         }
     })
 
@@ -39,13 +42,15 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null 
         console.log('here32 ', senderEmail, "declinedFriendRequest")
         if (user2Email === senderEmail) {
             setFriendshipStatusState({friendshipStatusState: undefined})
+            triggers.forEach(fn => fn())
         }
     })
 
     useEffect(() => {
-        console.log(friendshipStatusState);
+        console.log('infriendsopt50', friendshipStatusState, auth.email, user2Email);
         getFriendshipStatus(auth.token, auth.email, user2Email)
             .then(({ friendshipStatus, initiatedUser }) => {
+                console.log('49fo', initiatedUser, friendshipStatus)
                 setFriendshipStatusState({
                     friendshipStatus,
                     initiatedUser,
@@ -63,6 +68,7 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null 
             initiatedUser: auth.email,
         });
         friendsSocketApi.sendFriendRequest(potentialFriend)
+        triggers.forEach(fn => fn())
     };
 
     const unfriendHandler = (potentialFriend) => {
@@ -71,12 +77,17 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null 
             friendshipStatus: undefined,
         });
         friendsSocketApi.unfriend(potentialFriend)
+        triggers.forEach(fn => {
+            console.log('triggered', fn)
+            fn()
+        })
     };
 
     const removeFriendRequestHandler = (potentialFriend) => {
         // removeFriendRequest(auth.token, auth.email, potentialFriend);
         setFriendshipStatusState({ friendshipStatus: undefined });
         friendsSocketApi.declineFriendRequest(potentialFriend)
+        triggers.forEach(fn => fn())
     };
 
     const acceptFriendRequestHandler = (potentialFriend) => {
@@ -86,6 +97,7 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null 
             initiatedUser: null,
         });
         friendsSocketApi.acceptFriendRequest(potentialFriend)
+        triggers.forEach(fn => fn())
     };
 
     if (user2Email === auth.email) {
