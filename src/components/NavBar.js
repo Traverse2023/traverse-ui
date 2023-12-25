@@ -12,7 +12,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const NavBar = () => {
     const auth = React.useContext(AuthContext);
-    const { friendsSocketApi } = useContext(SocketContext)
+    const { chatsSocketApi, friendsSocketApi } = useContext(SocketContext)
     const [play] = useSound("/audio/notificationsound.mp3");
     const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ const NavBar = () => {
         play()
     })
 
-    friendsSocketApi.globalListener( (notification) => {
+    chatsSocketApi.globalListener( (notification) => {
         console.log('29global', notification)
         if (notification.notificationType === "MESSAGE_SENT") {
             const updatedNotifications = [...notifications, notification]

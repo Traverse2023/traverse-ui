@@ -39,11 +39,16 @@ const MessageArea = () => {
         }
     }
 
-    useEffect(async () => {
-        const response = await axios.get(`${process.env.REACT_APP_STORAGE_SERVICE_URL}/api/v1/messages/${groupControl.selectedGroup.groupId}/general`)
-        console.log('39', response)
-        if (response.data) setMessages(response.data)
-        else setMessages([])
+    const getMessages = async() =>{
+        return await axios.get(`${process.env.REACT_APP_STORAGE_SERVICE_URL}/api/v1/messages/${groupControl.selectedGroup.groupId}/general`)
+    }
+
+    useEffect( () => {
+        getMessages().then(response => {
+            console.log('51', response)
+            if (response.data) setMessages(response.data)
+            else setMessages([])
+        }).catch(err => console.log(err))
     }, [groupControl.selectedGroup.groupId])
 
     useEffect(() => {
@@ -79,28 +84,28 @@ const MessageArea = () => {
     const TOKEN = "007eJxTYBAzuFt2stBvl9GWrIYIgwXnFzSwN+6S3HQyjo2pom5TFpcCg4GpWap5aqqRaWqykUmSiamFWZqheWqyobl5qqGRYYqhjVlTakMgI8MmjuksjAwQCOKzMOQmZuYxMAAAu3Uc7A=="
     const CHANNEL = "main"
 
-    const AgoraUI = () => {
-        const [videoCall, setVideoCall] = useState(true);
-        const rtcProps = {
-            appId: APP_ID,
-            channel: CHANNEL,
-            token: TOKEN
-        };
-
-        const callbacks = {
-            EndCall: () => setVideoCall(false),
-        };
-
-        const rtmProps = {};
-        const styleProps = {};
-        return videoCall ? (
-            <div style={{ display: 'flex', width: '100vw', height: '100vh' }}>
-                <AgoraUIKit rtcProps={rtcProps} callbacks={callbacks} rtmProps={rtmProps} styleProps={styleProps} />
-            </div>
-        ) : (
-            <h3 onClick={() => setVideoCall(true)}>Start Call</h3>
-        );
-    };
+    // const AgoraUI = () => {
+    //     const [videoCall, setVideoCall] = useState(true);
+    //     const rtcProps = {
+    //         appId: APP_ID,
+    //         channel: CHANNEL,
+    //         token: TOKEN
+    //     };
+    //
+    //     const callbacks = {
+    //         EndCall: () => setVideoCall(false),
+    //     };
+    //
+    //     const rtmProps = {};
+    //     const styleProps = {};
+    //     return videoCall ? (
+    //         <div style={{ display: 'flex', width: '100vw', height: '100vh' }}>
+    //             <AgoraUIKit rtcProps={rtcProps} callbacks={callbacks} rtmProps={rtmProps} styleProps={styleProps} />
+    //         </div>
+    //     ) : (
+    //         <h3 onClick={() => setVideoCall(true)}>Start Call</h3>
+    //     );
+    // };
 
     const [streamJoined, setStreamJoined] = useState(false)
     return (
@@ -139,7 +144,7 @@ const MessageArea = () => {
             </div>
             <div className="msg-input-div">
                 <button className="plus">+</button>
-                <button onClick={() => setStreamJoined(prevState => !prevState)}>{streamJoined? "Leave Stream" : "Join Stream"}</button>
+                {/*<button onClick={() => setStreamJoined(prevState => !prevState)}>{streamJoined? "Leave Stream" : "Join Stream"}</button>*/}
                 <textarea value={typedMsg} rows={0} className="msg-input" onChange={typedMsgChangeHandler} onKeyDown={sendMsg}/>
             </div>
         </div>

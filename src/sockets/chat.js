@@ -11,6 +11,10 @@ class ChatSocket {
         });
     }
 
+    globalListener(callback) {
+        this.socket.on("globalNotification", callback)
+    }
+
     sendMessage(groupId, message_info) {
         console.log('sendingMsg')
         this.socket.emit("sendMessage", groupId, message_info)
