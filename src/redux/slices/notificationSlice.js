@@ -2,28 +2,10 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-type Notification = {
-    senderEmail: string;
-    notificationType: string;
-    notificationMessage?: string;
-}
-
-interface NotificationsState {
-  notifications: Notification[];
-  loadState: 'idle' | 'loading' | 'failed' | 'fulfilled';
-  addState: 'idle' | 'loading' | 'failed' | 'fulfilled';
-
-}
-
-const initialState: NotificationsState = {
-  notifications: [],
-  loadState: 'idle',
-  addState: 'idle',
-};
 
 export const addNotificationAsync = createAsyncThunk(
     'notifications/addNotification',
-    async (notification: Notification) => {
+    async (notification) => {
       const response = await axios.post(
         `${process.env.STORAGE_SERVICE_URL}/api/v1/notifications/createNotification`, notification
       )
@@ -33,7 +15,7 @@ export const addNotificationAsync = createAsyncThunk(
 
   export const loadAllNotificationsAsync = createAsyncThunk(
     'notifications/loadAllNotifications',
-    async (forEmail : string) => {
+    async (forEmail) => {
       const response = await axios.get(
         `${process.env.STORAGE_SERVICE_URL}/api/v1/notifications/getNotifications/${forEmail}}`
       );
@@ -45,10 +27,10 @@ const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
-    addNotification: (state, action: PayloadAction<Notification>) => {
+    addNotification: (state, action) => {
       state.notifications.push(action.payload);
     },
-    loadAllNotifications: (state, action: PayloadAction<Notification[]>) => {
+    loadAllNotifications: (state, action) => {
         state.notifications = action.payload;
     }
     // increment: (state) => {
