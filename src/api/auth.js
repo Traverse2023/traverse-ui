@@ -1,4 +1,5 @@
 import axios from "axios";
+import { loadAllNotificationsAsync } from "../redux/slices/notificationSlice";
 
 const backend = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_URL + "api/",
@@ -15,6 +16,7 @@ const login = (email, password) => {
                 password,
             });
             console.log("here", response.data);
+            loadAllNotificationsAsync(email)
             resolve(response.data);
         } catch (err) {
             console.log("====================================");

@@ -9,6 +9,8 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { faHome, faUserGroup, faUser, faBell, faSignOut } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { useSelector, useDispatch } from "react-redux";
+import { addNotificationAsync } from "../redux/slices/notificationSlice";
 
 const NavBar = () => {
     const auth = React.useContext(AuthContext);
@@ -17,11 +19,15 @@ const NavBar = () => {
     const navigate = useNavigate();
 
     const [search, setSearch] = React.useState();
-    const [notifications, setNotifications] = React.useState([])
+    const { notifications } = useSelector((state) => state.notifications);
+    const dispatch = useDispatch();
 
     friendsSocketApi.friendRequestListener((senderEmail) => {
-        const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST"}]
-        setNotifications(updatedNotifications)
+        dispatch(
+            addNotificationAsync(
+                {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST"}
+            )
+        )
         play()
     })
 
@@ -35,8 +41,11 @@ const NavBar = () => {
     })
 
     friendsSocketApi.acceptListener((senderEmail) => {
-        const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST_ACCEPTED"}]
-        setNotifications(updatedNotifications)
+        dispatch(
+            addNotification(
+                {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST_ACCEPTED"}
+            )
+        )
         play()
     })
 
