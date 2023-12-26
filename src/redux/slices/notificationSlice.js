@@ -3,6 +3,12 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 
+const initialState = {
+    notifications: [],
+    loadState: 'idle',
+    addState: 'idle',
+};
+
 export const addNotificationAsync = createAsyncThunk(
     'notifications/addNotification',
     async (notification) => {

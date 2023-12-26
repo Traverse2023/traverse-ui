@@ -3,14 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import useSound from 'use-sound';
 import { AuthContext } from "../context/auth-context";
 import {SocketContext} from "../context/friends-socket-context";
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import {Button} from "react-bootstrap";
+
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import { faHome, faUserGroup, faUser, faBell, faSignOut } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faUserGroup, faUser, faBell, faSignOut } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
-import { addNotificationAsync } from "../redux/slices/notificationSlice";
+import { addNotification } from '../redux/slices/notificationSlice';
 
 const NavBar = () => {
     const auth = React.useContext(AuthContext);
@@ -24,7 +23,7 @@ const NavBar = () => {
 
     friendsSocketApi.friendRequestListener((senderEmail) => {
         dispatch(
-            addNotificationAsync(
+            addNotification(
                 {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST"}
             )
         )
@@ -33,9 +32,13 @@ const NavBar = () => {
 
     chatsSocketApi.globalListener( (notification) => {
         console.log('29global', notification)
+        const { recipientEmail } = notification
         if (notification.notificationType === "MESSAGE_SENT") {
-            const updatedNotifications = [...notifications, notification]
-            setNotifications(updatedNotifications)
+            dispatch(
+                addNotification(
+                    {recipientEmail, notificationType: "MESSAGE_SENT"}
+                )
+            )
             play()
         }
     })
