@@ -34,7 +34,9 @@ const notificationsSlice = createSlice({
   initialState,
   reducers: {
     addNotification: (state, action) => {
+        console.log('action.payload: ', action)
       state.notifications.push(action.payload);
+        console.log("After adding not", state.notifications)
     },
     loadAllNotifications: (state, action) => {
         state.notifications = action.payload;

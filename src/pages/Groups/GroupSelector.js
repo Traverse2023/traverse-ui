@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/auth-context";
 import { GroupContext } from "../../context/group-context";
 import ChatSocket from "../../sockets/chat";
 import {SocketContext} from "../../context/friends-socket-context";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 const GroupSelector = () => {
     const groupControl = useContext(GroupContext);
@@ -12,6 +12,8 @@ const GroupSelector = () => {
     const { chatsSocketApi } = useContext(SocketContext)
 
     let { state } = useLocation();
+    const navigate = useNavigate();
+
     console.log("15", state)
     if (state) {
         console.log('17', state)
@@ -28,6 +30,14 @@ const GroupSelector = () => {
     }, []);
 
     const groupClickHandler = (event) => {
+        window.history.replaceState({}, document.title)
+
+        // navigate({
+        //     pathname: location.pathname,
+        //     search: location.search,
+        //     state: { resetState: true },
+        // });
+
         groupControl.setSelectedGroup({groupId: event.target.id, groupName: event.target.getAttribute("data-name")});
         // chatsSocketApi.disconnect()
         chatsSocketApi.joinRoom(event.target.id)

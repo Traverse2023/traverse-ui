@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useSound from 'use-sound';
 import { AuthContext } from "../context/auth-context";
@@ -10,6 +10,7 @@ import { faHome, faUserGroup, faUser, faBell, faSignOut } from '@fortawesome/fre
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import { addNotification } from '../redux/slices/notificationSlice';
+import axios from "axios";
 
 const NavBar = () => {
     const auth = React.useContext(AuthContext);
@@ -18,39 +19,64 @@ const NavBar = () => {
     const navigate = useNavigate();
 
     const [search, setSearch] = React.useState();
-    const { notifications } = useSelector((state) => state.notifications);
-    const dispatch = useDispatch();
+    const [notifications, setNotifications] = React.useState([])
+
+    useEffect(() => {
+        console.log('25nots', notifications)
+    }, [notifications])
+
+    const loadNotifications = async () => {
+        console.log('STORAGE SERV URL', process.env.REACT_APP_STORAGE_SERVICE_URL)
+        const currentNotifications = await axios.get( `${process.env.REACT_APP_STORAGE_SERVICE_URL}/api/v1/notifications/getNotifications/${auth.email}`
+        )
+        setNotifications(currentNotifications.data)
+        console.log("CURR NOTS", currentNotifications.data)
+    }
+
+    useEffect(() => {
+
+        loadNotifications().then(response => console.log(response)).catch(err => console.log(err))
+    }, [])
 
     friendsSocketApi.friendRequestListener((senderEmail) => {
-        dispatch(
-            addNotification(
-                {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST"}
-            )
-        )
+        const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST"}]
+        setNotifications(updatedNotifications)
         play()
     })
 
     chatsSocketApi.globalListener( (notification) => {
         console.log('29global', notification)
-        const { recipientEmail } = notification
         if (notification.notificationType === "MESSAGE_SENT") {
-            dispatch(
-                addNotification(
-                    {recipientEmail, notificationType: "MESSAGE_SENT"}
-                )
-            )
+            const updatedNotifications = [...notifications, notification]
+            setNotifications(updatedNotifications)
             play()
         }
     })
 
     friendsSocketApi.acceptListener((senderEmail) => {
-        dispatch(
-            addNotification(
-                {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST_ACCEPTED"}
-            )
-        )
+        const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST_ACCEPTED"}]
+        setNotifications(updatedNotifications)
         play()
     })
+
+    // useEffect(() => {
+    //     chatsSocketApi.globalListener( (notification) => {
+    //         console.log('29global', notification)
+    //         const { recipientEmail } = notification
+    //         if (notification.notificationType === "MESSAGE_SENT") {
+    //             console.log("sound should play")
+    //             play()
+    //             dispatch(
+    //                 addNotification(
+    //                     {recipientEmail, notificationType: "MESSAGE_SENT"}
+    //                 )
+    //             )
+    //             // play()
+    //         }
+    //     })
+    // }, [])
+
+
 
 
 
@@ -86,6 +112,11 @@ const NavBar = () => {
             });
         }
     };
+
+    const tempHandler = (e) => {
+        // e.preventDefault()
+        console.log('clickedLink', notifications)
+    }
 
     return (
         <div className="navbar">
@@ -155,7 +186,7 @@ const NavBar = () => {
                                         )
                                     } else if (notification.notificationType === "MESSAGE_SENT") {
                                         return (
-                                            <Link to="/groups" state={{ groupId: notification.groupId }}>{notification.message}</Link>
+                                            <Link onClick={tempHandler} to={`/groups`} state={{ groupId: notification.groupId }}>{notification.message}</Link>
                                         )
                                     }
                                 })}
