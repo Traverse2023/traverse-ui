@@ -11,9 +11,10 @@ import Search from "./pages/Search";
 import FriendsSocket from "./sockets/friends";
 import {SocketContext} from "./context/friends-socket-context";
 import ChatSocket from "./sockets/chat";
+import Post from "./pages/Feed/Post";
 
 function App() {
-    const { token, email, firstName, lastName, acceptLogin, acceptLogout } = useAuth();
+    const { token, email, firstName, lastName, pfpURL, acceptLogin, acceptLogout, updatePfpUrl } = useAuth();
 
     let routes;
     let friendsSocket;
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/groups" element={<Groups />} />
                     <Route path="/profile/:email" element={<Profile />} />
                     <Route path="/search" element={<Search />} />
+                    <Route path="/post" element={<Post type="page" />} />
                 </Routes>
             </Router>
         );
@@ -50,8 +52,10 @@ function App() {
                 token: token,
                 firstName: firstName,
                 lastName: lastName,
+                pfpURL: pfpURL,
                 acceptLogin: acceptLogin,
                 acceptLogout: acceptLogout,
+                updatePfpURL: updatePfpUrl
             }}
         >
             <SocketContext.Provider value={{
