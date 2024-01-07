@@ -11,13 +11,14 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import { addNotification } from '../redux/slices/notificationSlice';
 import axios from "axios";
+import {GroupContext} from "../context/group-context";
 
 const NavBar = () => {
     const auth = React.useContext(AuthContext);
     const { chatsSocketApi, friendsSocketApi } = useContext(SocketContext)
     const [play] = useSound("/audio/notificationsound.mp3");
     const navigate = useNavigate();
-
+    const groupControl = useContext(GroupContext);
     const [search, setSearch] = React.useState();
     const [notifications, setNotifications] = React.useState([])
 
@@ -113,8 +114,9 @@ const NavBar = () => {
         }
     };
 
-    const tempHandler = (e) => {
-        // e.preventDefault()
+    const tempHandler = (e, groupId, groupName) => {
+        e.preventDefault()
+        groupControl.setSelectedGroup({groupId, groupName})
         console.log('clickedLink', notifications)
     }
 
@@ -186,7 +188,7 @@ const NavBar = () => {
                                         )
                                     } else if (notification.notificationType === "MESSAGE_SENT") {
                                         return (
-                                            <Link onClick={tempHandler} to={`/groups`} state={{ groupId: notification.groupId }}>{notification.message}</Link>
+                                            <Link onClick={(e) => tempHandler(e, notification.groupId, notification.groupName)} to={`/groups`}>{notification.message}</Link>
                                         )
                                     }
                                 })}

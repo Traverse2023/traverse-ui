@@ -15,10 +15,14 @@ const GroupSelector = () => {
     const navigate = useNavigate();
 
     console.log("15", state)
-    if (state) {
-        console.log('17', state)
-        groupControl.setSelectedGroup(state)
-    }
+
+    useEffect(() => {
+        if (state) {
+            console.log('17', state)
+            groupControl.setSelectedGroup({groupId: state, groupName: "X"})
+        }
+    }, [state]);
+
 
     const [groups, setGroups] = useState([]);
     useEffect(() => {
