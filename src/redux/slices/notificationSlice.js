@@ -4,42 +4,42 @@ import axios from 'axios';
 
 
 const initialState = {
-    notifications: [],
-    loadState: 'idle',
-    addState: 'idle',
+  notifications: [],
+  loadState: 'idle',
+  addState: 'idle',
 };
 
 export const addNotificationAsync = createAsyncThunk(
-    'notifications/addNotification',
-    async (notification) => {
-      const response = await axios.post(
-        `${process.env.STORAGE_SERVICE_URL}/api/v1/notifications/createNotification`, notification
-      )
-      return response.data;
-    }
-  );
+  'notifications/addNotification',
+  async (notification) => {
+    const response = await axios.post(
+      `${process.env.STORAGE_SERVICE_URL}/api/v1/notifications/createNotification`, notification
+    )
+    return response.data;
+  }
+);
 
-  export const loadAllNotificationsAsync = createAsyncThunk(
-    'notifications/loadAllNotifications',
-    async (forEmail) => {
-      const response = await axios.get(
-        `${process.env.STORAGE_SERVICE_URL}/api/v1/notifications/getNotifications/${forEmail}}`
-      );
-      return response.data;
-    }
-  );
+export const loadAllNotificationsAsync = createAsyncThunk(
+  'notifications/loadAllNotifications',
+  async (forEmail) => {
+    const response = await axios.get(
+      `${process.env.STORAGE_SERVICE_URL}/api/v1/notifications/getNotifications/${forEmail}`
+    );
+    return response.data;
+  }
+);
 
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
     addNotification: (state, action) => {
-        console.log('action.payload: ', action)
+      console.log('action.payload: ', action)
       state.notifications.push(action.payload);
-        console.log("After adding not", state.notifications)
+      console.log("After adding not", state.notifications)
     },
     loadAllNotifications: (state, action) => {
-        state.notifications = action.payload;
+      state.notifications = action.payload;
     }
     // increment: (state) => {
     //   state.value += 1;

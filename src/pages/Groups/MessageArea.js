@@ -1,8 +1,8 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
-import {SocketContext} from "../../context/friends-socket-context";
-import {GroupContext} from "../../context/group-context";
-import {AuthContext} from "../../context/auth-context";
-import axios from "axios";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { SocketContext } from "../../context/friends-socket-context";
+import { GroupContext } from "../../context/group-context";
+import { AuthContext } from "../../context/auth-context";
+import usePaginatedMessages from "../../hooks/usePaginatedMessages";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import AgoraUIKit from 'agora-react-uikit';
 
@@ -10,18 +10,25 @@ const MessageArea = () => {
 
     const auth = useContext(AuthContext)
     const groupControl = useContext(GroupContext);
+    const [typedMsg, setTypedMsg] = useState("")
     const { chatsSocketApi } = useContext(SocketContext)
 
-    const [messages, setMessages] = useState([])
+    const [newMessageData, setNewMessageData] = useState(null)
+    const [messagesPage, setMessagesPage] = useState(1)
+    const { messages, error, loading, hasMore } = usePaginatedMessages(groupControl.selectedGroup, groupControl.selectedChannel, messagesPage)
 
-    const [typedMsg, setTypedMsg] = useState("")
 
     const typedMsgChangeHandler = (event) => {
         setTypedMsg(event.target.value)
     }
 
+    const observer = useRef()
+    const lastMessageRef = useCallback(item => {
+        setMessagesPage(prevPage => prevPage + 1)
+    })
+
     const sendMsg = (event) => {
-        if (event.key === 'Enter'){
+        if (event.key === 'Enter') {
             event.preventDefault()
             console.log('Enter key pressed', typedMsg)
             if (typedMsg.length > 0) {
@@ -39,17 +46,14 @@ const MessageArea = () => {
         }
     }
 
-    const getMessages = async() =>{
-        return await axios.get(`${process.env.REACT_APP_STORAGE_SERVICE_URL}/api/v1/messages/${groupControl.selectedGroup.groupId}/general`)
-    }
 
-    useEffect( () => {
-        getMessages().then(response => {
-            console.log('51', response)
-            if (response.data) setMessages(response.data)
-            else setMessages([])
-        }).catch(err => console.log(err))
-    }, [groupControl.selectedGroup.groupId])
+    // useEffect(() => {
+    //     getMessages().then(response => {
+    //         console.log('51', response)
+    //         if (response.data) setMessages(response.data)
+    //         else setMessages([])
+    //     }).catch(err => console.log(err))
+    // }, [groupControl.selectedGroup.groupId])
 
     useEffect(() => {
         // chatsSocketApi.joinMessageListener((joinMsg) => {
@@ -61,18 +65,14 @@ const MessageArea = () => {
 
         chatsSocketApi.receiveAddedToGroupNotificationListener((senderEmail, recipientEmail) => {
             console.log('receiveAddedToGroupNotificationListener', senderEmail, recipientEmail)
-            setMessages(prevState => {
-                return [...prevState,  `${senderEmail} has added ${recipientEmail}`]
-            })
+            setNewMessageData(`${senderEmail} has added ${recipientEmail}`)
         })
 
-        chatsSocketApi.receiveMessageListener((messageInfo) => {
-            console.log('44', messageInfo)
+        chatsSocketApi.receiveMessageListener((messageData) => {
+            console.log('44', messageData)
             // const currMsgs = [...messages]
             // currMsgs.push(messageInfo)
-            setMessages(prevState => {
-                return [...prevState, messageInfo]
-            })
+            setNewMessageData(messageData);
         })
     }, []);
 
@@ -118,8 +118,10 @@ const MessageArea = () => {
                 {/*            <AgoraUI />*/}
                 {messages.map((msg) => {
                     return (
-                        <div className="msg-container">
-                            <img className="pfp" src={msg.pfpURL}/>
+                        <div ref={lastMessageRef} className="msg-container">
+                            <div>{loading && 'Loading...'}</div>
+                            <div>{error && error}</div>
+                            <img className="pfp" src={msg.pfpURL} />
                             <div className="name-msg">
                                 {
                                     typeof msg === 'object' && msg !== null ?
@@ -134,18 +136,18 @@ const MessageArea = () => {
                             </div>
                             <br />
                         </div>)
-                        // <div id="stream-controls">
-                        //     <button id="leave-btn">Leave Stream</button>
-                        //     <button id="mic-btn">Mic On</button>
-                        //     <button id="camera-btn">Camera On</button>
-                        // </div>
+                    // <div id="stream-controls">
+                    //     <button id="leave-btn">Leave Stream</button>
+                    //     <button id="mic-btn">Mic On</button>
+                    //     <button id="camera-btn">Camera On</button>
+                    // </div>
                     // </div>
                 })}
             </div>
             <div className="msg-input-div">
                 <button className="plus">+</button>
                 {/*<button onClick={() => setStreamJoined(prevState => !prevState)}>{streamJoined? "Leave Stream" : "Join Stream"}</button>*/}
-                <textarea value={typedMsg} rows={0} className="msg-input" onChange={typedMsgChangeHandler} onKeyDown={sendMsg}/>
+                <textarea value={typedMsg} rows={0} className="msg-input" onChange={typedMsgChangeHandler} onKeyDown={sendMsg} />
             </div>
         </div>
     );
