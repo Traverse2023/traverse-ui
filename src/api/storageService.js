@@ -3,11 +3,13 @@ import axios from "axios";
 const storageServiceBaseURL = `${process.env.REACT_APP_STORAGE_SERVICE_URL}/api/v1`;
 
 const getPaginatedMessages = (groupId, channelName, pageNumber) => {
-    console.log(`Getting page ${pageNumber} of messages for group: ${groupId} and channel: ${channelName}`)
+    console.log(groupId)
+    console.log(channelName)
+    console.log(`Getting messages from ${storageServiceBaseURL}/messages/${groupId}/${channelName}/${pageNumber}`)
     return new Promise(async (resolve, reject) => {
         try {
             const response = await axios.get(
-                `${storageServiceBaseURL}/${groupId}/${channelName}/${pageNumber}`);
+                `${storageServiceBaseURL}/messages/${groupId}/${channelName}/${pageNumber}`);
             console.log(`Get messages data for group and channel ${groupId}, ${channelName}: ${response.data}`);
             resolve(response.data)
         } catch (error) {
@@ -17,11 +19,11 @@ const getPaginatedMessages = (groupId, channelName, pageNumber) => {
     });
 };
 
-const getPaginatedNotifications = (recieivingEmail) => {
+const getPaginatedNotifications = (recieivingEmail, pageNumber) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await axios.get(
-                `${storageServiceBaseURL}/notifications/getNotifications/${recieivingEmail}`)
+                `${storageServiceBaseURL}/notifications/getNotifications/${recieivingEmail}/ ${pageNumber}`)
             console.log(`Get notifications for user ${recieivingEmail}: ${response.data}`)
             resolve(response.data)
         } catch (error) {

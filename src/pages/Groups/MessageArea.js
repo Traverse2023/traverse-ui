@@ -12,10 +12,11 @@ const MessageArea = () => {
     const groupControl = useContext(GroupContext);
     const [typedMsg, setTypedMsg] = useState("")
     const { chatsSocketApi } = useContext(SocketContext)
+    //const [selectedChannel, setSelectedChannel] = useContext(null)
 
     const [newMessageData, setNewMessageData] = useState(null)
     const [messagesPage, setMessagesPage] = useState(1)
-    const { messages, error, loading, hasMore } = usePaginatedMessages(groupControl.selectedGroup, groupControl.selectedChannel, messagesPage)
+    const { messages, error, loading, hasMore } = usePaginatedMessages(groupControl.selectedGroup.groupId, groupControl.selectedChannel, messagesPage, newMessageData)
 
 
     const typedMsgChangeHandler = (event) => {
@@ -76,9 +77,9 @@ const MessageArea = () => {
         })
     }, []);
 
-    useEffect(() => {
-        console.log('52', messages)
-    }, [messages])
+    // useEffect(() => {
+    //     console.log('52', messages)
+    // }, [messages])
 
     const APP_ID = "056e7ee25ec24b4586f17ec177e121d1"
     const TOKEN = "007eJxTYBAzuFt2stBvl9GWrIYIgwXnFzSwN+6S3HQyjo2pom5TFpcCg4GpWap5aqqRaWqykUmSiamFWZqheWqyobl5qqGRYYqhjVlTakMgI8MmjuksjAwQCOKzMOQmZuYxMAAAu3Uc7A=="
@@ -112,16 +113,20 @@ const MessageArea = () => {
         <div className="messageArea">
             <header># general</header>
             <div className="text-area">
+                <div>{loading && 'Loading...'}</div>
+                <div>{error && error}</div>
                 {/*{streamJoined ?*/}
                 {/*    <div id="stream-wrapper">*/}
                 {/*        <div id="video-streams">*/}
                 {/*            <AgoraUI />*/}
                 {messages.map((msg) => {
+                    console.log(`Length ${messages.length}`)
+                    console.log(messages)
                     return (
-                        <div ref={lastMessageRef} className="msg-container">
-                            <div>{loading && 'Loading...'}</div>
-                            <div>{error && error}</div>
-                            <img className="pfp" src={msg.pfpURL} />
+                        <div
+                            // ref={lastMessageRef}
+                            key={msg._id} className="msg-container">
+                            <img className="pfp" />
                             <div className="name-msg">
                                 {
                                     typeof msg === 'object' && msg !== null ?
