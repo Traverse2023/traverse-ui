@@ -10,7 +10,7 @@ const getPaginatedMessages = (groupId, channelName, pageNumber) => {
         try {
             const response = await axios.get(
                 `${storageServiceBaseURL}/messages/${groupId}/${channelName}/${pageNumber}`);
-            console.log(`Get messages data for group and channel ${groupId}, ${channelName}: ${response.data}`);
+            console.log(`Get messages data for group and channel ${groupId}, ${channelName}`);
             resolve(response.data)
         } catch (error) {
             console.log(`Error retrieving stored messages: ${error}`)

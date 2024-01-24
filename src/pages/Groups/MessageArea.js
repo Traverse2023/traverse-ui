@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { SocketContext } from "../../context/friends-socket-context";
 import { GroupContext } from "../../context/group-context";
 import { AuthContext } from "../../context/auth-context";
@@ -12,21 +12,29 @@ const MessageArea = () => {
     const groupControl = useContext(GroupContext);
     const [typedMsg, setTypedMsg] = useState("")
     const { chatsSocketApi } = useContext(SocketContext)
-    //const [selectedChannel, setSelectedChannel] = useContext(null)
 
-    const [newMessageData, setNewMessageData] = useState(null)
-    const [messagesPage, setMessagesPage] = useState(1)
-    const { messages, error, loading, hasMore } = usePaginatedMessages(groupControl.selectedGroup.groupId, groupControl.selectedChannel, messagesPage, newMessageData)
+    const [newMessageData, setNewMessageData] = useState()
+    const [pageNumber, setPageNumber] = useState(1)
+    const { messages, error, loading, hasMore } = usePaginatedMessages(groupControl.selectedGroup.groupId, groupControl.selectedChannel, pageNumber, newMessageData)
 
-
+    const scrollDiv = useRef(null)
     const typedMsgChangeHandler = (event) => {
         setTypedMsg(event.target.value)
     }
 
     const observer = useRef()
-    const lastMessageRef = useCallback(item => {
-        setMessagesPage(prevPage => prevPage + 1)
-    })
+    const topMessageRef = useCallback(item => {
+        if (loading) return
+        if (observer.current) observer.current.disconnect()
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                console.log(hasMore)
+                console.log('Last message is now visible on screen. Prompting get next page of messages if available')
+                setPageNumber(prevPageNumber => prevPageNumber + 1);
+            }
+        })
+        if (item) observer.current.observe(item)
+    }, [hasMore])
 
     const sendMsg = (event) => {
         if (event.key === 'Enter') {
@@ -47,23 +55,11 @@ const MessageArea = () => {
         }
     }
 
+    let initialRender = useRef(true)
 
-    // useEffect(() => {
-    //     getMessages().then(response => {
-    //         console.log('51', response)
-    //         if (response.data) setMessages(response.data)
-    //         else setMessages([])
-    //     }).catch(err => console.log(err))
-    // }, [groupControl.selectedGroup.groupId])
 
     useEffect(() => {
-        // chatsSocketApi.joinMessageListener((joinMsg) => {
-        //     console.log('line9MsgArea', joinMsg)
-        //     setMessages(prevState => {
-        //         return [...prevState,  joinMsg]
-        //     })
-        // })
-
+        //scrollDiv.current.scrollIntoView({ block: "end" });
         chatsSocketApi.receiveAddedToGroupNotificationListener((senderEmail, recipientEmail) => {
             console.log('receiveAddedToGroupNotificationListener', senderEmail, recipientEmail)
             setNewMessageData(`${senderEmail} has added ${recipientEmail}`)
@@ -71,15 +67,19 @@ const MessageArea = () => {
 
         chatsSocketApi.receiveMessageListener((messageData) => {
             console.log('44', messageData)
-            // const currMsgs = [...messages]
-            // currMsgs.push(messageInfo)
             setNewMessageData(messageData);
         })
+
+
     }, []);
 
-    // useEffect(() => {
-    //     console.log('52', messages)
-    // }, [messages])
+    useLayoutEffect(() => {
+        if (scrollDiv?.current) {
+            scrollDiv.current.scrollTop = scrollDiv.current.scrollHeight;
+        }
+    }, [scrollDiv])
+
+
 
     const APP_ID = "056e7ee25ec24b4586f17ec177e121d1"
     const TOKEN = "007eJxTYBAzuFt2stBvl9GWrIYIgwXnFzSwN+6S3HQyjo2pom5TFpcCg4GpWap5aqqRaWqykUmSiamFWZqheWqyobl5qqGRYYqhjVlTakMgI8MmjuksjAwQCOKzMOQmZuYxMAAAu3Uc7A=="
@@ -119,36 +119,70 @@ const MessageArea = () => {
                 {/*    <div id="stream-wrapper">*/}
                 {/*        <div id="video-streams">*/}
                 {/*            <AgoraUI />*/}
-                {messages.map((msg) => {
-                    console.log(`Length ${messages.length}`)
-                    console.log(messages)
-                    return (
-                        <div
-                            // ref={lastMessageRef}
-                            key={msg._id} className="msg-container">
-                            <img className="pfp" />
-                            <div className="name-msg">
-                                {
-                                    typeof msg === 'object' && msg !== null ?
-                                        <ul>
-                                            <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
-                                            <li>{msg.text}</li>
-                                        </ul> :
-                                        <ul>
-                                            <li>{msg}</li> <br />
-                                        </ul>
-                                }
+                {messages.map((msg, index) => {
+                    if (0 === index) {
+                        return (
+                            <div ref={topMessageRef} key={msg._id} className="msg-container">
+                                <img className="pfp" />
+                                <div className="name-msg">
+                                    {
+                                        typeof msg === 'object' && msg !== null ?
+                                            <ul>
+                                                <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
+                                                <li>{msg.text}</li>
+                                            </ul> :
+                                            <ul>
+                                                <li>{msg}</li> <br />
+                                            </ul>
+                                    }
+                                </div>
+                                <br />
                             </div>
-                            <br />
-                        </div>)
-                    // <div id="stream-controls">
-                    //     <button id="leave-btn">Leave Stream</button>
-                    //     <button id="mic-btn">Mic On</button>
-                    //     <button id="camera-btn">Camera On</button>
-                    // </div>
-                    // </div>
+                        )
+                    }
+                    else if (index === messages.length - 1) {
+                        return (
+                            <div key={msg._id} className="msg-container">
+                                <img className="pfp" />
+                                <div className="name-msg">
+                                    {
+                                        typeof msg === 'object' && msg !== null ?
+                                            <ul>
+                                                <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
+                                                <li>{msg.text}</li>
+                                            </ul> :
+                                            <ul>
+                                                <li>{msg}</li> <br />
+                                            </ul>
+                                    }
+                                </div>
+                                <br />
+                            </div>
+                        )
+                    }
+                    else {
+                        return (
+                            <div key={msg._id} className="msg-container">
+                                <img className="pfp" />
+                                <div className="name-msg">
+                                    {
+                                        typeof msg === 'object' && msg !== null ?
+                                            <ul>
+                                                <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
+                                                <li>{msg.text}</li>
+                                            </ul> :
+                                            <ul>
+                                                <li>{msg}</li> <br />
+                                            </ul>
+                                    }
+                                </div>
+                                <br />
+                            </div>)
+                    }
                 })}
             </div>
+            <div ref={scrollDiv}></div>
+
             <div className="msg-input-div">
                 <button className="plus">+</button>
                 {/*<button onClick={() => setStreamJoined(prevState => !prevState)}>{streamJoined? "Leave Stream" : "Join Stream"}</button>*/}

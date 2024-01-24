@@ -7,14 +7,12 @@ export default function usePaginatedMessages(groupId, channelName, pageNumber, n
     const [error, setError] = useState(false)
     const [messages, setMessages] = useState([])
 
-    const getMessages = (group, channel, page) => {
-
-    }
+    // Use effect called when a new message enters chat
     useEffect(() => {
-        console.log("State refreshed due to new message")
         setLoading(true)
         setError(false)
         if (newMessage) {
+            console.log(`Received message: ${newMessage}`)
             setMessages(prevMessages => {
                 return [...prevMessages, newMessage]
             })
@@ -22,24 +20,25 @@ export default function usePaginatedMessages(groupId, channelName, pageNumber, n
         setLoading(false)
     }, [newMessage])
 
+    // Called when scrool reaches last message to load additional page of messages
     useEffect(() => {
-        console.log("Messages state refreshed due to load more message history")
+        console.log(`Loading page ${pageNumber} from group: ${groupId}, channel: ${channelName}`)
         setLoading(true)
         setError(false)
         getPaginatedMessages(groupId, channelName, pageNumber)
             .then(value => {
-                console.log(value)
                 if (value) {
                     setMessages(prevMessages => {
-                        return [...value, ...prevMessages]
+                        return [...value.messages, ...prevMessages]
                     })
+                    messages.forEach(m => { console.log(m.text) })
                 }
                 else {
+                    console.log("no messages")
                     setMessages([])
                 }
-
-
-                //setHasMore(value.messageCount - messages.length > 0)
+                console.log(`Messages remaining in DB: ${value.messageCount - messages.length}`)
+                setHasMore(value.messageCount - messages.length > 0)
                 setLoading(false)
             })
             .catch(error => {
@@ -48,20 +47,22 @@ export default function usePaginatedMessages(groupId, channelName, pageNumber, n
             })
     }, [pageNumber])
 
+    // Initial render use effect gets database messages using groupId and channelName
     useEffect(() => {
         console.log("Messages state refreshed due to load new group or channel")
         setLoading(true)
         setError(false)
         getPaginatedMessages(groupId, channelName, 1)
             .then(value => {
-                console.log(`Get messages: ${value}`)
+                console.log("Messages received")
+                value.messages.forEach(m => { console.log(m.text) })
                 if (value) {
-                    setMessages(value)
+                    setMessages(value.messages)
                 }
                 else {
                     setMessages([])
                 }
-                //setHasMore(value.messageCount - messages.length > 0)
+                setHasMore(value.messageCount - messages.length > 0)
                 setLoading(false)
             })
             .catch(error => {
