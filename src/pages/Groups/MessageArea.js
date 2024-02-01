@@ -43,6 +43,7 @@ const MessageArea = () => {
             if (typedMsg.length > 0) {
                 const message_info = {
                     msg: typedMsg,
+                    channelName: groupControl.selectedChannel,
                     firstName: auth.firstName,
                     lastName: auth.lastName,
                     pfpURL: auth.pfpURL,
