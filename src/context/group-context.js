@@ -4,5 +4,6 @@ export const GroupContext = createContext({
     selectedGroup: "control-center",
     selectedChannel: "general",
     members: [],
-    setMembers: () => {}
+    messages: [],
+    setMembers: () => { }
 });
