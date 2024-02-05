@@ -12,8 +12,6 @@ import { useNavigate } from "react-router-dom";
 
 import ReactS3 from "react-s3";
 
-// window.Buffer = window.Buffer || require("buffer").Buffer;
-
 const FriendsTable = ({ allFriends, location, triggers }) => {
     const navigate = useNavigate();
     return (
