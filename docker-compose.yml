@@ -1,12 +1,10 @@
 version: "3.8"
 services:
-
-  front-end:
-    build: ../traverse-ui
-    ports:
-      - 3000:3000
-    container_name: front-end
-    environment:
-      REACT_APP_BACKEND_URL: http://127.0.0.1:8000/
-      REACT_APP_STORAGE_SERVICE_URL: http://127.0.0.1:8080
-
+    front-end:
+        build: ../traverse-ui
+        ports:
+            - 3000:3000
+        container_name: front-end
+        environment:
+            VITE_APP_BACKEND_URL: http://127.0.0.1:8000/
+            VITE_APP_STORAGE_SERVICE_URL: http://127.0.0.1:8080

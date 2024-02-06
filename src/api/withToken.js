@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const backend = axios.create({
-    baseURL: process.env.REACT_APP_BACKEND_URL + "api/"
+    baseURL: import.meta.env.VITE_APP_BACKEND_URL + "api/",
 });
 
 const createGroup = (token, groupInfo, user1Email) => {
@@ -62,7 +62,7 @@ const getMembers = (token, groupId) => {
                 `group/getMembers/${groupId}`,
                 config
             );
-            console.log('withTokenline65', response.data);
+            console.log("withTokenline65", response.data);
             resolve(response.data);
         } catch (err) {
             console.log(err);
@@ -83,7 +83,7 @@ const getFriendsWhoAreNotMembers = (token, user1Email, groupId) => {
                 `group/getFriendsWhoAreNotMembers/${user1Email}/${groupId}`,
                 config
             );
-            console.log('withTokenline65', response.data);
+            console.log("withTokenline65", response.data);
             resolve(response.data);
         } catch (err) {
             console.log(err);
@@ -325,5 +325,5 @@ export {
     getMembers,
     getFriendsWhoAreNotMembers,
     getFriendRequests,
-    savePFP
+    savePFP,
 };
