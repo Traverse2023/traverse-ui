@@ -10,8 +10,8 @@ RUN npm run build
 
 COPY ./dist ./dist
 
-# RUN npm install -g http-server
+RUN npm install -g http-server
 
-# EXPOSE 3000
+EXPOSE 3000
 
-# CMD ["http-server", "dist", "-p", "3000"]
+CMD ["http-server", "dist", "-p", "3000"]
