@@ -5,9 +5,8 @@
     "type": "module",
     "scripts": {
         "start": "vite",
-        "build": "vite build",
-        "preview": "vite preview",
-        "dev": "vite --host"
+        "build": "NODE_ENV=production vite build",
+        "preview": "vite preview"
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.5.1",
