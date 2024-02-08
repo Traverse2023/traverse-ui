@@ -19,7 +19,7 @@ const login = (email, password) => {
             loadAllNotificationsAsync(email);
             resolve(response.data);
         } catch (err) {
-            console.log("====================================");
+            console.log("=====================================");
             console.log("her2");
             console.log("====================================");
             console.log(err);
