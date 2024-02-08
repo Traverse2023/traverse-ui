@@ -8,8 +8,6 @@ RUN npm ci
 
 RUN npm run build
 
-COPY ./dist ./dist
-
 RUN npm install -g http-server
 
 EXPOSE 3000
