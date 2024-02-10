@@ -1617,3 +1617,15 @@ border-radius: 8px;
   margin-top: 0.5em;
   font-size: small;
 }
+
+.newNotification {
+  content: "";
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  width: 8px;
+  height: 8px;
+  background-color: blue;
+  border-radius: 50%;
+}

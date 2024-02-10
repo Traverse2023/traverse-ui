@@ -1,8 +1,10 @@
 import Post from "./Post";
 import Modal from "../../components/Modal";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import ReactQuill from "react-quill";
 import Editor from "./CreatePost";
+import {useInfiniteQuery} from "react-query";
+import axios from "axios";
 
 const FeedArea = () => {
     const [createPostModal, setCreatePostModal] = useState(false)
@@ -11,6 +13,47 @@ const FeedArea = () => {
         console.log('npc', newPostContent)
     }, [newPostContent])
     const [posts, setPosts] = useState([])
+
+    // const fetchData= async ({pageParam}) => {
+    //     const offset = pageParam ? pageParam : 0;
+    //     const data = await axios.get(
+    //         `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${LIMIT}`
+    //     );
+    //     return {
+    //         results: data.data.results,
+    //         offset: offset + LIMIT,
+    //     };
+    // };
+    // const {
+    //     data,
+    //     error,
+    //     fetchNextPage,
+    //     hasNextPage,
+    //     isFetching,
+    //     isLoading,
+    // } = useInfiniteQuery('data', fetchData, {
+    //     getNextPageParam: (lastPage, pages) => lastPage.offset,
+    // });
+    //
+    // const flattenedData = useMemo(
+    //     () => (data ? data?.pages.flatMap(item => item.results) : []),
+    //     [data]
+    // );
+    //
+    // const observer = useRef();
+    // const lastElementRef = useCallback(
+    //     (node) => {
+    //         if (isLoading) return;
+    //         if (observer.current) observer.current.disconnect();
+    //         observer.current = new IntersectionObserver(entries => {
+    //             if (entries[0].isIntersecting && hasNextPage && !isFetching) {
+    //                 fetchNextPage();
+    //             }
+    //         });
+    //         if (node) observer.current.observe(node);
+    //     },
+    //     [isLoading, hasNextPage]
+    // );
 
     const modules = {
         toolbar: [
