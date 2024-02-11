@@ -1,16 +1,64 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Modal from "../../components/Modal";
 import ServerOptsOverlay, {
     titleOverlayTargetHandler,
 } from "./ServerOptsOverlay";
+import cloneDeep from 'lodash/cloneDeep';
+
+import {GroupContext} from "../../context/group-context";
+import {AuthContext} from "../../context/auth-context";
+import {SocketContext} from "../../context/friends-socket-context";
+import VoiceChannel from "./VoiceChannel.jsx";
 
 const SubGroupSelector = () => {
     const [show, setShow] = React.useState(false);
     const target = React.useRef(null);
-
+    const [rtcProps, setRtcProps] = React.useState(null)
     const [createModal, setCreateModal] = React.useState(false);
+    const auth = useContext(AuthContext)
+    const groupControl = useContext(GroupContext)
+    // const { chatsSocketApi } = useContext(SocketContext)
+    const [channels, setChannels] = useState(new Map())
+
+    useEffect(() => {
+        const response = ['general', 'announcements', 'events']
+        setChannels(new Map(response.map(channelName => [channelName, []])))
+    }, []);
+
+    const addUser = (channelName, user) => {
+        // If channel doesn't exist, create a new map
+        const updatedChannels = new Map(channels); // Copy the map to avoid directly mutating state
+        // if (!updatedChannels.has(channelName)) {
+        //     updatedChannels.set(channelName, new Map());
+        // }
+
+        // Remove the user from any existing channels
+        for (const [currChannelName, users] of updatedChannels) {
+            console.log('going thru channels', currChannelName, users)
+            for (let i = 0; i < users.length; i++) {
+                const existingUser = users[i]
+                if (existingUser.email === user.email) {
+                    console.log('found user in this channel, deleting...')
+                    users.splice(i, 1)
+                    console.log('new array', users)
+                    console.log('new map', updatedChannels)
+                    break
+                }
+            }
+        }
+
+        // Add the user object to the map for the specified channel
+        updatedChannels.get(channelName).push(user);
+        console.log('added to new channel', channelName)
+        setChannels(updatedChannels);
+    };
+
+    useEffect(() => {
+        console.log('channels map', channels)
+    }, [channels])
+
 
     return (
         <div className="subGroupSelector">
@@ -57,6 +105,14 @@ const SubGroupSelector = () => {
                     <Modal show={createModal} setModalStatus={setCreateModal}>
                         <p>Some text in the Modal..</p>
                     </Modal>
+                    {/*<Modal show={joined} setModalStatus={setJoined} className="modal-content-full">*/}
+                    {/*    /!*<AgoraRTCProvider client={agoraEngine}>*!/*/}
+                    {/*    /!*    <AgoraManager config={config} >*!/*/}
+                    {/*    /!*    </AgoraManager>*!/*/}
+                    {/*    /!*</AgoraRTCProvider>*!/*/}
+                    {/*    /!*{rtcProps?.token}*!/*/}
+                    {/*    /!*{joined && rtcProps && <AgoraUIKit  rtcProps={rtcProps} callbacks={callbacks}/>}*!/*/}
+                    {/*</Modal>*/}
                 </div>
                 <div className="channel">
                     <h1>#</h1>
@@ -103,20 +159,7 @@ const SubGroupSelector = () => {
                         <button className="add-channel-btn">+</button>
                     </OverlayTrigger>
                 </div>
-                <div className="channel">
-                    <h1>#</h1>
-                    <h6>general</h6>
-                    <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={
-                            <Tooltip className="tooltip">Edit Channel</Tooltip>
-                        }
-                    >
-                        <button>*</button>
-                    </OverlayTrigger>
-                    {/* <button>*</button> */}
-                </div>
+                {[...channels.keys()].map(channelName => <VoiceChannel channelName={channelName} channels={channels} addUser={addUser}/>)}
             </div>
             {/* </div> */}
             <div className="bottom-tab">
