@@ -3,8 +3,6 @@ import { SocketContext } from "../../context/friends-socket-context";
 import { GroupContext } from "../../context/group-context";
 import { AuthContext } from "../../context/auth-context";
 import usePaginatedMessages from "../../hooks/usePaginatedMessages";
-import AgoraRTC from "agora-rtc-sdk-ng";
-import AgoraUIKit from 'agora-react-uikit';
 
 const MessageArea = () => {
 

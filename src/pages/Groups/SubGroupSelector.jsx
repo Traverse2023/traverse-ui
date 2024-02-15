@@ -25,6 +25,7 @@ const SubGroupSelector = () => {
     useEffect(() => {
         const response = ['general', 'announcements', 'events']
         setChannels(new Map(response.map(channelName => [channelName, []])))
+        // Map("general": [{user.email,...}])
     }, []);
 
     const addUser = (channelName, user) => {
