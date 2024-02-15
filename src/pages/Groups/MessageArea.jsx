@@ -1,10 +1,11 @@
-import React, { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { SocketContext } from "../../context/friends-socket-context";
-import { GroupContext } from "../../context/group-context";
-import { AuthContext } from "../../context/auth-context";
+import React, {useCallback, useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
+import {SocketContext} from "../../context/friends-socket-context";
+import {GroupContext} from "../../context/group-context";
+import {AuthContext} from "../../context/auth-context";
 import usePaginatedMessages from "../../hooks/usePaginatedMessages";
-import AgoraRTC from "agora-rtc-sdk-ng";
-import AgoraUIKit from 'agora-react-uikit';
+import {VideoRoom} from "../../components/VideoRoom.jsx";
+import axios from "axios";
+
 
 const MessageArea = () => {
 
@@ -12,7 +13,7 @@ const MessageArea = () => {
     const groupControl = useContext(GroupContext);
     const [typedMsg, setTypedMsg] = useState("")
     const { chatsSocketApi } = useContext(SocketContext)
-
+    const [streamJoined, setStreamJoined] = useState(false)
     const [newMessageData, setNewMessageData] = useState()
     const [pageNumber, setPageNumber] = useState(1)
     const { messages, error, loading, hasMore } = usePaginatedMessages(groupControl.selectedGroup.groupId, groupControl.selectedChannel, pageNumber, newMessageData)
@@ -57,6 +58,11 @@ const MessageArea = () => {
     }
 
     let initialRender = useRef(true)
+
+
+    async function handleJoinStream() {
+        setStreamJoined(prevState => !prevState)
+    }
 
 
     useEffect(() => {
@@ -109,84 +115,96 @@ const MessageArea = () => {
     //     );
     // };
 
-    const [streamJoined, setStreamJoined] = useState(false)
     return (
         <div className="messageArea">
             <header># general</header>
             <div className="text-area">
                 <div>{loading && 'Loading...'}</div>
                 <div>{error && error}</div>
-                {/*{streamJoined ?*/}
-                {/*    <div id="stream-wrapper">*/}
-                {/*        <div id="video-streams">*/}
-                {/*            <AgoraUI />*/}
-                {messages.map((msg, index) => {
-                    if (0 === index) {
-                        return (
-                            <div ref={topMessageRef} key={msg._id} className="msg-container">
-                                <img className="pfp" />
-                                <div className="name-msg">
-                                    {
-                                        typeof msg === 'object' && msg !== null ?
-                                            <ul>
-                                                <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
-                                                <li>{msg.text}</li>
-                                            </ul> :
-                                            <ul>
-                                                <li>{msg}</li> <br />
-                                            </ul>
-                                    }
-                                </div>
-                                <br />
-                            </div>
-                        )
-                    }
-                    else if (index === messages.length - 1) {
-                        return (
-                            <div key={msg._id} className="msg-container">
-                                <img className="pfp" />
-                                <div className="name-msg">
-                                    {
-                                        typeof msg === 'object' && msg !== null ?
-                                            <ul>
-                                                <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
-                                                <li>{msg.text}</li>
-                                            </ul> :
-                                            <ul>
-                                                <li>{msg}</li> <br />
-                                            </ul>
-                                    }
-                                </div>
-                                <br />
-                            </div>
-                        )
-                    }
-                    else {
-                        return (
-                            <div key={msg._id} className="msg-container">
-                                <img className="pfp" />
-                                <div className="name-msg">
-                                    {
-                                        typeof msg === 'object' && msg !== null ?
-                                            <ul>
-                                                <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
-                                                <li>{msg.text}</li>
-                                            </ul> :
-                                            <ul>
-                                                <li>{msg}</li> <br />
-                                            </ul>
-                                    }
-                                </div>
-                                <br />
-                            </div>)
-                    }
-                })}
+                {!streamJoined && (
+                        <button onClick={() => handleJoinStream()}>{streamJoined? "Leave Stream" : "Join Stream"}</button>
+                    )}
+                {streamJoined && (
+                    <div>
+                        <VideoRoom
+                                   email ={auth.email}
+                                   channel={groupControl.selectedGroup.groupId + groupControl.selectedChannel}
+                        />
+                    </div>
+
+                )}
+                {/*:*/}
+                {/*messages.map((msg, index) => {*/}
+                {/*    if (0 === index) {*/}
+                {/*        return (*/}
+                {/*            <div ref={topMessageRef} key={msg._id} className="msg-container">*/}
+                {/*                <img className="pfp"/>*/}
+                {/*                <div className="name-msg">*/}
+                {/*                    {*/}
+                {/*                        typeof msg === 'object' && msg !== null ?*/}
+                {/*                            <ul>*/}
+                {/*                                <li>{msg.firstName} {msg.lastName} {msg.time}</li>*/}
+                {/*                                <br/>*/}
+                {/*                                <li>{msg.text}</li>*/}
+                {/*                            </ul> :*/}
+                {/*                            <ul>*/}
+                {/*                                <li>{msg}</li>*/}
+                {/*                                <br/>*/}
+                {/*                            </ul>*/}
+                {/*                    }*/}
+                {/*                </div>*/}
+                {/*                <br/>*/}
+                {/*            </div>*/}
+                {/*        )*/}
+                {/*    } else if (index === messages.length - 1) {*/}
+                {/*        return (*/}
+                {/*            <div key={msg._id} className="msg-container">*/}
+                {/*                <img className="pfp"/>*/}
+                {/*                <div className="name-msg">*/}
+                {/*                    {*/}
+                {/*                        typeof msg === 'object' && msg !== null ?*/}
+                {/*                            <ul>*/}
+                {/*                                <li>{msg.firstName} {msg.lastName} {msg.time}</li>*/}
+                {/*                                <br/>*/}
+                {/*                                <li>{msg.text}</li>*/}
+                {/*                            </ul> :*/}
+                {/*                            <ul>*/}
+                {/*                                <li>{msg}</li>*/}
+                {/*                                <br/>*/}
+                {/*                            </ul>*/}
+                {/*                    }*/}
+                {/*                </div>*/}
+                {/*                <br/>*/}
+                {/*            </div>*/}
+                {/*        )*/}
+                {/*    } else {*/}
+                {/*        return (*/}
+                {/*            <div key={msg._id} className="msg-container">*/}
+                {/*                <img className="pfp"/>*/}
+                {/*                <div className="name-msg">*/}
+                {/*                    {*/}
+                {/*                        typeof msg === 'object' && msg !== null ?*/}
+                {/*                            <ul>*/}
+                {/*                                <li>{msg.firstName} {msg.lastName} {msg.time}</li>*/}
+                {/*                                <br/>*/}
+                {/*                                <li>{msg.text}</li>*/}
+                {/*                            </ul> :*/}
+                {/*                            <ul>*/}
+                {/*                                <li>{msg}</li>*/}
+                {/*                                <br/>*/}
+                {/*                            </ul>*/}
+                {/*                    }*/}
+                {/*                </div>*/}
+                {/*                <br/>*/}
+                {/*            </div>)*/}
+                {/*    }*/}
+
+                {/*})}*/}
+
             </div>
             <div ref={scrollDiv}></div>
-
             <div className="msg-input-div">
                 <button className="plus">+</button>
-                {/*<button onClick={() => setStreamJoined(prevState => !prevState)}>{streamJoined? "Leave Stream" : "Join Stream"}</button>*/}
                 <textarea value={typedMsg} rows={0} className="msg-input" onChange={typedMsgChangeHandler} onKeyDown={sendMsg} />
             </div>
         </div>
