@@ -11,11 +11,12 @@ const MessageArea = () => {
 
     const auth = useContext(AuthContext)
     const groupControl = useContext(GroupContext);
-    const [typedMsg, setTypedMsg] = useState("")
-    const { chatsSocketApi } = useContext(SocketContext)
-    const [streamJoined, setStreamJoined] = useState(false)
-    const [newMessageData, setNewMessageData] = useState()
-    const [pageNumber, setPageNumber] = useState(1)
+    const [typedMsg, setTypedMsg] = useState("");
+    const { chatsSocketApi } = useContext(SocketContext);
+    // If user is in video call, setInCall gets passed to video room
+    const [inCall, setInCall] = useState(false);
+    const [newMessageData, setNewMessageData] = useState();
+    const [pageNumber, setPageNumber] = useState(1);
     const { messages, error, loading, hasMore } = usePaginatedMessages(groupControl.selectedGroup.groupId, groupControl.selectedChannel, pageNumber, newMessageData)
 
     const scrollDiv = useRef(null)
@@ -121,18 +122,19 @@ const MessageArea = () => {
             <div className="text-area">
                 <div>{loading && 'Loading...'}</div>
                 <div>{error && error}</div>
-                {!streamJoined && (
-                        <button onClick={() => handleJoinStream()}>{streamJoined? "Leave Stream" : "Join Stream"}</button>
-                    )}
+                <button onClick={() => handleJoinStream()}>{streamJoined? "Leave Stream" : "Join Stream"}</button>
+
                 {streamJoined && (
                     <div>
                         <VideoRoom
-                                   email ={auth.email}
-                                   channel={groupControl.selectedGroup.groupId + groupControl.selectedChannel}
+                            setInCall={setInCall()}
+                            email={auth.email}
+                            channelId={groupControl.selectedGroup.groupId + groupControl.selectedChannel}
                         />
                     </div>
 
                 )}
+
                 {/*:*/}
                 {/*messages.map((msg, index) => {*/}
                 {/*    if (0 === index) {*/}
