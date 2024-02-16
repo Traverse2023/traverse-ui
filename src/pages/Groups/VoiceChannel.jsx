@@ -1,32 +1,45 @@
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import React, {createContext, useContext, useEffect, useRef} from "react";
+import React, {createContext, useContext, useEffect, useRef, useState} from "react";
 import {SocketContext} from "../../context/friends-socket-context.js";
 import {AuthContext} from "../../context/auth-context.js";
 import {GroupContext} from "../../context/group-context.js";
-import AgoraRTC from 'agora-rtc-sdk-ng';
 import axios from "axios";
 import {
-    RemoteUser,
-    useJoin,
-    useLocalMicrophoneTrack,
-    usePublish,
-    useRTCClient,
+    useJoin, useRTCClient, useClientEvent, useIsConnected, useRemoteAudioTracks,
     useRemoteUsers,
-    useClientEvent, AgoraRTCProvider,
+    useRemoteVideoTracks, LocalAudioTrack, RemoteAudioTrack, useLocalMicrophoneTrack, usePublish,
 } from "agora-rtc-react";
-
-import { IMicrophoneAudioTrack, ICameraVideoTrack } from "agora-rtc-sdk-ng";
+import {Room} from "./Room.jsx";
+import {RenderRemoteUsers} from "./RemoteUsers.jsx";
 
 const VoiceChannel = ({channelName, channels, addUser}) => {
+    const [joined, setJoined] = useState(false)
+    const [localTrackReady, setLocalTrackReady] = useState(false)
+    const isConnected = useIsConnected();
+    useEffect(()=> {
+        console.log('isConnected', isConnected)
+    }, [isConnected, joined])
     const { chatsSocketApi } = useContext(SocketContext)
     const auth = useContext(AuthContext)
     const groupControl = useContext(GroupContext)
 
-    const agoraEngine = useRTCClient(AgoraRTC.createClient({ codec: "vp8", mode: 'rtc' }))
-    const { isLoading: isLoadingMic, localMicrophoneTrack } = useLocalMicrophoneTrack();
+    const [micOn, setMic] = useState(true);
+    const [cameraOn, setCamera] = useState(false);
+
     const remoteUsers = useRemoteUsers();
-    usePublish([localMicrophoneTrack]);
+    // const { videoTracks } = useRemoteVideoTracks(remoteUsers);
+    const { audioTracks : remoteAudioTracks } = useRemoteAudioTracks(remoteUsers);
+    useEffect(() =>{
+        console.log('rAT', remoteAudioTracks)
+    }, [remoteAudioTracks])
+    remoteAudioTracks.map(track => track.play());
+
+    const client = useRTCClient();
+    useClientEvent(client, "user-joined", (user) => {
+        console.log("user joined", user.uid)
+        setLocalTrackReady(true)
+    });
 
     useEffect(() => {
         // console.log('24configuid', config.uid)
@@ -35,8 +48,23 @@ const VoiceChannel = ({channelName, channels, addUser}) => {
             addUser(channelName, member)
         })
     }, []);
-    const joinVoiceChannel = () => {
-        joinAgoraChannel()
+
+    const getAgoraToken = async () => {
+        const res = await axios.get('http://localhost:8000/getAgoraToken/' + auth.email + '/' + channelName);
+        const token = res.data.token;
+        console.log("Token: " + token)
+        return token;
+    }
+    useJoin(
+        {
+            appid: "056e7ee25ec24b4586f17ec177e121d1",
+            channel: "general",
+            token: "007eJxTYCi8Y+Lwck5FxmLzbgf/39PK3PV2zVwoksml/sH90Ofc228UGAxMzVLNU1ONTFOTjUySTEwtzNIMzVOTDc3NUw2NDFMM0z6dS20IZGRwOPeZmZEBAkF8dob01LzUosQcBgYA+vEiRw==",
+        },
+        joined
+    );
+    const joinVoiceChannel = async () => {
+        setJoined(true)
         chatsSocketApi.joinCall({
             email: auth.email,
             firstName: auth.firstName,
@@ -45,50 +73,13 @@ const VoiceChannel = ({channelName, channels, addUser}) => {
         }, groupControl.selectedGroup, channelName)
     }
 
-    const localStreamRef = useRef(null);
-
-    useClientEvent(agoraEngine, "user-joined", (user) => {
-        console.log("The user" , user.uid , " has joined the channel");
-    });
-
-    useClientEvent(agoraEngine, "user-left", (user) => {
-        console.log("The user" , user.uid , " has left the channel");
-    });
-
-    useClientEvent(agoraEngine, "user-published", (user, mediaType) => {
-        console.log("The user" , user.uid , " has published media in the channel");
-    });
-
-    const joinAgoraChannel = async () => {
-        axios.get('http://localhost:8000/getAgoraToken/' + auth.email + '/' + groupControl.selectedGroup.groupId + '-' +channelName).then(response => {
-            const appId = '056e7ee25ec24b4586f17ec177e121d1';
-            const token = response.data.token
-            const uid = 0
-            console.log('token', token)
-            console.log('uuid', uid)
-            const client = AgoraRTC.createClient({ codec: 'vp8', mode: 'rtc' });
-
-            useJoin({
-                appid: "056e7ee25ec24b4586f17ec177e121d1",
-                channel: groupControl.selectedGroup.groupId + '-' + channelName,
-                token: token,
-                uid: uid,
-            });
-
-
-        })
-    };
-    const AgoraContext = createContext(null);
-    const AgoraProvider = ({ children, localMicrophoneTrack }) => (
-        <AgoraContext.Provider value={{ localMicrophoneTrack, children }}>
-            {children}
-        </AgoraContext.Provider>
-    );
+    const { localMicrophoneTrack: localAudioTrack } = useLocalMicrophoneTrack(micOn);
+    console.log('localTrack', localAudioTrack)
+    usePublish([localAudioTrack], localTrackReady, client)
 
     return (
         <>
             <div className="channel" onClick={joinVoiceChannel}>
-                <div id="local_stream" ref={localStreamRef}></div>
                 <h1>#</h1>
                 <h6>{channelName}</h6>
                 <OverlayTrigger
@@ -110,17 +101,24 @@ const VoiceChannel = ({channelName, channels, addUser}) => {
                         <div style={{textAlign: "center", fontSize: "14px"}}>{member.firstName+' '+member.lastName}</div>
                     </div>
                 ))}
-                <AgoraRTCProvider client={agoraEngine}>
-                    <AgoraProvider localMicrophoneTrack={localMicrophoneTrack}>
-                        {children}
-                        {remoteUsers.map((remoteUser) => (
-                            <div key={remoteUser.uid}>
-                                <RemoteUser user={remoteUser} playVideo={false} playAudio={true} />
-                            </div>
-                        ))}
-                    </AgoraProvider>
-                </AgoraRTCProvider>
             </div>
+            {/*{joined ? <Room*/}
+            {/*    cameraOn={cameraOn}*/}
+            {/*    micOn={micOn}*/}
+            {/*    renderRemoteUsers={() => <RenderRemoteUsers audioTracks={remoteAudioTracks} />}*/}
+            {/*/>: null}*/}
+            {joined ?
+                <>
+                    <LocalAudioTrack
+                        track={localAudioTrack}
+                        muted={false}
+                        play={false}
+                    />
+                    {remoteAudioTracks?.map(track => (
+                        <RemoteAudioTrack key={track.getUserId()} play={true} track={track} />
+                    ))}
+                </>
+            : null}
         </>
     )
 }
