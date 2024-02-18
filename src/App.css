@@ -83,6 +83,11 @@
   /* margin: auto; */
 }
 
+.newNotification{
+  background-color: blue;
+  border-radius: 50%;
+}
+
 
 html{
   height: 100%;

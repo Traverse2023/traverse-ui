@@ -10,6 +10,7 @@ import { useAuth } from "./hooks/auth-hook";
 import Search from "./pages/Search";
 import FriendsSocket from "./sockets/friends";
 import {SocketContext} from "./context/friends-socket-context";
+import {NotificationsContext} from "./context/notifications-context";
 import ChatSocket from "./sockets/chat";
 import Post from "./pages/Feed/Post";
 
@@ -43,7 +44,7 @@ function App() {
             </Router>
         );
     }
-
+    const [notifications, setNotifications] = React.useState([])
     return (
         <AuthContext.Provider
             value={{
@@ -58,12 +59,17 @@ function App() {
                 updatePfpURL: updatePfpUrl
             }}
         >
+            <NotificationsContext.Provider value={{
+                notifications: notifications,
+                setNotifications: setNotifications
+            }}>
             <SocketContext.Provider value={{
                 friendsSocketApi: friendsSocket,
                 chatsSocketApi: chatsSocket
             }}>
                 <div className="App">{routes}</div>
             </SocketContext.Provider>
+            </NotificationsContext.Provider>
         </AuthContext.Provider>
     );
 }

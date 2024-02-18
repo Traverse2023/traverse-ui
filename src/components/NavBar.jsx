@@ -18,6 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addNotification } from "../redux/slices/notificationSlice";
 import axios from "axios";
 import { GroupContext } from "../context/group-context";
+import { NotificationsContext } from "../context/notifications-context";
 
 const NavBar = () => {
     const auth = React.useContext(AuthContext);
@@ -26,8 +27,7 @@ const NavBar = () => {
     const navigate = useNavigate();
     const groupControl = useContext(GroupContext);
     const [search, setSearch] = React.useState();
-    const [notifications, setNotifications] = React.useState([]);
-
+    const {notifications, setNotifications} = useContext(NotificationsContext)
     useEffect(() => {
         console.log("25nots", notifications);
     }, [notifications]);
@@ -63,7 +63,7 @@ const NavBar = () => {
 
     chatsSocketApi.globalListener((notification) => {
         console.log("29global", notification);
-        if (notification.notificationType === "MESSAGE_SENT") {
+        if (notification.notificationType === "messageSent") {
             const updatedNotifications = [...notifications, notification];
             setNotifications(updatedNotifications);
             play();
@@ -135,6 +135,10 @@ const NavBar = () => {
     const tempHandler = (e, groupId, groupName) => {
         e.preventDefault();
         groupControl.setSelectedGroup({ groupId, groupName });
+        // const newNotifications = notifications.filter(
+        //     ({ id }) => id != groupId
+        // );
+        // setNotifications(newNotifications);
         console.log("clickedLink", notifications);
     };
 
@@ -251,7 +255,7 @@ const NavBar = () => {
                                         );
                                     } else if (
                                         notification.notificationType ===
-                                        "MESSAGE_SENT"
+                                        "messageSent"
                                     ) {
                                         return (
                                             <Link

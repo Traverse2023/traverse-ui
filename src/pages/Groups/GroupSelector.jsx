@@ -5,11 +5,16 @@ import { GroupContext } from "../../context/group-context";
 import ChatSocket from "../../sockets/chat";
 import {SocketContext} from "../../context/friends-socket-context";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {NotificationsContext} from "../../context/notifications-context.js";
 
 const GroupSelector = () => {
     const groupControl = useContext(GroupContext);
     const auth = useContext(AuthContext);
     const { chatsSocketApi } = useContext(SocketContext)
+    const notificationContext = useContext(NotificationsContext)
+    const notifications = notificationContext.notifications.map((notification) => {
+        return notification.groupId
+    })
 
     let { state } = useLocation();
     const navigate = useNavigate();
@@ -33,6 +38,11 @@ const GroupSelector = () => {
             .catch((err) => console.error(err));
     }, []);
 
+
+    useEffect(() => {
+        console.log("NOTS INSIDE GROUP SELECTOR", notifications)
+    }, [notifications]);
+
     const groupClickHandler = (event) => {
         window.history.replaceState({}, document.title)
 
@@ -44,6 +54,8 @@ const GroupSelector = () => {
 
         groupControl.setSelectedGroup({groupId: event.target.id, groupName: event.target.getAttribute("data-name")});
         // chatsSocketApi.disconnect()
+        const newNotifications = notifications.filter(({ groupId }) => groupId != event.target.id)
+        notificationContext.setNotifications(newNotifications)
         chatsSocketApi.joinRoom(event.target.id)
     };
 
@@ -68,7 +80,7 @@ const GroupSelector = () => {
                         className={
                             groupControl.selectedGroup.groupId === group.groupId
                                 ? "groupSelected"
-                                : "group"
+                                : "group" + (notifications.includes(group.groupId) ? " newNotification" : "")
                         }
                         id={group.groupId}
                         data-name={group.groupName}
