@@ -10,8 +10,9 @@ export default defineConfig(({ mode }) => {
         base: "",
         plugins: [react(), viteTsconfigPaths()],
         server: {
-            open: NODE_ENV === "development",
+            open: false,
             port: 3000,
+            host: true
         },
         build: {
             target: browserslistToEsbuild([
