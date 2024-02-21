@@ -1,30 +1,27 @@
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import React, { useContext, useEffect, useState } from "react";
-import { SocketContext } from "../../context/friends-socket-context.js";
-import { AuthContext } from "../../context/auth-context.js";
-import { GroupContext } from "../../context/group-context.js";
+import React, {useContext, useEffect, useState} from "react";
+import {SocketContext} from "../../context/friends-socket-context.js";
+import {AuthContext} from "../../context/auth-context.js";
+import {GroupContext} from "../../context/group-context.js";
 import axios from "axios";
-import AgoraRTC, {
-    useJoin,
+import {
     useClientEvent,
-    useIsConnected,
-    useRemoteAudioTracks,
-    useRemoteUsers,
+    useJoin,
     useLocalMicrophoneTrack,
     usePublish,
-    useLocalCameraTrack,
-    useRemoteVideoTracks, useRTCClient,
-
+    useRemoteAudioTracks,
+    useRemoteUsers,
+    useRTCClient,
 } from "agora-rtc-react";
 
-const VoiceChannel = ({ channelName, channels, addUser }) => {
+const VoiceChannel = ({ channelName, channels, addUser, setSelectedChannel }) => {
     const { chatsSocketApi } = useContext(SocketContext)
     const auth = useContext(AuthContext)
     const groupControl = useContext(GroupContext)
 
     // Unique string to identify channel when creating agora token and connecting to agora
-    const channelId = groupControl.selectedGroup.groupId + "-" + groupControl.selectedChannel;
+    const channelId = groupControl.selectedGroup.groupId + "-" + channelName;
 
     // Pulls existing client from AgoraProvider
     const client = useRTCClient();
@@ -68,9 +65,9 @@ const VoiceChannel = ({ channelName, channels, addUser }) => {
     }
 
     useJoin(async () => {
-        const token = getAgoraToken();
-        return token;
+            return getAgoraToken();
     },
+        inCall
     );
 
     audioTracks.map((track) => track.play())
@@ -86,7 +83,7 @@ const VoiceChannel = ({ channelName, channels, addUser }) => {
             addUser(channelName, member);
         })
 
-        setInCall(true);
+
 
         console.log("Remote users: " + remoteUsers);
         // localMicrophoneTrack.play()
@@ -98,16 +95,27 @@ const VoiceChannel = ({ channelName, channels, addUser }) => {
         console.log('rAT', audioTracks);
     }, [remoteUsers])
 
-
+    const disconnectVoiceChannel = async() => {
+        setInCall(false);
+        console.log('localmictrack', localMicrophoneTrack);
+        await localMicrophoneTrack?.setEnabled(false);
+        await client.leave();
+    }
 
     const joinVoiceChannel = async () => {
+        // setSelectedChannel(channelName);
+        await disconnectVoiceChannel();
+
         chatsSocketApi.joinCall({
             email: auth.email,
             firstName: auth.firstName,
             lastName: auth.lastName,
 
         }, groupControl.selectedGroup, channelName)
+        setInCall(true);
     }
+
+
 
 
     if (deviceLoading) return <div>Loading devices...</div>;
@@ -119,7 +127,7 @@ const VoiceChannel = ({ channelName, channels, addUser }) => {
                 <h6>{channelName}</h6>
                 <OverlayTrigger
                     placement="top"
-                    delay={{ show: 250, hide: 400 }}
+                    delay={{show: 250, hide: 400}}
                     overlay={
                         <Tooltip className="tooltip">Edit Channel</Tooltip>
                     }
@@ -129,11 +137,15 @@ const VoiceChannel = ({ channelName, channels, addUser }) => {
                 {/* <button>*</button> */}
 
             </div>
-            <div style={{ paddingLeft: "30px", marginTop: '-5px', paddingBottom: "5px" }}>
+            <button onClick={disconnectVoiceChannel}>Leave</button>
+            <div style={{paddingLeft: "30px", marginTop: '-5px', paddingBottom: "5px"}}>
                 {channels.get(channelName)?.map(member => (
-                    <div style={{ display: "flex", alignItems: "center", alignContent: "center", paddingTop: "15px" }}>
-                        <img src={member.pfp} style={{ width: '20px', paddingRight: "10px" }} />
-                        <div style={{ textAlign: "center", fontSize: "14px" }}>{member.firstName + ' ' + member.lastName}</div>
+                    <div style={{display: "flex", alignItems: "center", alignContent: "center", paddingTop: "15px"}}>
+                        <img src={member.pfp} style={{width: '20px', paddingRight: "10px"}}/>
+                        <div style={{
+                            textAlign: "center",
+                            fontSize: "14px"
+                        }}>{member.firstName + ' ' + member.lastName}</div>
                     </div>
                 ))}
             </div>

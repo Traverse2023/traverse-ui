@@ -22,6 +22,8 @@ const SubGroupSelector = () => {
     // const { chatsSocketApi } = useContext(SocketContext)
     const [channels, setChannels] = useState(new Map())
 
+    const [selectedChannel, setSelectedChannel] = useState("");
+
     useEffect(() => {
         const response = ['general', 'announcements', 'events']
         setChannels(new Map(response.map(channelName => [channelName, []])))
@@ -160,7 +162,7 @@ const SubGroupSelector = () => {
                         <button className="add-channel-btn">+</button>
                     </OverlayTrigger>
                 </div>
-                {[...channels.keys()].map(channelName => <VoiceChannel channelName={channelName} channels={channels} addUser={addUser}/>)}
+                {[...channels.keys()].map(channelName => <VoiceChannel channelName={channelName} channels={channels} addUser={addUser} setSelectedChannel={setSelectedChannel} />)}
             </div>
             {/* </div> */}
             <div className="bottom-tab">
