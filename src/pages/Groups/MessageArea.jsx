@@ -17,7 +17,7 @@ const MessageArea = () => {
 
     const scrollDiv = useRef(null)
     const typedMsgChangeHandler = (event) => {
-        setTypedMsg(event.target.value)
+        setTypedMsg(event.target.value);
     }
 
     const observer = useRef()

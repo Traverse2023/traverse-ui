@@ -6,77 +6,96 @@ import {AuthContext} from "../../context/auth-context.js";
 import {GroupContext} from "../../context/group-context.js";
 import axios from "axios";
 import {
-    useJoin, useRTCClient, useClientEvent, useIsConnected, useRemoteAudioTracks,
-    useRemoteUsers, useLocalMicrophoneTrack, usePublish, useLocalCameraTrack, useRemoteVideoTracks, useTrackEvent,
+    useJoin,
+    useClientEvent,
+    useIsConnected,
+    useRemoteAudioTracks,
+    useRemoteUsers,
+    useLocalMicrophoneTrack,
+    usePublish,
+    useLocalCameraTrack,
+    useRemoteVideoTracks, useRTCClient,
+
 } from "agora-rtc-react";
 
 const VoiceChannel = ({channelName, channels, addUser}) => {
-    const client = useRTCClient();
-
-    const { localMicrophoneTrack : localAudioTrack}  = useLocalMicrophoneTrack();
-    const { localCameraTrack: videoTrack } = useLocalCameraTrack();
-
-    const remoteUsers = useRemoteUsers();
-
-    const videoTracks = useRemoteVideoTracks(remoteUsers);
-    const audioTracks = useRemoteAudioTracks(remoteUsers);
-
-    usePublish([localAudioTrack, videoTrack], true, client)
-    const [ready, setReady] = useState(true);
-
-
-
     const { chatsSocketApi } = useContext(SocketContext)
     const auth = useContext(AuthContext)
     const groupControl = useContext(GroupContext)
 
-    useClientEvent(client, "user-left", (user) => {
-        console.log("user-left")
-    })
+    const client = useRTCClient();
 
-    useClientEvent(client, "user-unpublished", (user, mediaType) => {
-        console.log("user-unpublished")
-    });
+    // Local media tracks
+    const { isLoading: isLoadingMic, localMicrophoneTrack }  = useLocalMicrophoneTrack();
+    const { isLoading: isLoadingCam, localCameraTrack } = useLocalCameraTrack();
 
-    useClientEvent(client, "user-joined", (user) => {
-        console.log("user joined", user.uid, user);
-    });
+    const remoteUsers = useRemoteUsers();
 
-    useClientEvent(client, "user-published", (user, mediaType) => {
-        console.log("user-published", user, mediaType)
-    })
+    const isConnected = useIsConnected();
 
-    useEffect(() => {
-        chatsSocketApi.joinCallListener((member, channelName) => {
-            console.log(member, "joining call")
-            addUser(channelName, member)
-        })
-        setReady(true);
-        console.log(remoteUsers);
-        console.log(localAudioTrack);
-        console.log(client);
+    const [token, setToken] = useState("");
 
-    }, []);
+    const [inCall, setInCall] = useState(false);
 
-    useEffect(() =>{
-        console.log('rAT', audioTracks);
-    }, [videoTracks, remoteUsers])
+    const { videoTracks } = useRemoteVideoTracks(remoteUsers);
+    const { audioTracks } = useRemoteAudioTracks(remoteUsers);
+
+    usePublish([localMicrophoneTrack, localCameraTrack])
+
+    useJoin(
+        {
+            appid: "056e7ee25ec24b4586f17ec177e121d1",
+            channel: "general ",
+            token: token === "" ? null : token,
+            uid: auth.email
+        },
+        inCall
+    );
+
+    audioTracks.map((track) => track.play())
+
+
 
     const getAgoraToken = async () => {
-        const res = await axios.get('http://localhost:8000/getAgoraToken/' + auth.email + '/' + channelName);
+        const res = await axios.get('http://127.0.0.1:8000/getAgoraToken/' + auth.email + '/' + groupControl.selectedGroup + "-" + groupControl.selectedChannel);
         const token = res.data.token;
         console.log("Token: " + token)
         return token;
     }
 
-    useJoin(
-        {
-            appid: "056e7ee25ec24b4586f17ec177e121d1",
-            channel: "general",
-            token: "007eJxTYHCur/k18etd7rsbthf4zVrAx7mx98P21XJ7uwr4v2lF6QoqMBiYmqWap6YamaYmG5kkmZhamKUZmqcmG5qbpxoaGaYYNjVeSm0IZGTo8i1gZWSAQBCfnSE9NS+1KDGHgQEA8vghCw",
-        },
-        ready
-    );
+
+    useEffect(() => {
+
+        useClientEvent(client, "user-left", (user) => {
+            console.log("user-left")
+        })
+
+        useClientEvent(client, "user-unpublished", (user, mediaType) => {
+            console.log("user-unpublished")
+        });
+
+        useClientEvent(client, "user-joined", (user) => {
+            console.log("user joined", user.uid, user);
+        });
+
+        useClientEvent(client, "user-published", (user, mediaType) => {
+            console.log("user-published", user, mediaType)
+        })
+        chatsSocketApi.joinCallListener((member, channelName) => {
+            console.log(member, "joining call")
+            addUser(channelName, member)
+        })
+
+        console.log(remoteUsers);
+
+    }, []);
+
+
+    useEffect(() =>{
+        console.log('rAT', audioTracks);
+    }, [videoTracks, remoteUsers])
+
+
 
     const joinVoiceChannel = async () => {
         chatsSocketApi.joinCall({
