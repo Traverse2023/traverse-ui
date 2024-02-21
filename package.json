@@ -4,8 +4,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "start": "vite --host ",
-        "build": "NODE_ENV=production vite build",
+        "start": "vite --host",
+        "build": "vite build",
         "preview": "vite preview"
     },
     "dependencies": {
