@@ -1,4 +1,4 @@
-FROM node:20.10.0-bookworm-slim
+FROM node:20.10.0-bookworm-slim as build
 
 WORKDIR /app
 
@@ -10,16 +10,19 @@ ENV VITE_APP_BACKEND_URL=$VITE_APP_BACKEND_URL
 
 ENV VITE_APP_BACKEND_URL=$VITE_APP_BACKEND_URL
 
-RUN echo $VITE_APP_BACKEND_URL
 
-COPY . .
+COPY package.json package-lock.json ./
 
 RUN npm ci
 
-RUN npm run build
+COPY . .
 
-RUN npm install -g http-server
+RUN npm run build
 
 EXPOSE 3000
 
-CMD ["http-server", "dist", "-p", "3000"]
+FROM build as run
+
+RUN npm install -g http-server
+
+CMD ["npm", "dist", "-p", "3000"]
