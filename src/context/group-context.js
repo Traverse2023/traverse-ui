@@ -5,5 +5,11 @@ export const GroupContext = createContext({
     selectedChannel: "general",
     members: [],
     messages: [],
-    setMembers: () => { }
+    setMembers: () => { },
+    inCall: false,
+    setInCall: () => {},
+    isMuted: false,
+    setIsMuted: () => {},
+    triggerDisconnect: false,
+    setTriggerDisconnect: () => {}
 });

@@ -33,6 +33,14 @@ class ChatSocket {
         this.socket.on('joinCallListener', callback)
     }
 
+    disconnectCall(member, groupObj, channelName) {
+        this.socket.emit("disconnectCall", member, groupObj, channelName)
+    }
+
+    disconnectCallListener(callback) {
+        this.socket.on('disconnectCallListener', callback)
+    }
+
     joinRoom(groupId) {
         console.log("injoinroom15")
         this.socket.emit("joinRoom", groupId)

@@ -14,14 +14,16 @@ import {
     useRemoteUsers,
     useRTCClient,
 } from "agora-rtc-react";
+import useSound from "use-sound";
 
-const VoiceChannel = ({ channelName, channels, addUser, setSelectedChannel }) => {
+const VoiceChannel = ({ channelName, channels, addUser, removeUser }) => {
+    const [play] = useSound("/audio/joincall.wav");
     const { chatsSocketApi } = useContext(SocketContext)
     const auth = useContext(AuthContext)
-    const groupControl = useContext(GroupContext)
-
+    const { selectedGroup } = useContext(GroupContext);
+    const [inCall, setInCall] = useState(false)
     // Unique string to identify channel when creating agora token and connecting to agora
-    const channelId = groupControl.selectedGroup.groupId + "-" + channelName;
+    const channelId = selectedGroup.groupId + "-" + channelName;
 
     // Pulls existing client from AgoraProvider
     const client = useRTCClient();
@@ -31,7 +33,9 @@ const VoiceChannel = ({ channelName, channels, addUser, setSelectedChannel }) =>
     // Get auto updating remote user objects
     const remoteUsers = useRemoteUsers();
 
-    const [inCall, setInCall] = useState(false);
+    // useEffect(() => {
+    //     if (inCall) groupControl.setInCall(true)
+    // }, [inCall]);
 
     const { audioTracks } = useRemoteAudioTracks(remoteUsers);
 
@@ -65,6 +69,7 @@ const VoiceChannel = ({ channelName, channels, addUser, setSelectedChannel }) =>
     }
 
     useJoin(async () => {
+        console.log()
             return getAgoraToken();
     },
         inCall
@@ -80,10 +85,13 @@ const VoiceChannel = ({ channelName, channels, addUser, setSelectedChannel }) =>
     useEffect(() => {
         chatsSocketApi.joinCallListener((member, channelName) => {
             console.log(member, "joining call");
+            // play()
             addUser(channelName, member);
         })
 
-
+        chatsSocketApi.disconnectCallListener((member, channelName) => {
+            removeUser(channelName, member)
+        })
 
         console.log("Remote users: " + remoteUsers);
         // localMicrophoneTrack.play()
@@ -102,6 +110,12 @@ const VoiceChannel = ({ channelName, channels, addUser, setSelectedChannel }) =>
         await client.leave();
     }
 
+    // const mute = async () => {
+    //     console.log('mute')
+    //     await localMicrophoneTrack?.setEnabled(false)
+    //     //localMicrophoneTrack?.setEnabled(false).then(() => localMicrophoneTrack.setMuted(true)).catch(err => console.log(err))
+    // }
+
     const joinVoiceChannel = async () => {
         // setSelectedChannel(channelName);
         await disconnectVoiceChannel();
@@ -110,15 +124,21 @@ const VoiceChannel = ({ channelName, channels, addUser, setSelectedChannel }) =>
             email: auth.email,
             firstName: auth.firstName,
             lastName: auth.lastName,
-
-        }, groupControl.selectedGroup, channelName)
+            pfpURL: auth.pfpURL
+        }, selectedGroup, channelName)
         setInCall(true);
     }
 
+    // useEffect(() => {
+    //     chatsSocketApi.disconnectCall({email: auth.email},groupControl.selectedGroup, channelName)
+    // }, [groupControl.triggerDisconnect])
 
 
 
-    if (deviceLoading) return <div>Loading devices...</div>;
+
+
+
+    // if (deviceLoading) return <div>Loading devices...</div>;
 
     return (
         <>
@@ -137,18 +157,18 @@ const VoiceChannel = ({ channelName, channels, addUser, setSelectedChannel }) =>
                 {/* <button>*</button> */}
 
             </div>
-            <button onClick={disconnectVoiceChannel}>Leave</button>
             <div style={{paddingLeft: "30px", marginTop: '-5px', paddingBottom: "5px"}}>
                 {channels.get(channelName)?.map(member => (
                     <div style={{display: "flex", alignItems: "center", alignContent: "center", paddingTop: "15px"}}>
-                        <img src={member.pfp} style={{width: '20px', paddingRight: "10px"}}/>
+                        <img src={member.pfpURL} style={{width: '20px', paddingRight: "10px"}}/>
                         <div style={{
                             textAlign: "center",
                             fontSize: "14px"
-                        }}>{member.firstName + ' ' + member.lastName}</div>
+                        }} onClick={() => console.log(member)}>{member.firstName + ' ' + member.lastName}</div>
                     </div>
                 ))}
             </div>
+            {/*<button onClick={mute}>Mute</button>*/}
             {/*{joined ? <Room*/}
             {/*    cameraOn={cameraOn}*/}
             {/*    micOn={micOn}*/}

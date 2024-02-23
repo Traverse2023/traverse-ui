@@ -11,6 +11,7 @@ import {GroupContext} from "../../context/group-context";
 import {AuthContext} from "../../context/auth-context";
 import {SocketContext} from "../../context/friends-socket-context";
 import VoiceChannel from "./VoiceChannel.jsx";
+import MediaControls from "./MediaControls.jsx";
 
 const SubGroupSelector = () => {
     const [show, setShow] = React.useState(false);
@@ -57,6 +58,26 @@ const SubGroupSelector = () => {
         console.log('added to new channel', channelName)
         setChannels(updatedChannels);
     };
+
+    const removeUser = (channelName, user) => {
+        const updatedChannels = new Map(channels);
+
+        for (const [currChannelName, users] of updatedChannels) {
+            console.log('going thru channels', currChannelName, users)
+            for (let i = 0; i < users.length; i++) {
+                const existingUser = users[i]
+                if (existingUser.email === user.email) {
+                    console.log('found user in this channel, deleting...')
+                    users.splice(i, 1)
+                    console.log('new array', users)
+                    console.log('new map', updatedChannels)
+                    break
+                }
+            }
+        }
+        console.log(user.email, 'disconnected from', channelName)
+        setChannels(updatedChannels);
+    }
 
     useEffect(() => {
         console.log('channels map', channels)
@@ -162,12 +183,11 @@ const SubGroupSelector = () => {
                         <button className="add-channel-btn">+</button>
                     </OverlayTrigger>
                 </div>
-                {[...channels.keys()].map(channelName => <VoiceChannel channelName={channelName} channels={channels} addUser={addUser} setSelectedChannel={setSelectedChannel} />)}
+                {[...channels.keys()].map(channelName => <VoiceChannel channelName={channelName} channels={channels} addUser={addUser} removeUser={removeUser} />)}
             </div>
             {/* </div> */}
             <div className="bottom-tab">
-                <button>Mute</button>
-                <button>Deafen</button>
+                <MediaControls />
             </div>
         </div>
     );
