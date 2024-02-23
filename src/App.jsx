@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing";
@@ -13,9 +13,11 @@ import {SocketContext} from "./context/friends-socket-context";
 import ChatSocket from "./sockets/chat";
 import Post from "./pages/Feed/Post";
 
+import AgoraRTC, {AgoraRTCProvider, useRTCClient} from "agora-rtc-react";
+
 function App() {
     const { token, email, firstName, lastName, pfpURL, acceptLogin, acceptLogout, updatePfpUrl } = useAuth();
-
+    const client = useRTCClient(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
     let routes;
     let friendsSocket;
     let chatsSocket;
@@ -59,10 +61,12 @@ function App() {
             }}
         >
             <SocketContext.Provider value={{
-                friendsSocketApi: friendsSocket,
-                chatsSocketApi: chatsSocket
+                friendsSocketApi: token ? friendsSocket : null,
+                chatsSocketApi: token ? chatsSocket : null
             }}>
-                <div className="App">{routes}</div>
+                <AgoraRTCProvider client={client}>
+                    <div className="App">{routes}</div>
+                </AgoraRTCProvider>
             </SocketContext.Provider>
         </AuthContext.Provider>
     );
