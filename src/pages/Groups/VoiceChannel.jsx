@@ -18,18 +18,6 @@ import useSound from "use-sound";
 
 const VoiceChannel = ({ channelName, users }) => {
 
-
-    // useEffect(() => {
-    //     chatsSocketApi.disconnectCall({email: auth.email},groupControl.selectedGroup, channelName)
-    // }, [groupControl.triggerDisconnect])
-    //i think i got it below, i did users.get(channelName) on lineok reload on voice again not working
-    //discord
-    useEffect(() => {
-
-    })
-
-    // if (deviceLoading) return <div>Loading devices...</div>;
-
     const { setSelectedVoiceChannel } = useContext(GroupContext);
 
     return (
