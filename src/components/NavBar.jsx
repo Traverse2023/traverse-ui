@@ -42,8 +42,10 @@ const NavBar = () => {
                 import.meta.env.VITE_APP_STORAGE_SERVICE_URL
             }/api/v1/notifications/getNotifications/${auth.email}`
         );
-        setNotifications(currentNotifications.data);
-        console.log("CURR NOTS", currentNotifications.data);
+        if (currentNotification) {
+            setNotifications(currentNotifications.data);
+            console.log("CURR NOTS", currentNotifications.data);
+        }
     };
 
     useEffect(() => {

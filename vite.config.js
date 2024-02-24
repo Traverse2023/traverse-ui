@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => {
         server: {
             open: false,
             port: 3000,
+            host: true
         },
         build: {
             target: browserslistToEsbuild([
