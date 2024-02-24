@@ -6,17 +6,25 @@ import {useLocalMicrophoneTrack, useRTCClient} from "agora-rtc-react";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import {SocketContext} from "../../context/friends-socket-context.js";
+import {AuthContext} from "../../context/auth-context.js";
 
 const MediaControls = () => {
     const groupControl = useContext(GroupContext)
+    const auth = useContext(AuthContext)
     const { chatsSocketApi } = useContext(SocketContext)
     const client = useRTCClient();
     const { isLoading: isLoadingMic, localMicrophoneTrack } = useLocalMicrophoneTrack();
     const disconnectVoiceChannel = async() => {
         groupControl.setInCall(false);
         console.log('localmictrack', localMicrophoneTrack);
+
         await localMicrophoneTrack?.setEnabled(false);
+        await localMicrophoneTrack?.stop();
         await client.leave();
+        groupControl.setSelectedVoiceChannel(null);
+        chatsSocketApi.disconnectCall({
+            email: auth.email
+        }, groupControl.selectedGroup, groupControl.selectedVoiceChannel)
         // groupControl.setTriggerDisconnect(prevState => !prevState)
     }
     const mute = async () => {
@@ -27,7 +35,7 @@ const MediaControls = () => {
     const unmute = async () => {
         // groupControl.setIsMuted(false)
         console.log('unmute')
-        await localMicrophoneTrack?.setEnabled(true)
+        await localMicrophoneTrack?.setEnabled(true);
     }
     return (
         groupControl.inCall ?
