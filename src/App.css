@@ -837,7 +837,24 @@ border-radius: 8px;
   bottom: 0;
   width: 100%;
   justify-content: space-evenly;
+  /*padding-bottom: 15px;*/
+}
+
+.media-controls {
+  background-color: #EBEDEF;
+  width: 100%;
+  padding-top: 15px;
   padding-bottom: 15px;
+  display: flex;
+}
+
+.media-control-icon {
+  flex-grow: 1;
+}
+
+.media-control-icon:hover {
+  flex-grow: 1;
+  cursor: pointer;
 }
 
 .tooltip{
