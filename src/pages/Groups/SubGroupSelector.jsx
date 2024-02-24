@@ -30,7 +30,11 @@ const SubGroupSelector = () => {
     const auth = useContext(AuthContext)
     // const { chatsSocketApi } = useContext(SocketContext)
     const [channelUsersMap, setChannelUsersMap] = useState(new Map(["general", "announcements", "events"].map(channelName => [channelName, []])))
-    const [play] = useSound("/audio/joincall.wav");
+    // const [play] = useSound("/audio/joincall.wav");
+    const joinCallSound = new Audio("/audio/joincall.wav")
+    const leaveCallSound = new Audio("/audio/leavecall.wav")
+
+    // const [play] = useSound("/audio/leavecall.wav")
     const { chatsSocketApi } = useContext(SocketContext);
     const { selectedGroup, selectedTextChannel, selectedVoiceChannel, inCall, setInCall } = useContext(GroupContext);
     // Unique string to identify channel when creating agora token and connecting to agora
@@ -54,10 +58,11 @@ const SubGroupSelector = () => {
         // Map("general": [{user.email,...}])
         chatsSocketApi.joinCallListener((member, channelName) => {
             console.log(member, channelName, "joining call");
-            // play()
+            joinCallSound.play()
             addUser(channelName, member);
         })
         chatsSocketApi.disconnectCallListener((member, channelName) => {
+            leaveCallSound.play()
             removeUser(channelName, member)
         })
     }, []);

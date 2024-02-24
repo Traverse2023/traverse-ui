@@ -30,7 +30,7 @@ const MediaControls = () => {
     const mute = async () => {
         console.log('mute')
         // groupControl.setIsMuted(true)
-        await localMicrophoneTrack?.setMuted(false);
+        await localMicrophoneTrack?.setMuted(true);
     }
     const unmute = async () => {
         // groupControl.setIsMuted(false)
