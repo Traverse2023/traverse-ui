@@ -35,11 +35,11 @@ const NavBar = () => {
     const loadNotifications = async () => {
         console.log(
             "STORAGE SERV URL",
-            import.meta.env.VITE_APP_STORAGE_SERVICE_URL
+            "http://load-balancer-storage-service-417091110.us-east-1.elb.amazonaws.com"
         );
         const currentNotifications = await axios.get(
             `${
-                import.meta.env.VITE_APP_STORAGE_SERVICE_URL
+                "http://load-balancer-storage-service-417091110.us-east-1.elb.amazonaws.com"
             }/api/v1/notifications/getNotifications/${auth.email}`
         );
         if (currentNotification) {

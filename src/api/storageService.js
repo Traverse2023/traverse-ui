@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const storageServiceBaseURL = `${
-    import.meta.env.VITE_APP_STORAGE_SERVICE_URL
+    "http://load-balancer-storage-service-417091110.us-east-1.elb.amazonaws.com"
 }/api/v1`;
 
 const getPaginatedMessages = (groupId, channelName, pageNumber) => {

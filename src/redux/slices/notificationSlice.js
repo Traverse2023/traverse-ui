@@ -12,9 +12,8 @@ export const addNotificationAsync = createAsyncThunk(
     "notifications/addNotification",
     async (notification) => {
         const response = await axios.post(
-            `${
-                import.meta.env.STORAGE_SERVICE_URL
-            }/api/v1/notifications/createNotification`,
+            `
+                http://load-balancer-storage-service-417091110.us-east-1.elb.amazonaws.com/api/v1/notifications/createNotification`,
             notification
         );
         return response.data;
@@ -25,9 +24,7 @@ export const loadAllNotificationsAsync = createAsyncThunk(
     "notifications/loadAllNotifications",
     async (forEmail) => {
         const response = await axios.get(
-            `${
-                import.meta.env.STORAGE_SERVICE_URL
-            }/api/v1/notifications/getNotifications/${forEmail}`
+            `http://load-balancer-storage-service-417091110.us-east-1.elb.amazonaws.com/api/v1/notifications/getNotifications/${forEmail}`
         );
         return response.data;
     }
