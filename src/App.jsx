@@ -28,7 +28,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/groups" element={<Groups />} />
+                    <Route path="#/groups" element={<Groups />} />
                     <Route path="/profile/:email" element={<Profile />} />
                     <Route path="/search" element={<Search />} />
                     <Route path="/post" element={<Post type="page" />} />
