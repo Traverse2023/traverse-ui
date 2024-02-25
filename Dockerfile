@@ -22,6 +22,4 @@ EXPOSE 3000
 
 FROM build as run
 
-RUN npm install -g http-server
-
-CMD ["http-server", "dist", "-p", "3000"]
+CMD ["sh", "-c", "", "npm start"]

@@ -25,7 +25,7 @@ function App() {
         friendsSocket = new FriendsSocket(email)
         chatsSocket = new ChatSocket(email)
         routes = (
-            <HashRouter>
+            <Router>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/groups" element={<Groups />} />
@@ -33,7 +33,7 @@ function App() {
                     <Route path="/search" element={<Search />} />
                     <Route path="/post" element={<Post type="page" />} />
                 </Routes>
-            </HashRouter>
+            </Router>
         );
     } else {
         routes = (
