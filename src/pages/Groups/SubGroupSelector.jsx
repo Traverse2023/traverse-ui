@@ -137,7 +137,7 @@ const SubGroupSelector = () => {
     usePublish([localMicrophoneTrack])
 
     const getAgoraToken = async () => {
-        const res = await axios.get('http://127.0.0.1:8000/getAgoraToken/' + auth.email + '/' + channelId);
+        const res = await axios.get('http://load-balancer-for-main-service-1482477395.us-east-1.elb.amazonaws.com/getAgoraToken/' + auth.email + '/' + channelId);
         const token = res.data.token;
         console.log("Token:  " + token)
         return {
