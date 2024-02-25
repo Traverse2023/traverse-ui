@@ -4,7 +4,7 @@ class FriendsSocket {
     socket;
     constructor(email) {
         this.email = email;
-        this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}friends`, {
+        this.socket = io(`http://load-balancer-for-main-service-1482477395.us-east-1.elb.amazonaws.com/friends`, {
             query: {
                 email: email,
             },
