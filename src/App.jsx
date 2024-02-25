@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, HashRouter } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Home from "./pages/Home";
 import Groups from "./pages/Groups";
@@ -25,15 +25,15 @@ function App() {
         friendsSocket = new FriendsSocket(email)
         chatsSocket = new ChatSocket(email)
         routes = (
-            <Router>
+            <HashRouter>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="#/groups" element={<Groups />} />
+                    <Route path="/groups" element={<Groups />} />
                     <Route path="/profile/:email" element={<Profile />} />
                     <Route path="/search" element={<Search />} />
                     <Route path="/post" element={<Post type="page" />} />
                 </Routes>
-            </Router>
+            </HashRouter>
         );
     } else {
         routes = (

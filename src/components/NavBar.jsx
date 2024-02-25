@@ -194,7 +194,7 @@ const NavBar = () => {
                                 </Tooltip>
                             }
                         >
-                            <Link to={"#/groups"}>
+                            <Link to={"/groups"}>
                                 <FontAwesomeIcon icon={faUserGroup} />
                             </Link>
                         </OverlayTrigger>
