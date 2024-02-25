@@ -13,7 +13,7 @@ const MessageArea = () => {
 
     const [newMessageData, setNewMessageData] = useState()
     const [pageNumber, setPageNumber] = useState(1)
-    const { messages, error, loading, hasMore } = usePaginatedMessages(groupControl.selectedGroup.groupId, groupControl.selectedChannel, pageNumber, newMessageData)
+    const { messages, error, loading, hasMore } = usePaginatedMessages(groupControl.selectedGroup.groupId, groupControl.selectedTextChannel, pageNumber, newMessageData)
 
     const scrollDiv = useRef(null)
     const typedMsgChangeHandler = (event) => {
@@ -41,7 +41,7 @@ const MessageArea = () => {
             if (typedMsg.length > 0) {
                 const message_info = {
                     msg: typedMsg,
-                    channelName: groupControl.selectedChannel,
+                    channelName: groupControl.selectedTextChannel,
                     firstName: auth.firstName,
                     lastName: auth.lastName,
                     pfpURL: auth.pfpURL,

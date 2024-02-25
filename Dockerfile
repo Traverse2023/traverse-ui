@@ -10,7 +10,6 @@ ENV VITE_APP_BACKEND_URL=$VITE_APP_BACKEND_URL
 
 ENV VITE_APP_BACKEND_URL=$VITE_APP_BACKEND_URL
 
-
 COPY package.json package-lock.json ./
 
 RUN npm ci
@@ -25,4 +24,4 @@ FROM build as run
 
 RUN npm install -g http-server
 
-CMD ["npm", "start", "-p", "3000"]
+CMD ["http-server", "dist", "-p", "3000"]

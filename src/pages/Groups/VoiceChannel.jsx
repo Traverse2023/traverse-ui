@@ -14,115 +14,15 @@ import {
     useRemoteUsers,
     useRTCClient,
 } from "agora-rtc-react";
+import useSound from "use-sound";
 
-const VoiceChannel = ({ channelName, channels, addUser, setSelectedChannel }) => {
-    const { chatsSocketApi } = useContext(SocketContext)
-    const auth = useContext(AuthContext)
-    const groupControl = useContext(GroupContext)
+const VoiceChannel = ({ channelName, users }) => {
 
-    // Unique string to identify channel when creating agora token and connecting to agora
-    const channelId = groupControl.selectedGroup.groupId + "-" + channelName;
-
-    // Pulls existing client from AgoraProvider
-    const client = useRTCClient();
-
-    // Get local microphone tracks
-    const { isLoading: isLoadingMic, localMicrophoneTrack } = useLocalMicrophoneTrack();
-    // Get auto updating remote user objects
-    const remoteUsers = useRemoteUsers();
-
-    const [inCall, setInCall] = useState(false);
-
-    const { audioTracks } = useRemoteAudioTracks(remoteUsers);
-
-    usePublish([localMicrophoneTrack])
-
-    useClientEvent(client, "user-left", (user) => {
-        console.log("user-left")
-    })
-
-    useClientEvent(client, "user-unpublished", (user, mediaType) => {
-        console.log("user-unpublished")
-    });
-
-    useClientEvent(client, "user-joined", (user) => {
-        console.log("user joined", user.uid, user);
-    });
-
-    useClientEvent(client, "user-published", (user, mediaType) => {
-        console.log("user-published", user, mediaType)
-    })
-
-    const getAgoraToken = async () => {
-        const res = await axios.get('http://127.0.0.1:8000/getAgoraToken/' + auth.email + '/' + channelId);
-        const token = res.data.token;
-        console.log("Token:  " + token)
-        return {
-            appid: "056e7ee25ec24b4586f17ec177e121d1",
-            channel: channelId,
-            token: token,
-        };
-    }
-
-    useJoin(async () => {
-            return getAgoraToken();
-    },
-        inCall
-    );
-
-    audioTracks.map((track) => track.play())
-
-    const deviceLoading = isLoadingMic;
-
-    const deviceUnavailable = !localMicrophoneTrack;
-
-
-    useEffect(() => {
-        chatsSocketApi.joinCallListener((member, channelName) => {
-            console.log(member, "joining call");
-            addUser(channelName, member);
-        })
-
-
-
-        console.log("Remote users: " + remoteUsers);
-        // localMicrophoneTrack.play()
-
-    }, []);
-
-
-    useEffect(() => {
-        console.log('rAT', audioTracks);
-    }, [remoteUsers])
-
-    const disconnectVoiceChannel = async() => {
-        setInCall(false);
-        console.log('localmictrack', localMicrophoneTrack);
-        await localMicrophoneTrack?.setEnabled(false);
-        await client.leave();
-    }
-
-    const joinVoiceChannel = async () => {
-        // setSelectedChannel(channelName);
-        await disconnectVoiceChannel();
-
-        chatsSocketApi.joinCall({
-            email: auth.email,
-            firstName: auth.firstName,
-            lastName: auth.lastName,
-
-        }, groupControl.selectedGroup, channelName)
-        setInCall(true);
-    }
-
-
-
-
-    if (deviceLoading) return <div>Loading devices...</div>;
+    const { setSelectedVoiceChannel } = useContext(GroupContext);
 
     return (
         <>
-            <div className="channel" onClick={joinVoiceChannel}>
+            <div className="channel" onClick={() => setSelectedVoiceChannel(channelName)}>
                 <h1>#</h1>
                 <h6>{channelName}</h6>
                 <OverlayTrigger
@@ -137,18 +37,18 @@ const VoiceChannel = ({ channelName, channels, addUser, setSelectedChannel }) =>
                 {/* <button>*</button> */}
 
             </div>
-            <button onClick={disconnectVoiceChannel}>Leave</button>
             <div style={{paddingLeft: "30px", marginTop: '-5px', paddingBottom: "5px"}}>
-                {channels.get(channelName)?.map(member => (
+                {users.get(channelName)?.map(member => (
                     <div style={{display: "flex", alignItems: "center", alignContent: "center", paddingTop: "15px"}}>
-                        <img src={member.pfp} style={{width: '20px', paddingRight: "10px"}}/>
+                        <img src={member.pfpURL} style={{width: '20px', paddingRight: "10px"}}/>
                         <div style={{
                             textAlign: "center",
                             fontSize: "14px"
-                        }}>{member.firstName + ' ' + member.lastName}</div>
+                        }} onClick={() => console.log(member.firstName)}>{member.firstName + ' ' + member.lastName}</div>
                     </div>
                 ))}
             </div>
+            {/*<button onClick={mute}>Mute</button>*/}
             {/*{joined ? <Room*/}
             {/*    cameraOn={cameraOn}*/}
             {/*    micOn={micOn}*/}
