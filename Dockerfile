@@ -25,5 +25,4 @@ FROM build as run
 
 RUN npm install -g http-server
 
-CMD ["npm", "dist", "-p", "3000"]
-
+CMD ["npm", "start", "-p", "3000"]
