@@ -22,4 +22,4 @@ EXPOSE 3000
 
 FROM build as run
 
-CMD ["sh", "-c", "", "npm start"]
+CMD ["npm", "start"]
