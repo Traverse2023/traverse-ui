@@ -4,7 +4,7 @@ class FriendsSocket {
     socket;
     constructor(email) {
         this.email = email;
-        this.socket = io(`http://load-balancer-for-main-service-1482477395.us-east-1.elb.amazonaws.com/friends`, {
+        this.socket = io(`https://main-service.traverse.zone/friends`, {
             query: {
                 email: email,
             },

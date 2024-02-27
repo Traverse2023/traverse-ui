@@ -2,7 +2,7 @@ import axios from "axios";
 import { loadAllNotificationsAsync } from "../redux/slices/notificationSlice";
 
 const backend = axios.create({
-    baseURL: "http://load-balancer-for-main-service-1482477395.us-east-1.elb.amazonaws.com/" + "api/",
+    baseURL: "https://main-service.traverse.zone/" + "api/",
 });
 
 const login = (email, password) => {

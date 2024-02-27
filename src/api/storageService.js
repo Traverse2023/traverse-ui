@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const storageServiceBaseURL = `${
-    "http://load-balancer-storage-service-417091110.us-east-1.elb.amazonaws.com"
+    "https://storage-service.traverse.zone"
 }/api/v1`;
 
 const getPaginatedMessages = (groupId, channelName, pageNumber) => {

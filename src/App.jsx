@@ -3,6 +3,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Routes, HashRouter } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Home from "./pages/Home";
+import Algo from "./pages/Algo";
 import Groups from "./pages/Groups";
 import Profile from "./pages/Profile";
 import { AuthContext } from "./context/auth-context";
@@ -32,6 +33,7 @@ function App() {
                     <Route path="/profile/:email" element={<Profile />} />
                     <Route path="/search" element={<Search />} />
                     <Route path="/post" element={<Post type="page" />} />
+                    <Route path="/algo" element={<Algo />} />
                 </Routes>
             </Router>
         );

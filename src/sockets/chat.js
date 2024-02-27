@@ -4,7 +4,7 @@ class ChatSocket {
     socket
     constructor(email) {
         this.email = email
-        this.socket = io(`http://load-balancer-for-main-service-1482477395.us-east-1.elb.amazonaws.com/groups`, {
+        this.socket = io(`https://main-service.traverse.zone/groups`, {
             query: {
                 email: email
             }

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const backend = axios.create({
-    baseURL: "http://load-balancer-for-main-service-1482477395.us-east-1.elb.amazonaws.com/" + "api/",
+    baseURL: "https://main-service.traverse.zone/" + "api/",
 });
 
 const createGroup = (token, groupInfo, user1Email) => {
