@@ -3,7 +3,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import React, {useContext, useEffect, useState} from "react";
 import {SocketContext} from "../../context/friends-socket-context.js";
 import {AuthContext} from "../../context/auth-context.js";
-import {GroupContext} from "../../context/group-context.js";
+import {GroupContext} from "../../context/group-context.jsx";
 import axios from "axios";
 import {
     useClientEvent,

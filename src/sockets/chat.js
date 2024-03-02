@@ -4,7 +4,7 @@ class ChatSocket {
     socket
     constructor(email) {
         this.email = email
-        this.socket = io(`https://main-service.traverse.zone/groups`, {
+        this.socket = io(`http://localhost:8000/groups`, {
             query: {
                 email: email
             }

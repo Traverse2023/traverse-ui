@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 import {getGroups, getMembers, getFriendsWhoAreNotMembers} from "../../api/withToken";
 import {AuthContext} from "../../context/auth-context";
-import {GroupContext} from "../../context/group-context";
+import {GroupContext} from "../../context/group-context.jsx";
 import Modal from "../../components/Modal";
 import {SocketContext} from "../../context/friends-socket-context";
 // import {Dropdown} from 'react-searchable-dropdown-component';
@@ -47,15 +47,6 @@ const Members = () => {
         currMembers.push(potentialMember)
         setMembers(currMembers)
     };
-
-    useEffect(() => {
-        getMembers(auth.token, groupControl.selectedGroup.groupId)
-            .then((response) => {
-                setMembers(response);
-                console.log('54', response)
-            })
-            .catch((err) => console.error(err));
-    }, [groupControl.selectedGroup.groupId]);
 
     const addMemberChangeHandler = (e) => {
         const index = e.target.selectedIndex;

@@ -4,7 +4,7 @@ class FriendsSocket {
     socket;
     constructor(email) {
         this.email = email;
-        this.socket = io(`https://main-service.traverse.zone/friends`, {
+        this.socket = io(`http://localhost:8000/friends`, {
             query: {
                 email: email,
             },

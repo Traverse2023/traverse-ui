@@ -17,7 +17,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import { addNotification } from "../redux/slices/notificationSlice";
 import axios from "axios";
-import { GroupContext } from "../context/group-context";
+import { GroupContext } from "../context/group-context.jsx";
+import CallContainer from "./CallContainer.jsx";
 
 const NavBar = () => {
     const auth = React.useContext(AuthContext);
@@ -35,11 +36,11 @@ const NavBar = () => {
     const loadNotifications = async () => {
         console.log(
             "STORAGE SERV URL",
-            "https://storage-service.traverse.zone"
+            "http://localhost:8080"
         );
         const currentNotifications = await axios.get(
             `${
-                "https://storage-service.traverse.zone"
+                "http://localhost:8080"
             }/api/v1/notifications/getNotifications/${auth.email}`
         );
         if (currentNotification) {
@@ -142,6 +143,7 @@ const NavBar = () => {
 
     return (
         <div className="navbar">
+            <CallContainer />
             <div className="logo2">
                 <div className="logo-wrapper">
                     <img

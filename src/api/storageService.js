@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const storageServiceBaseURL = `${
-    "https://storage-service.traverse.zone"
+    "http://localhost:8080"
 }/api/v1`;
 
 const getPaginatedMessages = (groupId, channelName, pageNumber) => {

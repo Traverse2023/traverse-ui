@@ -1,7 +1,7 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faMicrophone, faMicrophoneSlash, faPhone} from "@fortawesome/free-solid-svg-icons";
 import React, {useContext} from "react";
-import {GroupContext} from "../../context/group-context.js";
+import {GroupContext} from "../../context/group-context.jsx";
 import {useLocalMicrophoneTrack, useRTCClient} from "agora-rtc-react";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";

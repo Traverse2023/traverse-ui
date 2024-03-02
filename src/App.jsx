@@ -15,6 +15,8 @@ import ChatSocket from "./sockets/chat";
 import Post from "./pages/Feed/Post";
 
 import AgoraRTC, {AgoraRTCProvider, useRTCClient} from "agora-rtc-react";
+import {GroupProvider} from "./context/group-context.jsx";
+import CallContainer from "./components/CallContainer.jsx";
 
 function App() {
     const { token, email, firstName, lastName, pfpURL, acceptLogin, acceptLogout, updatePfpUrl } = useAuth();
@@ -67,7 +69,9 @@ function App() {
                 chatsSocketApi: token ? chatsSocket : null
             }}>
                 <AgoraRTCProvider client={client}>
-                    <div className="App">{routes}</div>
+                    <GroupProvider>
+                        <div className="App">{routes}</div>
+                    </GroupProvider>
                 </AgoraRTCProvider>
             </SocketContext.Provider>
         </AuthContext.Provider>

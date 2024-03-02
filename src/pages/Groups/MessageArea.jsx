@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { SocketContext } from "../../context/friends-socket-context";
-import { GroupContext } from "../../context/group-context";
+import { GroupContext } from "../../context/group-context.jsx";
 import { AuthContext } from "../../context/auth-context";
 import usePaginatedMessages from "../../hooks/usePaginatedMessages";
 

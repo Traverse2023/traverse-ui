@@ -2,7 +2,7 @@ import axios from "axios";
 import { loadAllNotificationsAsync } from "../redux/slices/notificationSlice";
 
 const backend = axios.create({
-    baseURL: "https://main-service.traverse.zone/" + "api/",
+    baseURL: "http://localhost:8000/" + "api/",
 });
 
 const login = (email, password) => {
