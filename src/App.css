@@ -10,9 +10,9 @@
 
 .loader span {
   position: relative;
-  top: 0.63em;  
+  top: 0.63em;
   display: inline-block;
-  text-transform: uppercase;  
+  text-transform: uppercase;
   opacity: 0;
   transform: rotateX(-90deg);
 }
@@ -54,26 +54,26 @@
 }
 
 @keyframes drop {
-    10% {
-        opacity: 0.5;
-    }
-    20% {
-        opacity: 1;
-        top: 3.78em;
-        transform: rotateX(-360deg);
-    }
-    80% {
-        opacity: 1;
-        top: 3.78em;
-        transform: rotateX(-360deg);
-    }
-    90% {
-        opacity: 0.5;
-    }
-    100% {
-        opacity: 0;
-        top: 6.94em
-    }
+  10% {
+    opacity: 0.5;
+  }
+  20% {
+    opacity: 1;
+    top: 3.78em;
+    transform: rotateX(-360deg);
+  }
+  80% {
+    opacity: 1;
+    top: 3.78em;
+    transform: rotateX(-360deg);
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    top: 6.94em
+  }
 }
 
 .App {
@@ -81,6 +81,11 @@
   height: 100%;
   width: 100%;
   /* margin: auto; */
+}
+
+.newNotification{
+  background-color: blue;
+  border-radius: 50%;
 }
 
 
@@ -411,14 +416,14 @@ padding-right: 20vh;
 
 .typewriter2 h1 {
   grid-area: typewriter;
-  
+
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   border-right: .15em solid #7F56D9; /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
   margin: 0 auto; /* Gives that scrolling effect as the typing happens */
-  animation: 
-    typing 5s steps(21, end) infinite,
-    blink-caret .75s step-end infinite;
+  animation:
+          typing 5s steps(21, end) infinite,
+          blink-caret .75s step-end infinite;
 }
 
 @keyframes typing {
@@ -480,7 +485,7 @@ a, .minimalBtn {
   line-height: 20px;
   font-size: 14px;
   box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05), 0px 0px 0px 4px #F4EBFF;
-border-radius: 8px;
+  border-radius: 8px;
 }
 
 .slogan-line{
@@ -664,7 +669,7 @@ border-radius: 8px;
   grid-template-columns: 200px 240px 5fr 240px;
   grid-template-rows: 1fr 25fr;
   grid-template-areas: "navbar navbar navbar navbar" 
-  "groupSelector subGroupSelector messageArea members"; 
+  "groupSelector subGroupSelector messageArea members";
 }
 
 .groupSelector{
@@ -675,7 +680,7 @@ border-radius: 8px;
   padding-left: 10px;
   padding-right: 10px;
   -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */  
+  scrollbar-width: none;  /* Firefox */
 }
 
 .groupSelector::-webkit-scrollbar {
@@ -760,7 +765,7 @@ border-radius: 8px;
 
 .title-click-overlay ul li{
   padding-bottom: 10px;
-  
+
 }
 
 .text-channel-header{
@@ -783,7 +788,7 @@ border-radius: 8px;
   padding: 5px;
   flex-grow: 1;
   cursor: pointer;
-  
+
 }
 
 .add-channel-btn{
@@ -927,7 +932,7 @@ border-radius: 8px;
   border-radius: 50%;
   color: white;
   font-size: 20px;
-  
+
 }
 
 .msg-input{
@@ -1004,7 +1009,7 @@ border-radius: 8px;
   width: 1200px;
   height: 100%;
   margin: auto;
-  
+
   /* margin-top: 420px; */
 }
 

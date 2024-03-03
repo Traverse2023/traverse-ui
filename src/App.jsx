@@ -9,7 +9,9 @@ import { AuthContext } from "./context/auth-context";
 import { useAuth } from "./hooks/auth-hook";
 import Search from "./pages/Search";
 import FriendsSocket from "./sockets/friends";
+import NotificationsSocket from "./sockets/notifications";
 import {SocketContext} from "./context/friends-socket-context";
+import {NotificationsContext} from "./context/notifications-context";
 import ChatSocket from "./sockets/chat";
 import Post from "./pages/Feed/Post";
 
@@ -19,9 +21,11 @@ function App() {
     let routes;
     let friendsSocket;
     let chatsSocket;
+    let notificationsSocket;
     if (token) {
         friendsSocket = new FriendsSocket(email)
         chatsSocket = new ChatSocket(email)
+        notificationsSocket = new NotificationsSocket(email)
         routes = (
             <Router>
                 <Routes>
@@ -43,7 +47,7 @@ function App() {
             </Router>
         );
     }
-
+    const [notifications, setNotifications] = React.useState([])
     return (
         <AuthContext.Provider
             value={{
@@ -58,12 +62,18 @@ function App() {
                 updatePfpURL: updatePfpUrl
             }}
         >
-            <SocketContext.Provider value={{
-                friendsSocketApi: friendsSocket,
-                chatsSocketApi: chatsSocket
+            <NotificationsContext.Provider value={{
+                notifications: notifications,
+                setNotifications: setNotifications
             }}>
-                <div className="App">{routes}</div>
-            </SocketContext.Provider>
+                <SocketContext.Provider value={{
+                    friendsSocketApi: friendsSocket,
+                    chatsSocketApi: chatsSocket,
+                    notificationSocketApi: notificationsSocket
+                }}>
+                    <div className="App">{routes}</div>
+                </SocketContext.Provider>
+            </NotificationsContext.Provider>
         </AuthContext.Provider>
     );
 }

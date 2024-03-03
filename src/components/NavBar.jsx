@@ -18,19 +18,20 @@ import { useSelector, useDispatch } from "react-redux";
 import { addNotification } from "../redux/slices/notificationSlice";
 import axios from "axios";
 import { GroupContext } from "../context/group-context";
+import {NotificationsContext} from "../context/notifications-context.js";
 
 const NavBar = () => {
     const auth = React.useContext(AuthContext);
-    const { chatsSocketApi, friendsSocketApi } = useContext(SocketContext);
+    const { chatsSocketApi, friendsSocketApi, notificationSocketApi } = useContext(SocketContext);
     const [play] = useSound("/audio/notificationsound.mp3");
     const navigate = useNavigate();
     const groupControl = useContext(GroupContext);
     const [search, setSearch] = React.useState();
-    const [notifications, setNotifications] = React.useState([]);
+    const notificationContext = useContext(NotificationsContext)
 
     useEffect(() => {
-        console.log("25nots", notifications);
-    }, [notifications]);
+        console.log("25nots", notificationContext.notifications);
+    }, [notificationContext.notifications]);
 
     const loadNotifications = async () => {
         console.log(
@@ -42,7 +43,7 @@ const NavBar = () => {
                 import.meta.env.VITE_APP_STORAGE_SERVICE_URL
             }/api/v1/notifications/getNotifications/${auth.email}`
         );
-        setNotifications(currentNotifications.data);
+        notificationContext.setNotifications(currentNotifications.data);
         console.log("CURR NOTS", currentNotifications.data);
     };
 
@@ -52,33 +53,45 @@ const NavBar = () => {
             .catch((err) => console.log(err));
     }, []);
 
+
     friendsSocketApi.friendRequestListener((senderEmail) => {
+        console.log(senderEmail, "sent you a friend request")
         const updatedNotifications = [
-            ...notifications,
+            ...notificationContext.notifications,
             { senderEmail: senderEmail, notificationType: "FRIEND_REQUEST" },
         ];
-        setNotifications(updatedNotifications);
+        notificationContext.setNotifications(updatedNotifications);
         play();
     });
 
+    notificationSocketApi.receiveNotificationListener((newNotification) => {
+        const updatedNotifications = []
+        console.log("newNotification", newNotification);
+        play();
+    })
+
+    chatsSocketApi.receiveMessageListener(() => {
+        //update the notifications state
+    })
+
     chatsSocketApi.globalListener((notification) => {
         console.log("29global", notification);
-        if (notification.notificationType === "MESSAGE_SENT") {
-            const updatedNotifications = [...notifications, notification];
-            setNotifications(updatedNotifications);
+        if (notification.notificationType === "messageSent") {
+            const updatedNotifications = [...notificationContext.notifications, notification];
+            notificationContext.setNotifications(updatedNotifications);
             play();
         }
     });
 
     friendsSocketApi.acceptListener((senderEmail) => {
         const updatedNotifications = [
-            ...notifications,
+            ...notificationContext.notifications,
             {
                 senderEmail: senderEmail,
                 notificationType: "FRIEND_REQUEST_ACCEPTED",
             },
         ];
-        setNotifications(updatedNotifications);
+        notificationContext.setNotifications(updatedNotifications);
         play();
     });
 
@@ -222,12 +235,12 @@ const NavBar = () => {
                         <div className="dropdown">
                             <button className="dropbtn">
                                 <FontAwesomeIcon icon={faBell} />{" "}
-                                {notifications.length
-                                    ? `(${notifications.length})`
+                                {notificationContext.notifications.length
+                                    ? `(${notificationContext.notifications.length})`
                                     : null}
                             </button>
                             <div className="dropdown-content">
-                                {notifications.map((notification) => {
+                                {notificationContext.notifications.map((notification) => {
                                     if (
                                         notification.notificationType ===
                                         "FRIEND_REQUEST"
@@ -251,7 +264,7 @@ const NavBar = () => {
                                         );
                                     } else if (
                                         notification.notificationType ===
-                                        "MESSAGE_SENT"
+                                        "messageSent"
                                     ) {
                                         return (
                                             <Link
