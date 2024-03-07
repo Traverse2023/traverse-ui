@@ -21,6 +21,7 @@ import {
 } from "agora-rtc-react";
 import useSound from "use-sound";
 import axios from "axios";
+import {getAgoraRTCToken} from "../../api/withToken.js";
 
 const SubGroupSelector = () => {
     const [show, setShow] = React.useState(false);
@@ -137,8 +138,8 @@ const SubGroupSelector = () => {
     usePublish([localMicrophoneTrack])
 
     const getAgoraToken = async () => {
-        const res = await axios.get('https://main-service.traverse.zone/getAgoraToken/' + auth.email + '/' + channelId);
-        const token = res.data.token;
+        const res = await getAgoraRTCToken();
+        const token = res.token;
         console.log("Token:  " + token)
         return {
             appid: "056e7ee25ec24b4586f17ec177e121d1",

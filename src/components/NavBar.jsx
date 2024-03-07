@@ -33,6 +33,7 @@ const NavBar = () => {
     }, [notifications]);
 
     const loadNotifications = async () => {
+        // TODO: over storage service operation out
         console.log(
             "STORAGE SERV URL",
             "https://storage-service.traverse.zone"

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const backend = axios.create({
-    baseURL: "https://main-service.traverse.zone/" + "api/",
+    baseURL: import.meta.env.BACKEND_URL + "api/",
 });
 
 const createGroup = (token, groupInfo, user1Email) => {
@@ -311,7 +311,29 @@ const savePFP = (token, user1Email, pfpURL) => {
     });
 };
 
+const getAgoraRTCToken = () => {
+    // TODO: configure this endpoint to use token in header
+    // const config = {
+    //     headers: {
+    //         Authorization: `Bearer ${token}`,
+    //     },
+    // };
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await backend.get(import.meta.env.BACKEND_URL + auth.email + '/' + channelId);
+            console.log(response.data);
+            resolve(response.data);
+        } catch (err) {
+            console.log(err);
+            reject(err);
+        }
+    });
+}
+
+
+
 export {
+    getAgoraRTCToken,
     searchUsers,
     sendFriendRequest,
     getMutualFriends,
