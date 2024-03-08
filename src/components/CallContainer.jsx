@@ -7,13 +7,15 @@ import {
     useRemoteUsers,
     useRTCClient
 } from "agora-rtc-react";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {GroupContext} from "../context/group-context.jsx";
 import axios from "axios";
 import {AuthContext} from "../context/auth-context.js";
+import VideoPlayer from "./VideoPlayer.jsx";
 
 const CallContainer = () => {
     const auth = useContext(AuthContext)
+    const [cameraOn, setCameraOn] = useState(false)
     const { selectedGroup, selectedTextChannel, selectedVoiceChannel, inCall, setInCall } = useContext(GroupContext);
     // Unique string to identify channel when creating agora token and connecting to agora
     const channelId = selectedGroup.groupId + "-" + selectedVoiceChannel;
@@ -64,8 +66,10 @@ const CallContainer = () => {
         console.log("user-published", user, mediaType)
     })
     return (
-        <>
-        </>
+        cameraOn ?
+        <VideoPlayer cameraOn={cameraOn} />
+            :
+            null
     )
 }
 

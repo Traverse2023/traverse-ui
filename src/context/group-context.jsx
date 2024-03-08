@@ -27,7 +27,7 @@ export const GroupProvider = ({children}) => {
     const [selectedGroup, setSelectedGroup] = useState(
         {groupId: "control-center", groupName: "control-center"});
     const [selectedTextChannel, setselectedTextChannel] = useState("general");
-    const { selectedVoiceChannel, setSelectedVoiceChannel, inCall, setInCall, channelUsersMap, isMuted, setIsMuted}= useCall(selectedGroup)
+    const { selectedVoiceChannel, setSelectedVoiceChannel, inCall, setInCall, channelUsersMap, isMuted, setIsMuted, cameraOn, setCameraOn}= useCall(selectedGroup)
     const [members, setMembers] = useState([])
     const {token} = useContext(AuthContext)
 
@@ -55,7 +55,9 @@ export const GroupProvider = ({children}) => {
             setInCall: setInCall,
             isMuted: isMuted,
             setIsMuted: setIsMuted,
-            channelUsersMap: channelUsersMap
+            channelUsersMap: channelUsersMap,
+            cameraOn: cameraOn,
+            setCameraOn: setCameraOn
             }}>
             {children}
         </GroupContext.Provider>

@@ -9,7 +9,7 @@ export const useCall = (selectedGroup) => {
 
     const [inCall, setInCall] = useState(false)
     const [isMuted, setIsMuted] = useState(false)
-
+    const [cameraOn, setCameraOn] = useState(false)
     const [channelUsersMap, setChannelUsersMap] = useState(new Map(["general", "announcements", "events"].map(channelName => [channelName, []])))
     const { chatsSocketApi } = useContext(SocketContext);
     const joinCallSound = new Audio("/audio/joincall.wav")
@@ -108,5 +108,5 @@ export const useCall = (selectedGroup) => {
     }, [chatsSocketApi]);
 
 
-    return { selectedVoiceChannel, setSelectedVoiceChannel, inCall, setInCall, isMuted, setIsMuted, channelUsersMap };
+    return { cameraOn, setCameraOn, selectedVoiceChannel, setSelectedVoiceChannel, inCall, setInCall, isMuted, setIsMuted, channelUsersMap };
 };
