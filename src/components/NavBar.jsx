@@ -63,7 +63,7 @@ const NavBar = () => {
 
     chatsSocketApi.globalListener((notification) => {
         console.log("29global", notification);
-        if (notification.notificationType === "messageSent") {
+        if (notification.notificationType === "MESSAGE_SENT") {
             const updatedNotifications = [...notifications, notification];
             setNotifications(updatedNotifications);
             play();
