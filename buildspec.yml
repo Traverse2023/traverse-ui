@@ -2,14 +2,8 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR....
-      - aws --version
-      #- $(aws ecr get-login --region ap-south-1 --no-include-email)
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 430376525872.dkr.ecr.us-east-1.amazonaws.com
-      - # Replace with this to your repository URI
-      - REPOSITORY_URI=430376525872.dkr.ecr.us-east-1.amazonaws.com/traverse-ui
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=build-${COMMIT_HASH:=latest}
+      - echo Logging in to dockerhub
+      - docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
   build:
     commands:
       - echo Build started on `date`
@@ -20,6 +14,12 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
+      - echo Logging in to Amazon ECR....
+      - aws --version
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 430376525872.dkr.ecr.us-east-1.amazonaws.com
+      - REPOSITORY_URI=430376525872.dkr.ecr.us-east-1.amazonaws.com/traverse-ui
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=build-${COMMIT_HASH:=latest}
       - echo pushing to repo
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
