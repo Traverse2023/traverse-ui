@@ -4,7 +4,7 @@ class FriendsSocket {
     socket;
     constructor(email) {
         this.email = email;
-        this.socket = io(`https://main-service.traverse.zone/friends`, {
+        this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}friends`, {
             query: {
                 email: email,
             },

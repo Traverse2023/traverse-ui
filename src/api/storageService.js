@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const storageServiceBaseURL = `${
-    "https://storage-service.traverse.zone"
+    import.meta.env.VITE_APP_STORAGE_SERVICE_URL
 }/api/v1`;
 
 const getPaginatedMessages = (groupId, channelName, pageNumber) => {

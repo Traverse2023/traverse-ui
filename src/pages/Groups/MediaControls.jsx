@@ -1,7 +1,7 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faMicrophone, faMicrophoneSlash, faPhone} from "@fortawesome/free-solid-svg-icons";
-import React, {useContext} from "react";
-import {GroupContext} from "../../context/group-context.js";
+import {faMicrophone, faMicrophoneSlash, faPhone, faVideo, faVideoSlash} from "@fortawesome/free-solid-svg-icons";
+import React, {useContext, useEffect} from "react";
+import {GroupContext} from "../../context/group-context.jsx";
 import {useLocalMicrophoneTrack, useRTCClient} from "agora-rtc-react";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -37,6 +37,16 @@ const MediaControls = () => {
         console.log('unmute')
         await localMicrophoneTrack?.setEnabled(true);
     }
+
+    const turnOnCamera = () => {
+        console.log("turning on camera")
+        groupControl.setCameraOn(true)
+    }
+
+    useEffect(() => {
+        console.log(groupControl.cameraOn)
+    }, [groupControl.cameraOn]);
+
     return (
         groupControl.inCall ?
             <div className="media-controls">
@@ -62,6 +72,27 @@ const MediaControls = () => {
                             <FontAwesomeIcon onClick={mute}  icon={faMicrophone} className="media-control-icon"/>
                         </OverlayTrigger>
 
+                }
+                {groupControl.cameraOn ?
+                    <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={
+                            <Tooltip className="tooltip">Turn Off Camera</Tooltip>
+                        }
+                    >
+                        <FontAwesomeIcon onClick={() => groupControl.setCameraOn(prevState => !prevState)} icon={faVideoSlash} className="media-control-icon"/>
+                    </OverlayTrigger>
+                    :
+                    <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={
+                            <Tooltip className="tooltip">Turn On Camera</Tooltip>
+                        }
+                    >
+                        <FontAwesomeIcon onClick={turnOnCamera} icon={faVideo} className="media-control-icon"/>
+                    </OverlayTrigger>
                 }
                 <OverlayTrigger
                     placement="top"
