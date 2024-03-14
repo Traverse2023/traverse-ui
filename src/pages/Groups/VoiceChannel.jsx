@@ -11,7 +11,7 @@ import {
     useLocalMicrophoneTrack,
     usePublish,
     useRemoteAudioTracks,
-    useRemoteUsers,
+    useRemoteUsers, useRemoteVideoTracks,
     useRTCClient,
 } from "agora-rtc-react";
 import useSound from "use-sound";
@@ -19,10 +19,13 @@ import useSound from "use-sound";
 const VoiceChannel = ({ channelName, users }) => {
 
     const { setSelectedVoiceChannel } = useContext(GroupContext);
-
+    const remoteUsers = useRemoteUsers()
+    const {videoTracks} = useRemoteVideoTracks(remoteUsers)
     return (
         <>
-            <div className="channel" onClick={() => setSelectedVoiceChannel(channelName)}>
+            <div className="channel" onClick={() => {setSelectedVoiceChannel(channelName)
+                console.log('invoking videoTracksinvoicechannel', videoTracks, remoteUsers)
+            }}>
                 <h1>#</h1>
                 <h6>{channelName}</h6>
                 <OverlayTrigger

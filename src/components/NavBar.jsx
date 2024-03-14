@@ -36,11 +36,11 @@ const NavBar = () => {
     const loadNotifications = async () => {
         console.log(
             "STORAGE SERV URL",
-            "http://localhost:8080"
+            import.meta.env.VITE_APP_STORAGE_SERVICE_URL
         );
         const currentNotifications = await axios.get(
             `${
-                "http://localhost:8080"
+                import.meta.env.VITE_APP_STORAGE_SERVICE_URL
             }/api/v1/notifications/getNotifications/${auth.email}`
         );
         if (currentNotification) {

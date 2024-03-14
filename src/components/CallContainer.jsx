@@ -7,16 +7,17 @@ import {
     useRemoteUsers,
     useRTCClient
 } from "agora-rtc-react";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {GroupContext} from "../context/group-context.jsx";
 import axios from "axios";
 import {AuthContext} from "../context/auth-context.js";
 import VideoPlayer from "./VideoPlayer.jsx";
+import PortableMedia from "./PortableMedia.jsx";
 
 const CallContainer = () => {
     const auth = useContext(AuthContext)
-    const [cameraOn, setCameraOn] = useState(false)
-    const { selectedGroup, selectedTextChannel, selectedVoiceChannel, inCall, setInCall } = useContext(GroupContext);
+    const {cameraOn} = useContext(GroupContext)
+    const { isPortableMediaToggled, setIsPortableMediaToggled, selectedGroup, selectedTextChannel, selectedVoiceChannel, inCall, setInCall } = useContext(GroupContext);
     // Unique string to identify channel when creating agora token and connecting to agora
     const channelId = selectedGroup.groupId + "-" + selectedVoiceChannel;
     // Pulls existing client from AgoraProvider
@@ -31,7 +32,7 @@ const CallContainer = () => {
     usePublish([localMicrophoneTrack])
 
     const getAgoraToken = async () => {
-        const res = await axios.get('http://localhost:8000/getAgoraToken/' + auth.email + '/' + channelId);
+        const res = await axios.get(import.meta.env.VITE_APP_BACKEND_URL+'getAgoraToken/' + auth.email + '/' + channelId);
         const token = res.data.token;
         console.log("Token:  " + token)
         return {
@@ -65,9 +66,16 @@ const CallContainer = () => {
     useClientEvent(client, "user-published", (user, mediaType) => {
         console.log("user-published", user, mediaType)
     })
+    useEffect(() => {
+        console.log('invoking isPortable', isPortableMediaToggled)
+        console.log('invoking cameraOn', cameraOn)
+    }, [cameraOn]);
     return (
+        isPortableMediaToggled ?
+            <PortableMedia />
+        :
         cameraOn ?
-        <VideoPlayer cameraOn={cameraOn} />
+            <VideoPlayer cameraOn={cameraOn} />
             :
             null
     )

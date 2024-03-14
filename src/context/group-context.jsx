@@ -19,7 +19,9 @@ export const GroupContext = createContext({
     isMuted: false,
     setIsMuted: () => {},
     triggerDisconnect: false,
-    setTriggerDisconnect: () => {}
+    setTriggerDisconnect: () => {},
+    isPortableMediaToggled: false,
+    setIsPortableMediaToggled: () => {}
 });
 
 export const GroupProvider = ({children}) => {
@@ -29,6 +31,7 @@ export const GroupProvider = ({children}) => {
     const [selectedTextChannel, setselectedTextChannel] = useState("general");
     const { selectedVoiceChannel, setSelectedVoiceChannel, inCall, setInCall, channelUsersMap, isMuted, setIsMuted, cameraOn, setCameraOn}= useCall(selectedGroup)
     const [members, setMembers] = useState([])
+    const [isPortableMediaToggled, setIsPortableMediaToggled] = useState(false)
     const {token} = useContext(AuthContext)
 
     //get members whenever group is changed
@@ -57,7 +60,9 @@ export const GroupProvider = ({children}) => {
             setIsMuted: setIsMuted,
             channelUsersMap: channelUsersMap,
             cameraOn: cameraOn,
-            setCameraOn: setCameraOn
+            setCameraOn: setCameraOn,
+            isPortableMediaToggled: isPortableMediaToggled,
+            setIsPortableMediaToggled: setIsPortableMediaToggled
             }}>
             {children}
         </GroupContext.Provider>

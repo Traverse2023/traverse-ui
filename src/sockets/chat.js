@@ -4,7 +4,7 @@ class ChatSocket {
     socket
     constructor(email) {
         this.email = email
-        this.socket = io(`http://localhost:8000/groups`, {
+        this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}groups`, {
             query: {
                 email: email
             }
