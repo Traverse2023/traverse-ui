@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const backend = axios.create({
-    baseURL: import.meta.env.BACKEND_URL + "api/",
+    baseURL: import.meta.env.VITE_APP_BACKEND_URL + "api/",
 });
 
 const createGroup = (token, groupInfo, user1Email) => {

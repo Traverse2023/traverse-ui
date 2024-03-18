@@ -4,7 +4,7 @@ class ChatSocket {
     socket
     constructor(email) {
         this.email = email
-        this.socket = io(`https://main-service.traverse.zone/groups`, {
+        this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}groups`, {
             query: {
                 email: email
             }

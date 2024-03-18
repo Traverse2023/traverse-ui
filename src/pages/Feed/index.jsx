@@ -1,5 +1,6 @@
 import FeedArea from "./FeedArea";
 import {useEffect, useState} from "react";
+import Draggable from 'react-draggable'
 
 const Feed = () => {
     const [showComments, setShowComments] = useState(false)
@@ -7,7 +8,6 @@ const Feed = () => {
     useEffect(() => {
         console.log('checked', showComments)
     }, [showComments]);
-
 
     return (
     // <div className={showComments ? "feed-container-show" : "feed-container"}>
@@ -33,6 +33,10 @@ const Feed = () => {
             <label>My Posts</label>
         </div>
         <FeedArea/>
+            {/*<Draggable>*/}
+            {/*    <div className={`mini-media-controls ${showControls ? 'visible' : ''}`}></div>*/}
+            {/*    <div className="floating-button">Button</div>*/}
+            {/*</Draggable>*/}
     </div>
     )
 }

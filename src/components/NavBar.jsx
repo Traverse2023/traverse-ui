@@ -17,7 +17,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import { addNotification } from "../redux/slices/notificationSlice";
 import axios from "axios";
-import { GroupContext } from "../context/group-context";
+import { GroupContext } from "../context/group-context.jsx";
+import CallContainer from "./CallContainer.jsx";
 
 const NavBar = () => {
     const auth = React.useContext(AuthContext);
@@ -36,11 +37,11 @@ const NavBar = () => {
         // TODO: over storage service operation out
         console.log(
             "STORAGE SERV URL",
-            "https://storage-service.traverse.zone"
+            import.meta.env.VITE_APP_STORAGE_SERVICE_URL
         );
         const currentNotifications = await axios.get(
             `${
-                "https://storage-service.traverse.zone"
+                import.meta.env.VITE_APP_STORAGE_SERVICE_URL
             }/api/v1/notifications/getNotifications/${auth.email}`
         );
         if (currentNotification) {
@@ -143,6 +144,7 @@ const NavBar = () => {
 
     return (
         <div className="navbar">
+            <CallContainer />
             <div className="logo2">
                 <div className="logo-wrapper">
                     <img
