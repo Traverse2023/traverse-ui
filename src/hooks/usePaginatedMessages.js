@@ -23,52 +23,65 @@ export default function usePaginatedMessages(groupId, channelName, page, newMess
 
     // Called when scroll reaches last message to load additional page of messages
     useEffect(() => {
-        console.log(`Loading messages from group: ${groupId}, channel: ${channelName}`)
-        setLoading(true)
-        setError(false)
-        getMessages(groupId, channelName, cursor)
-            .then(value => {
-                if (value) {
-                    console.log("Messages received: ")
-                    value.messages.forEach(m => { console.log(m.text) })
-                    setCursor(value.cursor ? value.cursor : null);
-                    setMessages(prevMessages => {
-                        return [...value.messages, ...prevMessages]
-                    })
-                    messages.forEach(m => { console.log(m.text) })
-                }
-                else {
-                    console.log("no messages")
-                    setMessages([])
-                }
-                setHasMore(cursor);
-                setLoading(false)
-            })
-            .catch(error => {
-                console.log(error)
-                setError(true)
-            })
+        if (cursor) {
+            console.log(`Loading messages from group: ${groupId}, channel: ${channelName} with page ${page}`)
+            setLoading(true)
+            setError(false)
+            getMessages(groupId, channelName, cursor)
+                .then(value => {
+                    if (value) {
+
+
+                        setCursor(value.cursor ? value.cursor : null);
+                        setMessages(prevMessages => {
+                            return [...value.messages, ...prevMessages]
+                        })
+                        messages.forEach(m => {
+                            console.log(m.text)
+                        })
+                    } else {
+                        console.log("no messages")
+                        setMessages([])
+                    }
+                    setHasMore(cursor);
+                    setLoading(false)
+                })
+                .catch(error => {
+                    console.log(error)
+                    setError(true)
+                })
+        }
     }, [page])
 
     // Gets appropriate messages on change of group/channel
     useEffect(() => {
-
-        getMessages(groupId, channelName, cursor)
+        setCursor(null);
+        console.log(`Loading messages from group: ${groupId}, channel: ${channelName} and cursor: ${null}`);
+        getMessages(groupId, channelName, null)
             .then(value => {
 
                 if (value) {
-                    setMessages(value.messages)
+                    setMessages(value.messages);
+                    if (value?.cursor) {
+                        setCursor(value.cursor);
+                        setHasMore(cursor)
+                    } else{
+                        setCursor(null);
+                        setHasMore(null);
+                    }
                 }
                 else {
                     setMessages([])
                 }
-                setHasMore(cursor)
+
                 setLoading(false)
+
             })
             .catch(error => {
                 console.log(error)
                 setError(true)
             })
+
     }, [groupId, channelName])
 
     return { messages, error, loading, hasMore }
