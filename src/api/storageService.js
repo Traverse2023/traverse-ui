@@ -13,7 +13,7 @@ const getMessages = (groupId, channelName, cursor) => {
     return new Promise(async (resolve, reject) => {
         let url = `${storageServiceBaseURL}/messages/${groupId}/${channelName}`;
         try {
-            url += cursor ? `/?cursor=${cursor}` : "";
+            url += cursor ? `?cursor=${cursor}` : "";
             const response = await axios.get(url);
             console.log(`Get messages data for group and channel ${groupId}, ${channelName}`);
             resolve(response.data);
@@ -30,7 +30,7 @@ const getNotifications = (userId, cursor) => {
         let url = `${storageServiceBaseURL}/notifications/getNotifications/${userId}`
 
         try {
-            url += cursor ? `/?cursor=${cursor}` : "";
+            url += cursor ? `?cursor=${cursor}` : "";
             const response = await axios.get(url);
             console.log(`Get notifications for user ${userId}: ${response.data}`);
             resolve(response.data);

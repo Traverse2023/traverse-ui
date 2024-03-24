@@ -204,7 +204,7 @@ const NavBar = () => {
                             <div className="dropdown-content">
                                 {notifications.map((notification) => {
                                     if (
-                                        notification.notificationType ===
+                                        notification.type ===
                                         "FRIEND_REQUEST"
                                     ) {
                                         return (
@@ -214,7 +214,7 @@ const NavBar = () => {
                                             </Link>
                                         );
                                     } else if (
-                                        notification.notificationType ===
+                                        notification.type ===
                                         "FRIEND_REQUEST_ACCEPTED"
                                     ) {
                                         return (
@@ -225,8 +225,8 @@ const NavBar = () => {
                                             </Link>
                                         );
                                     } else if (
-                                        notification.notificationType ===
-                                        "MESSAGE_SENT"
+                                        notification.type ===
+                                        "GROUP_MESSAGE"
                                     ) {
                                         return (
                                             <Link
