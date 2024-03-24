@@ -29,6 +29,8 @@ export default function usePaginatedMessages(groupId, channelName, page, newMess
         getMessages(groupId, channelName, cursor)
             .then(value => {
                 if (value) {
+                    console.log("Messages received: ")
+                    value.messages.forEach(m => { console.log(m.text) })
                     setCursor(value.cursor ? value.cursor : null);
                     setMessages(prevMessages => {
                         return [...value.messages, ...prevMessages]
@@ -48,15 +50,12 @@ export default function usePaginatedMessages(groupId, channelName, page, newMess
             })
     }, [page])
 
-    // Initial render use effect gets database messages using groupId and channelName
+    // Gets appropriate messages on change of group/channel
     useEffect(() => {
-        console.log("Messages state refreshed due to load new group or channel")
-        setLoading(true)
-        setError(false)
+
         getMessages(groupId, channelName, cursor)
             .then(value => {
-                console.log("Messages received")
-                value.messages.forEach(m => { console.log(m.text) })
+
                 if (value) {
                     setMessages(value.messages)
                 }

@@ -46,7 +46,6 @@ const MessageArea = () => {
                     members: groupControl.members,
                     groupName: groupControl.selectedGroup.groupName
                 }
-                setNewMessageData()
                 chatsSocketApi.sendMessage(groupControl.selectedGroup.groupId, message_info)
                 setTypedMsg('')
             }

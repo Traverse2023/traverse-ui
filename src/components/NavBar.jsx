@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useSound from "use-sound";
 import { AuthContext } from "../context/auth-context";
@@ -19,70 +19,40 @@ import { addNotification } from "../redux/slices/notificationSlice";
 import axios from "axios";
 import { GroupContext } from "../context/group-context.jsx";
 import CallContainer from "./CallContainer.jsx";
+import usePaginatedNotifications from "../hooks/usePaginatedNotifications.js";
 
 const NavBar = () => {
-    const auth = React.useContext(AuthContext);
+    const auth = useContext(AuthContext);
     const { chatsSocketApi, friendsSocketApi } = useContext(SocketContext);
     const [play] = useSound("/audio/notificationsound.mp3");
     const navigate = useNavigate();
     const groupControl = useContext(GroupContext);
-    const [search, setSearch] = React.useState();
-    const [notifications, setNotifications] = React.useState([]);
+    const [search, setSearch] = useState();
+    const [newData, setNewData] = useState("");
+    const [page, setPage] = useState(0);
+    const { notifications, error, loading, hasMore } = usePaginatedNotifications(auth.email, page, newData)
 
     useEffect(() => {
         console.log("25nots", notifications);
     }, [notifications]);
 
-    const loadNotifications = async () => {
-        // TODO: over storage service operation out
-        console.log(
-            "STORAGE SERV URL",
-            import.meta.env.VITE_APP_STORAGE_SERVICE_URL
-        );
-        const currentNotifications = await axios.get(
-            `${
-                import.meta.env.VITE_APP_STORAGE_SERVICE_URL
-            }/api/v1/notifications/getNotifications/${auth.email}`
-        );
-        if (currentNotification) {
-            setNotifications(currentNotifications.data);
-            console.log("CURR NOTS", currentNotifications.data);
-        }
-    };
 
     useEffect(() => {
-        loadNotifications()
-            .then((response) => console.log(response))
-            .catch((err) => console.log(err));
+
     }, []);
 
     friendsSocketApi.friendRequestListener((senderEmail) => {
-        const updatedNotifications = [
-            ...notifications,
-            { senderEmail: senderEmail, notificationType: "FRIEND_REQUEST" },
-        ];
-        setNotifications(updatedNotifications);
+
         play();
     });
 
     chatsSocketApi.globalListener((notification) => {
         console.log("29global", notification);
-        if (notification.notificationType === "MESSAGE_SENT") {
-            const updatedNotifications = [...notifications, notification];
-            setNotifications(updatedNotifications);
-            play();
-        }
+
+        play();
     });
 
     friendsSocketApi.acceptListener((senderEmail) => {
-        const updatedNotifications = [
-            ...notifications,
-            {
-                senderEmail: senderEmail,
-                notificationType: "FRIEND_REQUEST_ACCEPTED",
-            },
-        ];
-        setNotifications(updatedNotifications);
         play();
     });
 
