@@ -11,9 +11,9 @@ const MessageArea = () => {
     const [typedMsg, setTypedMsg] = useState("")
     const { chatsSocketApi } = useContext(SocketContext)
 
-    const [newMessageData, setNewMessageData] = useState()
-    const [pageNumber, setPageNumber] = useState(1)
-    const { messages, error, loading, hasMore } = usePaginatedMessages(groupControl.selectedGroup.groupId, groupControl.selectedTextChannel, pageNumber, newMessageData)
+    const [newMessageData, setNewMessageData] = useState("");
+    const [page, setPage] = useState(0);
+    const { messages, error, loading, hasMore } = usePaginatedMessages(groupControl.selectedGroup.groupId, groupControl.selectedTextChannel, page, newMessageData);
 
     const scrollDiv = useRef(null)
     const typedMsgChangeHandler = (event) => {
@@ -28,11 +28,11 @@ const MessageArea = () => {
             if (entries[0].isIntersecting && hasMore) {
                 console.log(hasMore)
                 console.log('Last message is now visible on screen. Prompting get next page of messages if available')
-                setPageNumber(prevPageNumber => prevPageNumber + 1);
+                setPage(prevState => prevState+1);
             }
         })
         if (item) observer.current.observe(item)
-    }, [hasMore])
+    }, [hasMore, loading])
 
     const sendMsg = (event) => {
         if (event.key === 'Enter') {
@@ -42,12 +42,11 @@ const MessageArea = () => {
                 const message_info = {
                     msg: typedMsg,
                     channelName: groupControl.selectedTextChannel,
-                    firstName: auth.firstName,
-                    lastName: auth.lastName,
-                    pfpURL: auth.pfpURL,
+                    email: auth.email,
                     members: groupControl.members,
                     groupName: groupControl.selectedGroup.groupName
                 }
+                setNewMessageData()
                 chatsSocketApi.sendMessage(groupControl.selectedGroup.groupId, message_info)
                 setTypedMsg('')
             }
