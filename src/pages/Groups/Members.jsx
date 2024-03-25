@@ -38,6 +38,11 @@ const Members = () => {
             })
             .catch((err) => console.error(err));
     }, [addMemberModal]);
+    useEffect(() => {
+        chatsSocketApi.receiveAddedToGroupNotificationListener((users) => {
+
+        })
+    }, []);
 
     const addMemberHandler = () => {
         console.log('42', potentialMember.email)
