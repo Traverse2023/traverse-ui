@@ -23,7 +23,7 @@ import usePaginatedNotifications from "../hooks/usePaginatedNotifications.js";
 
 const NavBar = () => {
     const auth = useContext(AuthContext);
-    const { chatsSocketApi, friendsSocketApi } = useContext(SocketContext);
+    const { chatsSocketApi, friendsSocketApi , notificationsSocketApi} = useContext(SocketContext);
     const [play] = useSound("/audio/notificationsound.mp3");
     const navigate = useNavigate();
     const groupControl = useContext(GroupContext);
@@ -51,6 +51,11 @@ const NavBar = () => {
 
         play();
     });
+
+    notificationsSocketApi.receiveNotification((notification) => {
+        console.log("567", notification);
+        play();
+    })
 
     friendsSocketApi.acceptListener((senderEmail) => {
         play();

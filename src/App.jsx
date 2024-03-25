@@ -17,6 +17,7 @@ import Post from "./pages/Feed/Post";
 import AgoraRTC, {AgoraRTCProvider, useRTCClient} from "agora-rtc-react";
 import {GroupProvider} from "./context/group-context.jsx";
 import CallContainer from "./components/CallContainer.jsx";
+import NotificationSocket from "./sockets/notifications.js";
 
 function App() {
     const { token, email, firstName, lastName, pfpURL, acceptLogin, acceptLogout, updatePfpUrl } = useAuth();
@@ -24,9 +25,11 @@ function App() {
     let routes;
     let friendsSocket;
     let chatsSocket;
+    let notificationsSocket;
     if (token) {
         friendsSocket = new FriendsSocket(email)
         chatsSocket = new ChatSocket(email)
+        notificationsSocket = new NotificationSocket(email)
         routes = (
             <Router>
                 <Routes>
@@ -66,7 +69,8 @@ function App() {
         >
             <SocketContext.Provider value={{
                 friendsSocketApi: token ? friendsSocket : null,
-                chatsSocketApi: token ? chatsSocket : null
+                chatsSocketApi: token ? chatsSocket : null,
+                notificationsSocketApi: token ? notificationsSocket : null
             }}>
                 <AgoraRTCProvider client={client}>
                     <GroupProvider>
