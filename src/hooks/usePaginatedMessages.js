@@ -30,11 +30,10 @@ export default function usePaginatedMessages(groupId, channelName, page, newMess
             getMessages(groupId, channelName, cursor)
                 .then(value => {
                     if (value) {
-
-
                         setCursor(value.cursor ? value.cursor : null);
                         setMessages(prevMessages => {
                             return [...value.messages.reverse(), ...prevMessages]
+
                         })
                         messages.forEach(m => {
                             console.log(m.text)
@@ -59,7 +58,6 @@ export default function usePaginatedMessages(groupId, channelName, page, newMess
         console.log(`Loading messages from group: ${groupId}, channel: ${channelName} and cursor: ${null}`);
         getMessages(groupId, channelName, null)
             .then(value => {
-
                 if (value) {
                     setMessages(value.messages.reverse());
                     if (value?.cursor) {
@@ -73,9 +71,7 @@ export default function usePaginatedMessages(groupId, channelName, page, newMess
                 else {
                     setMessages([])
                 }
-
                 setLoading(false)
-
             })
             .catch(error => {
                 console.log(error)
