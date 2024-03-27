@@ -10,7 +10,7 @@ ENV VITE_APP_BACKEND_URL=$VITE_APP_BACKEND_URL
 
 ENV VITE_APP_STORAGE_SERVICE_URL=$VITE_APP_STORAGE_SERVICE_URL
 
-COPY package.json package-lock.json ./
+COPY package*.json ./
 
 RUN npm ci
 
@@ -20,6 +20,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-FROM build as run
-
-CMD ["npm", "start"]
+CMD ["npm", "dist/index.js"]

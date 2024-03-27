@@ -6,7 +6,7 @@ class NotificationSocket {
 
     constructor(email) {
         this.email = email
-        this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}groups`, {
+        this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}notifications`, {
             query: {
                 email: email
             }
@@ -15,6 +15,10 @@ class NotificationSocket {
 
     receiveNotification(callback) {
         this.socket.on('globalNotification', callback)
+    }
+
+    joinRoom(groupId) {
+        this.socket.emit("joinRoom", groupId);
     }
 }
 

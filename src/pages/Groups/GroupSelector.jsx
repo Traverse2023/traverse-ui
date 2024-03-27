@@ -14,8 +14,6 @@ const GroupSelector = () => {
     let { state } = useLocation();
     const navigate = useNavigate();
 
-    console.log("15", state)
-
     useEffect(() => {
         if (state) {
             console.log('17', state)

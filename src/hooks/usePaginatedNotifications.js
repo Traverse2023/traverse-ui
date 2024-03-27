@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {getMessages, getNotifications} from "../api/storageService";
 
-export default function usePaginatedNotifications(userId, page) {
+export default function usePaginatedNotifications(userId, page, newNotification) {
     const [hasMore, setHasMore] = useState(false)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
@@ -33,6 +33,18 @@ export default function usePaginatedNotifications(userId, page) {
                 setError(true)
             })
     }, [page])
+
+    useEffect(() => {
+        setLoading(true)
+        setError(false)
+        if (newNotification) {
+            console.log(`Received message: ${newNotification}`)
+            setNotifications(prev => {
+                return [...prev, newNotification]
+            })
+        }
+        setLoading(false)
+    }, [newNotification]);
 
     return { notifications, error, loading, hasMore }
 }

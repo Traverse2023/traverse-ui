@@ -23,7 +23,7 @@ import usePaginatedNotifications from "../hooks/usePaginatedNotifications.js";
 
 const NavBar = () => {
     const auth = useContext(AuthContext);
-    const { chatsSocketApi, friendsSocketApi , notificationsSocketApi} = useContext(SocketContext);
+    const { notificationsSocketApi} = useContext(SocketContext);
     const [play] = useSound("/audio/notificationsound.mp3");
     const navigate = useNavigate();
     const groupControl = useContext(GroupContext);
@@ -33,62 +33,15 @@ const NavBar = () => {
     const { notifications, error, loading, hasMore } = usePaginatedNotifications(auth.email, page, newData)
 
     useEffect(() => {
-        console.log("25nots", notifications);
+        console.log("Change in notifications:\n", notifications);
     }, [notifications]);
 
 
-    useEffect(() => {
-
-    }, []);
-
-    friendsSocketApi.friendRequestListener((senderEmail) => {
-
-        play();
-    });
-
-    chatsSocketApi.globalListener((notification) => {
-        console.log("29global", notification);
-
-        play();
-    });
-
     notificationsSocketApi.receiveNotification((notification) => {
-        console.log("567", notification);
-        play();
-    })
-
-    friendsSocketApi.acceptListener((senderEmail) => {
+        console.log("Receive notification:\n", notification);
+        setNewData(notification);
         play();
     });
-
-    // useEffect(() => {
-    //     chatsSocketApi.globalListener( (notification) => {
-    //         console.log('29global', notification)
-    //         const { recipientEmail } = notification
-    //         if (notification.notificationType === "MESSAGE_SENT") {
-    //             console.log("sound should play")
-    //             play()
-    //             dispatch(
-    //                 addNotification(
-    //                     {recipientEmail, notificationType: "MESSAGE_SENT"}
-    //                 )
-    //             )
-    //             // play()
-    //         }
-    //     })
-    // }, [])
-
-    // friendsSocketApi.declineFriendRequestListener((senderEmail) => {
-    //     console.log('here32 ', senderEmail, "declinedFriendRequest")
-    //     const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST"}]
-    //     setNotifications(updatedNotifications)
-    // })
-    //
-    // friendsSocketApi.unfriendListener((senderEmail) => {
-    //     console.log('here32 ', senderEmail, "declinedFriendRequest")
-    //     const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST"}]
-    //     setNotifications(updatedNotifications)
-    // })
 
     const logout = () => {
         auth.acceptLogout();

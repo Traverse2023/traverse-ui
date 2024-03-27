@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes, HashRouter } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Landing from "./pages/Landing";
 import Home from "./pages/Home";
 import Algo from "./pages/Algo";
@@ -13,15 +13,16 @@ import FriendsSocket from "./sockets/friends";
 import {SocketContext} from "./context/friends-socket-context";
 import ChatSocket from "./sockets/chat";
 import Post from "./pages/Feed/Post";
-
 import AgoraRTC, {AgoraRTCProvider, useRTCClient} from "agora-rtc-react";
 import {GroupProvider} from "./context/group-context.jsx";
-import CallContainer from "./components/CallContainer.jsx";
 import NotificationSocket from "./sockets/notifications.js";
+import {getGroups} from "./api/withToken.js";
 
 function App() {
     const { token, email, firstName, lastName, pfpURL, acceptLogin, acceptLogout, updatePfpUrl } = useAuth();
     const client = useRTCClient(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
+
+
     let routes;
     let friendsSocket;
     let chatsSocket;
@@ -30,6 +31,10 @@ function App() {
         friendsSocket = new FriendsSocket(email)
         chatsSocket = new ChatSocket(email)
         notificationsSocket = new NotificationSocket(email)
+        getGroups(token, email).then( (groups) => {
+            console.log("Groups: ", groups);
+            groups.forEach(g => notificationsSocket.joinRoom(g.groupId));
+        })
         routes = (
             <Router>
                 <Routes>

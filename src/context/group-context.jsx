@@ -28,7 +28,7 @@ export const GroupProvider = ({children}) => {
     const auth = useContext(AuthContext)
     const [selectedGroup, setSelectedGroup] = useState(
         {groupId: "control-center", groupName: "control-center"});
-    const [selectedTextChannel, setselectedTextChannel] = useState("general");
+    const [selectedTextChannel, setSelectedTextChannel] = useState("general");
     const { selectedVoiceChannel, setSelectedVoiceChannel, inCall, setInCall, channelUsersMap, isMuted, setIsMuted, cameraOn, setCameraOn}= useCall(selectedGroup)
     const [members, setMembers] = useState([])
     const [isPortableMediaToggled, setIsPortableMediaToggled] = useState(false)
@@ -49,7 +49,7 @@ export const GroupProvider = ({children}) => {
             selectedGroup: selectedGroup,
             setSelectedGroup: setSelectedGroup,
             selectedTextChannel: selectedTextChannel,
-            setselectedTextChannel: setselectedTextChannel,
+            setSelectedTextChannel: setSelectedTextChannel,
             selectedVoiceChannel: selectedVoiceChannel,
             setSelectedVoiceChannel: setSelectedVoiceChannel,
             members: members,

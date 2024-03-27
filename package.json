@@ -7,7 +7,8 @@
         "start": "node server.js",
         "dev": "vite --host",
         "build": "vite build",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "watch": "nodemon --watch src --ext js,json,jsx,mjs --exec \"npm run build && npm start\""
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.5.1",
@@ -27,6 +28,7 @@
         "browserslist-to-esbuild": "^2.1.1",
         "express": "^4.18.2",
         "lodash": "^4.17.21",
+        "nodemon": "^2.0.2",
         "react": "^18.2.0",
         "react-bootstrap": "^2.7.2",
         "react-dom": "^18.2.0",
