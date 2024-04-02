@@ -8,7 +8,7 @@ import ServerOptsOverlay, {
 
 import VoiceChannel from "./VoiceChannel.jsx";
 import MediaControls from "./MediaControls.jsx";
-import {GroupContext} from "../../context/group-context.jsx";
+import {GroupContext} from "../../context/group-context.tsx";
 
 const SubGroupSelector = () => {
     const [show, setShow] = React.useState(false);
@@ -105,7 +105,7 @@ const SubGroupSelector = () => {
                         <button className="add-channel-btn">+</button>
                     </OverlayTrigger>
                 </div>
-                {[...channelUsersMap.keys()].map(channelName => <VoiceChannel channelName={channelName} users={channelUsersMap} />)}
+                {[...channelUsersMap?.keys()].map(channelName => <VoiceChannel channelName={channelName} users={channelUsersMap} />)}
             </div>
             <div className="bottom-tab">
                 <MediaControls />

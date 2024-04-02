@@ -17,8 +17,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import { addNotification } from "../redux/slices/notificationSlice";
 import axios from "axios";
-import { GroupContext } from "../context/group-context.jsx";
-import CallContainer from "./CallContainer.jsx";
+import { GroupContext } from "../context/group-context.tsx";
+import CallContainer from "./CallContainer.tsx";
 
 const NavBar = () => {
     const auth = React.useContext(AuthContext);
@@ -143,7 +143,7 @@ const NavBar = () => {
 
     return (
         <div className="navbar">
-            <CallContainer />
+            {/*<CallContainer />*/}
             <div className="logo2">
                 <div className="logo-wrapper">
                     <img

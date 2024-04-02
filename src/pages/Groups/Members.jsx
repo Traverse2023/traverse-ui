@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 import {getGroups, getMembers, getFriendsWhoAreNotMembers} from "../../api/withToken";
 import {AuthContext} from "../../context/auth-context";
-import {GroupContext} from "../../context/group-context.jsx";
+import {GroupContext} from "../../context/group-context.tsx";
 import Modal from "../../components/Modal";
 import {SocketContext} from "../../context/friends-socket-context";
 // import {Dropdown} from 'react-searchable-dropdown-component';

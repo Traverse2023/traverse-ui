@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { getGroups } from "../../api/withToken";
 import { AuthContext } from "../../context/auth-context";
-import { GroupContext } from "../../context/group-context.jsx";
+import { GroupContext } from "../../context/group-context.tsx";
 import ChatSocket from "../../sockets/chat";
 import {SocketContext} from "../../context/friends-socket-context";
 import {useLocation, useNavigate, useParams} from "react-router-dom";

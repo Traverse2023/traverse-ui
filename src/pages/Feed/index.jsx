@@ -1,6 +1,7 @@
 import FeedArea from "./FeedArea";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Draggable from 'react-draggable'
+import CallContainer from "../../components/CallContainer.tsx";
 
 const Feed = () => {
     const [showComments, setShowComments] = useState(false)
@@ -12,6 +13,7 @@ const Feed = () => {
     return (
     // <div className={showComments ? "feed-container-show" : "feed-container"}>
         <div className={`feed-container ${showComments ? 'feed-container-show' : ''}`}>
+            <CallContainer />
         <div className="left-panel">
             <h3>Preferences</h3>
             <div className="checkbox-wrapper-3">

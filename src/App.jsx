@@ -15,8 +15,8 @@ import ChatSocket from "./sockets/chat";
 import Post from "./pages/Feed/Post";
 
 import AgoraRTC, {AgoraRTCProvider, useRTCClient} from "agora-rtc-react";
-import {GroupProvider} from "./context/group-context.jsx";
-import CallContainer from "./components/CallContainer.jsx";
+import {GroupProvider} from "./context/group-context.tsx";
+import CallContainer from "./components/CallContainer.tsx";
 
 function App() {
     const { token, email, firstName, lastName, pfpURL, acceptLogin, acceptLogout, updatePfpUrl } = useAuth();
