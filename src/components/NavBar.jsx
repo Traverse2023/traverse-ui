@@ -34,6 +34,7 @@ const NavBar = () => {
     }, [notifications]);
 
     const loadNotifications = async () => {
+        // TODO: over storage service operation out
         console.log(
             "STORAGE SERV URL",
             import.meta.env.VITE_APP_STORAGE_SERVICE_URL

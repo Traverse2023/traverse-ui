@@ -8,13 +8,17 @@ import ServerOptsOverlay, {
 
 import VoiceChannel from "./VoiceChannel.jsx";
 import MediaControls from "./MediaControls.jsx";
+
+//TODO - change this to a tsx file and import group-context.jsx
 import {GroupContext} from "../../context/group-context.tsx";
 
 const SubGroupSelector = () => {
+
     const [show, setShow] = React.useState(false);
     const target = React.useRef(null);
-    const [createModal, setCreateModal] = React.useState(false);
+    const [createModal, setCreateModal] = React.useState(false)
     const {channelUsersMap} = useContext(GroupContext)
+
     return (
         <div className="subGroupSelector">
             <h4 className="groupTitle">
