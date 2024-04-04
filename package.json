@@ -8,7 +8,7 @@
         "dev": "vite --host",
         "build": "vite build",
         "preview": "vite preview",
-        "watch": "nodemon --watch src --ext js,json,jsx,mjs --exec \"npm run dev && npm start\""
+        "watch": "nodemon --watch src --ext js,json,jsx,mjs --exec \"npm run build && npm start\""
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.5.1",

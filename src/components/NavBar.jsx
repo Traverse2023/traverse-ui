@@ -167,7 +167,7 @@ const NavBar = () => {
                                     ) {
                                         return (
                                             <Link to="/">
-                                                {notification.senderEmail} has
+                                                {notification.sender} has
                                                 sent you a friend request.
                                             </Link>
                                         );
@@ -177,7 +177,7 @@ const NavBar = () => {
                                     ) {
                                         return (
                                             <Link to="/">
-                                                {notification.senderEmail} has
+                                                {notification.sender} has
                                                 accepted your friend request
                                                 friend request.
                                             </Link>
@@ -191,13 +191,12 @@ const NavBar = () => {
                                                 onClick={(e) =>
                                                     tempHandler(
                                                         e,
-                                                        notification.groupId,
-                                                        notification.groupName
+                                                        notification.chatId,
                                                     )
                                                 }
                                                 to={`/groups`}
                                             >
-                                                {notification.message}
+                                                {notification.sender} has sent a message to group {notification.chatId}
                                             </Link>
                                         );
                                     }

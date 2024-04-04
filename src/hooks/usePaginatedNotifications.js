@@ -30,6 +30,7 @@ export default function usePaginatedNotifications(userId, page, newNotification)
             })
             .catch(error => {
                 console.log(error)
+                setNotifications([error.toString()])
                 setError(true)
             })
     }, [page])
