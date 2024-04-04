@@ -18,6 +18,7 @@ import {GroupProvider} from "./context/group-context.jsx";
 import NotificationSocket from "./sockets/notifications.js";
 import {getGroups} from "./api/withToken.js";
 
+
 function App() {
     const { token, email, firstName, lastName, pfpURL, acceptLogin, acceptLogout, updatePfpUrl } = useAuth();
     const client = useRTCClient(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
