@@ -144,7 +144,7 @@ const NavBar = () => {
 
     return (
         <div className="navbar">
-            {/*<CallContainer />*/}
+            <CallContainer />
             <div className="logo2">
                 <div className="logo-wrapper">
                     <img

@@ -80,7 +80,7 @@ const CallContainer = () => {
                     case VideoPlayerEnum.PORTABLE:
                         return <PortableMedia />
                     default:
-                        return cameraOn ? <VideoPlayer /> : null
+                        return null
                 }
             })()
         :

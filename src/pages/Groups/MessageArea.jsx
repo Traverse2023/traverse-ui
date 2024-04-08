@@ -4,6 +4,7 @@ import { GroupContext } from "../../context/group-context.tsx";
 import { AuthContext } from "../../context/auth-context";
 import usePaginatedMessages from "../../hooks/usePaginatedMessages";
 import CallContainer from "../../components/CallContainer.tsx";
+import VideoPlayer from "../../components/VideoPlayer.tsx";
 
 const MessageArea = () => {
 
@@ -81,7 +82,7 @@ const MessageArea = () => {
 
     return (
         groupControl.cameraOn ?
-                <CallContainer /> :
+                <VideoPlayer /> :
 
         <div className="messageArea">
             <header># general</header>
