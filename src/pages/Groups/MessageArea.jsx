@@ -1,40 +1,41 @@
-import React, { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {createRef, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import { SocketContext } from "../../context/friends-socket-context";
 import { GroupContext } from "../../context/group-context.tsx";
 import { AuthContext } from "../../context/auth-context";
 import usePaginatedMessages from "../../hooks/usePaginatedMessages";
-import CallContainer from "../../components/CallContainer.tsx";
 import VideoPlayer from "../../components/VideoPlayer.tsx";
+import {useInView} from 'react-intersection-observer';
 
+
+function scrollToBottom(botRef){
+    if (botRef.current) {
+        botRef.current.scrollIntoView({ block: "end"});
+    } else {
+        console.log("not yet")
+    }
+}
 const MessageArea = () => {
 
     const auth = useContext(AuthContext)
-    const groupControl = useContext(GroupContext);
+    const {selectedGroup,selectedTextChannel, members} = useContext(GroupContext);
     const [typedMsg, setTypedMsg] = useState("")
     const { chatsSocketApi } = useContext(SocketContext)
 
-    const [newMessageData, setNewMessageData] = useState()
-    const [pageNumber, setPageNumber] = useState(1)
-    const { messages, error, loading, hasMore } = usePaginatedMessages(groupControl.selectedGroup.groupId, groupControl.selectedTextChannel, pageNumber, newMessageData)
+    const [newMessageData, setNewMessageData] = useState("");
+    const [page, setPage] = useState(0);
+    const { messages, error, loading, hasMore } = usePaginatedMessages(selectedGroup.groupId, selectedTextChannel, page, newMessageData);
 
-    const scrollDiv = useRef(null)
     const typedMsgChangeHandler = (event) => {
         setTypedMsg(event.target.value);
     }
+    const { ref, inView } = useInView();
+    const bottomRef = useRef(null);
 
-    const observer = useRef()
-    const topMessageRef = useCallback(item => {
-        if (loading) return
-        if (observer.current) observer.current.disconnect()
-        observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) {
-                console.log(hasMore)
-                console.log('Last message is now visible on screen. Prompting get next page of messages if available')
-                setPageNumber(prevPageNumber => prevPageNumber + 1);
-            }
-        })
-        if (item) observer.current.observe(item)
-    }, [hasMore])
+    useEffect(() => {
+        if (inView && hasMore) {setPage(prev => prev+1);}
+    }, [inView])
+
+
 
     const sendMsg = (event) => {
         if (event.key === 'Enter') {
@@ -43,24 +44,22 @@ const MessageArea = () => {
             if (typedMsg.length > 0) {
                 const message_info = {
                     msg: typedMsg,
-                    channelName: groupControl.selectedTextChannel,
-                    firstName: auth.firstName,
-                    lastName: auth.lastName,
-                    pfpURL: auth.pfpURL,
-                    members: groupControl.members,
-                    groupName: groupControl.selectedGroup.groupName
+                    channelName: selectedTextChannel,
+                    email: auth.email,
+                    members: members,
+                    groupName: selectedGroup.groupName
                 }
-                chatsSocketApi.sendMessage(groupControl.selectedGroup.groupId, message_info)
+                chatsSocketApi.sendMessage(selectedGroup.groupId, message_info)
                 setTypedMsg('')
             }
         }
     }
 
-    let initialRender = useRef(true)
 
 
     useEffect(() => {
-        //scrollDiv.current.scrollIntoView({ block: "end" });
+
+
         chatsSocketApi.receiveAddedToGroupNotificationListener((senderEmail, recipientEmail) => {
             console.log('receiveAddedToGroupNotificationListener', senderEmail, recipientEmail)
             setNewMessageData(`${senderEmail} has added ${recipientEmail}`)
@@ -74,11 +73,17 @@ const MessageArea = () => {
 
     }, []);
 
+    useEffect(() => {
+        console.log("Scroll down...")
+        scrollToBottom(bottomRef);
+    }, [selectedGroup])
+
     useLayoutEffect(() => {
         if (scrollDiv?.current) {
             scrollDiv.current.scrollTop = scrollDiv.current.scrollHeight;
         }
     }, [scrollDiv])
+
 
     return (
         groupControl.cameraOn ?
@@ -86,6 +91,34 @@ const MessageArea = () => {
 
         <div className="messageArea">
             <header># general</header>
+            <div className="text-area">
+                <div ref={ref}><li>top</li></div>
+                {messages.map((msg) => {
+
+                    return (
+                        <div key={msg.id} className="msg-container">
+                            <img className="pfp"/>
+                            <div className="name-msg">
+                                {
+                                    typeof msg === 'object' && msg !== null ?
+                                        <ul>
+                                            <li>{msg.firstName} {msg.lastName} {msg.time}</li>
+                                            <br/>
+                                            <li>{msg.text}</li>
+                                        </ul> :
+                                        <ul>
+                                            <li>{msg}</li>
+                                            <br/>
+                                        </ul>
+                                }
+                            </div>
+                            <br/>
+                        </div>)
+
+                })}
+                <div ref={bottomRef}><li>bottom</li></div>
+            </div>
+
 
                 <>
                     <div className="text-area">

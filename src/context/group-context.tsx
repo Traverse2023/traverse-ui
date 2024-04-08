@@ -55,10 +55,10 @@ export const GroupProvider = ({children}) => {
     const auth = useContext(AuthContext)
     const [selectedGroup, setSelectedGroup] = useState(
         {groupId: "control-center", groupName: "control-center"});
+
     const [selectedTextChannel, setselectedTextChannel] = useState("general");
 
     const callHookStates = useCall(selectedGroup)
-
     const [members, setMembers] = useState([])
     // const [isPortableMediaToggled, setIsPortableMediaToggled] = useState(false)
     const {token} = useContext(AuthContext)

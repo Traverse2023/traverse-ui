@@ -1,6 +1,7 @@
 node_modules
 .gitignore
 .git
+/dist
 *.env
 *.example
 *.md
