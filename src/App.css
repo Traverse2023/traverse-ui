@@ -605,6 +605,7 @@ border-radius: 8px;
   margin: 0;
   width: fit-content;
   position: relative;
+  z-index: 1;
   display: inline-block;
 }
 
@@ -727,7 +728,7 @@ border-radius: 8px;
   border-radius: 3px;
   cursor: pointer;
   position: relative;
-  z-index: 2;
+  /*z-index: 2;*/
   /* display: grid;
   align-items: center; */
 }
@@ -910,6 +911,25 @@ border-radius: 8px;
   padding-right: 25px;
   padding-bottom: 25px;
   /* text-align: center; */
+}
+
+.videoArea{
+  grid-area: videoArea;
+  grid-template-rows: 50px calc(100vh - 175px);
+  grid-template-areas: "videoAreaHeader" "videoPlayerArea"
+}
+
+.videoArea header {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: solid gray;
+  border-width: 0.5px;
+  grid-area: videoAreaHeader;
+  padding-left: 20px;
+}
+
+.videoPlayerArea {
+  grid-area: videoPlayerArea;
 }
 
 .messageArea{

@@ -42,8 +42,8 @@ export default function VideoTrackPagination({localTrack, remoteTracks, max}) {
         console.log('invoking videoTracks in curr children', videoTracks)
         for (let i = page * max; i < page * max + max; i++) {
             if (i >= page * max && i < page * max + max) {
-                console.log('invoking videoTrack', videoTracks[i])
-                x.push(<RemoteVideoTrack track={videoTracks[i]} play={true} style={{position: "absolute"}}/>);
+                console.log('invoking videoTrack', remoteUsers[i])
+                x.push(<RemoteVideoTrack track={remoteUsers[i].videoTrack} play={true} style={{position: "absolute"}}/>);
             }
         }
         console.log('invoking x', x)
@@ -57,16 +57,23 @@ export default function VideoTrackPagination({localTrack, remoteTracks, max}) {
                     width: "50%",
                     margin: "0 auto",
                     display: "flex",
-                    flexWrap: "wrap"
-
+                    flexWrap: "wrap",
+                    // position: "relative"
                 }}
             >
-                {currentChildren()}
+                {/*{currentChildren()}*/}
+                <LocalVideoTrack track={localCameraTrack} play={true}/>
+                {remoteUsers.map(user => (
+                    <>
+                        <RemoteVideoTrack track={user.videoTrack} play={true}/>
+                        <label>User</label>
+                    </>
+                ))}
             </div>
 
-            Page {page + 1}
-            {page > 0 && <button onClick={prev}>Prev</button>}
-            {remoteTracks.length+1 > (page + 1) * max && <button onClick={next}>Next</button>}
+            {/*Page {page + 1}*/}
+            {/*{page > 0 && <button onClick={prev}>Prev</button>}*/}
+            {/*{remoteTracks.length+1 > (page + 1) * max && <button onClick={next}>Next</button>}*/}
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import NavBar from "../../components/NavBar";
-import {GroupContext} from "../../context/group-context.jsx";
+import {GroupContext} from "../../context/group-context.tsx";
 import ControlCenter from "./ControlCenter";
 import GroupSelector from "./GroupSelector";
 import Members from "./Members";

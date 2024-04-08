@@ -7,18 +7,20 @@ import {
     useRemoteUsers,
     useRTCClient
 } from "agora-rtc-react";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect} from "react";
 import {GroupContext} from "../context/group-context.jsx";
 import axios from "axios";
 import {AuthContext} from "../context/auth-context.js";
-import VideoPlayer from "./VideoPlayer.jsx";
+import VideoPlayer from "./VideoPlayer.js";
 import PortableMedia from "./PortableMedia.jsx";
+import {VideoPlayerEnum} from "../hooks/call-hook";
 
 const CallContainer = () => {
     const auth = useContext(AuthContext)
-    const {cameraOn} = useContext(GroupContext)
-    const { isPortableMediaToggled, setIsPortableMediaToggled, selectedGroup, selectedTextChannel, selectedVoiceChannel, inCall, setInCall } = useContext(GroupContext);
+
+    const { videoPlayerType, setVideoPlayerType, cameraOn, selectedGroup, selectedTextChannel, selectedVoiceChannel, inCall, setInCall } = useContext(GroupContext);
     // Unique string to identify channel when creating agora token and connecting to agora
+    // @ts-ignore
     const channelId = selectedGroup.groupId + "-" + selectedVoiceChannel;
     // Pulls existing client from AgoraProvider
     const client = useRTCClient();
@@ -32,6 +34,7 @@ const CallContainer = () => {
     usePublish([localMicrophoneTrack])
 
     const getAgoraToken = async () => {
+        // @ts-ignore
         const res = await axios.get(import.meta.env.VITE_APP_BACKEND_URL+'getAgoraToken/' + auth.email + '/' + channelId);
         const token = res.data.token;
         console.log("Token:  " + token)
@@ -67,16 +70,20 @@ const CallContainer = () => {
         console.log("user-published", user, mediaType)
     })
     useEffect(() => {
-        console.log('invoking isPortable', isPortableMediaToggled)
+        console.log('invoking videoPlayerType', videoPlayerType)
         console.log('invoking cameraOn', cameraOn)
     }, [cameraOn]);
     return (
-        isPortableMediaToggled ?
-            <PortableMedia />
+        inCall ?
+            (() => {
+                switch (videoPlayerType) {
+                    case VideoPlayerEnum.PORTABLE:
+                        return <PortableMedia />
+                    default:
+                        return null
+                }
+            })()
         :
-        cameraOn ?
-            <VideoPlayer cameraOn={cameraOn} />
-            :
             null
     )
 }

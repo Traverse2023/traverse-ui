@@ -1,5 +1,6 @@
 import Draggable from "react-draggable";
 import {useEffect, useState} from "react";
+import {LocalVideoTrack, useLocalCameraTrack} from "agora-rtc-react";
 
 const PortableMedia = () => {
     const [showControls, setShowControls] = useState(false);
@@ -28,6 +29,8 @@ const PortableMedia = () => {
         console.log("hasebeendragged")
         setHasBeenDragged(true)
     };
+
+    const {localCameraTrack} = useLocalCameraTrack()
     // const handleStop = () => {
     //     // Set isDragging to false when drag stops
     //     setIsDragging(false);
@@ -46,7 +49,10 @@ const PortableMedia = () => {
 
             >
                 <div>
-                    <div className={`mini-media-controls ${showControls ? 'visible-controls' : ''}`}>Hello</div>
+                    <div className={`mini-media-controls ${showControls ? 'visible-controls' : ''}`}>
+                        <LocalVideoTrack track={localCameraTrack} play={true} style={{width: "200px", height: "100px", zIndex: "99999999999999"}}/>
+
+                    </div>
                     <div className="handle floating-button"
                          // onMouseDown={handleMouseDown}
                          onMouseUp={handleMouseUp}
