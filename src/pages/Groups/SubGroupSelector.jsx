@@ -16,8 +16,8 @@ const SubGroupSelector = () => {
 
     const [show, setShow] = React.useState(false);
     const target = React.useRef(null);
-    const [createModal, setCreateModal] = React.useState(false)
-    const {channelUsersMap} = useContext(GroupContext)
+    const [createModal, setCreateModal] = React.useState(false);
+    const {channelUsersMap} = useContext(GroupContext);
 
     return (
         <div className="subGroupSelector">
