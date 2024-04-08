@@ -4,20 +4,18 @@ const storageServiceBaseURL = `${
     import.meta.env.VITE_APP_STORAGE_SERVICE_URL
 }/api/v1`;
 
-const getPaginatedMessages = (groupId, channelName, pageNumber) => {
+const getMessages = (groupId, channelName, cursor) => {
     console.log(groupId);
     console.log(channelName);
     console.log(
-        `Getting messages from ${storageServiceBaseURL}/messages/${groupId}/${channelName}/${pageNumber}`
+        `Getting messages from ${storageServiceBaseURL}/messages/${groupId}/${channelName}`
     );
     return new Promise(async (resolve, reject) => {
+        let url = `${storageServiceBaseURL}/messages/${groupId}/${channelName}`;
         try {
-            const response = await axios.get(
-                `${storageServiceBaseURL}/messages/${groupId}/${channelName}/${pageNumber}`
-            );
-            console.log(
-                `Get messages data for group and channel ${groupId}, ${channelName}`
-            );
+            url += cursor ? `?cursor=${cursor}` : "";
+            const response = await axios.get(url);
+            console.log(`Get messages data for group and channel ${groupId}, ${channelName}`);
             resolve(response.data);
         } catch (error) {
             console.log(`Error retrieving stored messages: ${error}`);
@@ -26,23 +24,35 @@ const getPaginatedMessages = (groupId, channelName, pageNumber) => {
     });
 };
 
-const getPaginatedNotifications = (recieivingEmail, pageNumber) => {
+const getNotifications = (userId, cursor) => {
     return new Promise(async (resolve, reject) => {
+
+        let url = `${storageServiceBaseURL}/notifications/getNotifications/${userId}`
+
         try {
-            const response = await axios.get(
-                `${storageServiceBaseURL}/notifications/getNotifications/${recieivingEmail}/ ${pageNumber}`
-            );
-            console.log(
-                `Get notifications for user ${recieivingEmail}: ${response.data}`
-            );
+            url += cursor ? `?cursor=${cursor}` : "";
+            const response = await axios.get(url);
+            console.log(`Get notifications for user ${userId}: ${response.data}`);
             resolve(response.data);
         } catch (error) {
-            console.log(
-                `Error when getting notifications for user ${recieivingEmail}: ${error}`
-            );
+            console.log(`Error when getting notifications for user ${userId}: ${error}`);
             reject(error);
         }
     });
 };
 
-export { getPaginatedMessages, getPaginatedNotifications };
+const deleteNotification = (userId, notificationSortKey) => {
+     return new Promise(async(resolve, reject) => {
+         try {
+             const response = await axios.delete(`${storageServiceBaseURL}/notifications/deleteNotification/`,
+             {data: {"pk": userId, "sk": notificationSortKey}});
+             console.log(`Delete notification for user ${userId} : ${response.data}`)
+             resolve(response.data)
+         } catch (error) {
+            console.log(`Error deleting notification: ${error}`);
+            reject(error);
+         }
+     })
+}
+
+export { getMessages, getNotifications };

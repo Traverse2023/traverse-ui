@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useSound from "use-sound";
 import { AuthContext } from "../context/auth-context";
@@ -14,106 +14,32 @@ import {
     faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useSelector, useDispatch } from "react-redux";
-import { addNotification } from "../redux/slices/notificationSlice";
-import axios from "axios";
-import { GroupContext } from "../context/group-context.tsx";
-import CallContainer from "./CallContainer.tsx";
+import { GroupContext } from "../context/group-context.jsx";
+import CallContainer from "./CallContainer.jsx";
+import usePaginatedNotifications from "../hooks/usePaginatedNotifications.js";
+
 
 const NavBar = () => {
-    const auth = React.useContext(AuthContext);
-    const { chatsSocketApi, friendsSocketApi } = useContext(SocketContext);
+    const auth = useContext(AuthContext);
+    const { notificationsSocketApi} = useContext(SocketContext);
     const [play] = useSound("/audio/notificationsound.mp3");
     const navigate = useNavigate();
     const groupControl = useContext(GroupContext);
-    const [search, setSearch] = React.useState();
-    const [notifications, setNotifications] = React.useState([]);
+    const [search, setSearch] = useState();
+    const [newData, setNewData] = useState("");
+    const [page, setPage] = useState(0);
+    const { notifications, error, loading, hasMore } = usePaginatedNotifications(auth.email, page, newData)
 
     useEffect(() => {
-        console.log("25nots", notifications);
+        console.log("Change in notifications:\n", notifications);
     }, [notifications]);
 
-    const loadNotifications = async () => {
-        // TODO: over storage service operation out
-        console.log(
-            "STORAGE SERV URL",
-            import.meta.env.VITE_APP_STORAGE_SERVICE_URL
-        );
-        const currentNotifications = await axios.get(
-            `${
-                import.meta.env.VITE_APP_STORAGE_SERVICE_URL
-            }/api/v1/notifications/getNotifications/${auth.email}`
-        );
-        if (currentNotification) {
-            setNotifications(currentNotifications.data);
-            console.log("CURR NOTS", currentNotifications.data);
-        }
-    };
 
-    useEffect(() => {
-        loadNotifications()
-            .then((response) => console.log(response))
-            .catch((err) => console.log(err));
-    }, []);
-
-    friendsSocketApi.friendRequestListener((senderEmail) => {
-        const updatedNotifications = [
-            ...notifications,
-            { senderEmail: senderEmail, notificationType: "FRIEND_REQUEST" },
-        ];
-        setNotifications(updatedNotifications);
+    notificationsSocketApi.receiveNotification((notification) => {
+        console.log("Receive notification:\n", notification);
+        setNewData(notification);
         play();
     });
-
-    chatsSocketApi.globalListener((notification) => {
-        console.log("29global", notification);
-        if (notification.notificationType === "MESSAGE_SENT") {
-            const updatedNotifications = [...notifications, notification];
-            setNotifications(updatedNotifications);
-            play();
-        }
-    });
-
-    friendsSocketApi.acceptListener((senderEmail) => {
-        const updatedNotifications = [
-            ...notifications,
-            {
-                senderEmail: senderEmail,
-                notificationType: "FRIEND_REQUEST_ACCEPTED",
-            },
-        ];
-        setNotifications(updatedNotifications);
-        play();
-    });
-
-    // useEffect(() => {
-    //     chatsSocketApi.globalListener( (notification) => {
-    //         console.log('29global', notification)
-    //         const { recipientEmail } = notification
-    //         if (notification.notificationType === "MESSAGE_SENT") {
-    //             console.log("sound should play")
-    //             play()
-    //             dispatch(
-    //                 addNotification(
-    //                     {recipientEmail, notificationType: "MESSAGE_SENT"}
-    //                 )
-    //             )
-    //             // play()
-    //         }
-    //     })
-    // }, [])
-
-    // friendsSocketApi.declineFriendRequestListener((senderEmail) => {
-    //     console.log('here32 ', senderEmail, "declinedFriendRequest")
-    //     const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST"}]
-    //     setNotifications(updatedNotifications)
-    // })
-    //
-    // friendsSocketApi.unfriendListener((senderEmail) => {
-    //     console.log('here32 ', senderEmail, "declinedFriendRequest")
-    //     const updatedNotifications = [...notifications, {senderEmail: senderEmail, notificationType: "FRIEND_REQUEST"}]
-    //     setNotifications(updatedNotifications)
-    // })
 
     const logout = () => {
         auth.acceptLogout();
@@ -234,42 +160,41 @@ const NavBar = () => {
                             <div className="dropdown-content">
                                 {notifications.map((notification) => {
                                     if (
-                                        notification.notificationType ===
+                                        notification.type ===
                                         "FRIEND_REQUEST"
                                     ) {
                                         return (
                                             <Link to="/">
-                                                {notification.senderEmail} has
+                                                {notification.sender} has
                                                 sent you a friend request.
                                             </Link>
                                         );
                                     } else if (
-                                        notification.notificationType ===
+                                        notification.type ===
                                         "FRIEND_REQUEST_ACCEPTED"
                                     ) {
                                         return (
                                             <Link to="/">
-                                                {notification.senderEmail} has
+                                                {notification.sender} has
                                                 accepted your friend request
                                                 friend request.
                                             </Link>
                                         );
                                     } else if (
-                                        notification.notificationType ===
-                                        "MESSAGE_SENT"
+                                        notification.type ===
+                                        "GROUP_MESSAGE"
                                     ) {
                                         return (
                                             <Link
                                                 onClick={(e) =>
                                                     tempHandler(
                                                         e,
-                                                        notification.groupId,
-                                                        notification.groupName
+                                                        notification.chatId,
                                                     )
                                                 }
                                                 to={`/groups`}
                                             >
-                                                {notification.message}
+                                                {notification.sender} has sent a message to group {notification.chatId}
                                             </Link>
                                         );
                                     }
