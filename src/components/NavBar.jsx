@@ -14,8 +14,8 @@ import {
     faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { GroupContext } from "../context/group-context.jsx";
-import CallContainer from "./CallContainer.jsx";
+import { GroupContext } from "../context/group-context.tsx";
+import CallContainer from "./CallContainer.tsx";
 import usePaginatedNotifications from "../hooks/usePaginatedNotifications.js";
 
 
