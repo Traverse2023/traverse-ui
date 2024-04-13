@@ -52,7 +52,6 @@ export const GroupContext = createContext<GroupContextType>({
 
 // @ts-ignore
 export const GroupProvider = ({children}) => {
-    const auth = useContext(AuthContext)
     const [selectedGroup, setSelectedGroup] = useState(
         {groupId: "control-center", groupName: "control-center"});
 
@@ -61,6 +60,7 @@ export const GroupProvider = ({children}) => {
     const callHookStates = useCall(selectedGroup)
     const [members, setMembers] = useState([])
     // const [isPortableMediaToggled, setIsPortableMediaToggled] = useState(false)
+    // @ts-ignore
     const {token} = useContext(AuthContext)
 
     //get members whenever group is changed
@@ -68,7 +68,7 @@ export const GroupProvider = ({children}) => {
         getMembers(token, selectedGroup.groupId)
             .then((response) => {
                 setMembers(response);
-                console.log('54', response)
+                console.log('54', response);
             })
             .catch((err) => console.error(err));
     }, [selectedGroup.groupId]);
@@ -77,15 +77,12 @@ export const GroupProvider = ({children}) => {
 
 
     return (
-
         <GroupContext.Provider value={{
-            // @ts-ignore
             selectedGroup: selectedGroup,
             setSelectedGroup: setSelectedGroup,
             selectedTextChannel: selectedTextChannel,
             setselectedTextChannel: setselectedTextChannel,
             members: members,
-            // @ts-ignore
             setMembers: setMembers,
             ...callHookStates
             }}>

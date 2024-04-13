@@ -17,7 +17,7 @@ function scrollToBottom(botRef){
 const MessageArea = () => {
 
     const auth = useContext(AuthContext)
-    const {selectedGroup,selectedTextChannel, members} = useContext(GroupContext);
+    const {selectedGroup,selectedTextChannel, members, cameraOn} = useContext(GroupContext);
     const [typedMsg, setTypedMsg] = useState("")
     const { chatsSocketApi } = useContext(SocketContext)
 
@@ -79,14 +79,12 @@ const MessageArea = () => {
     }, [selectedGroup])
 
     useLayoutEffect(() => {
-        if (scrollDiv?.current) {
-            scrollDiv.current.scrollTop = scrollDiv.current.scrollHeight;
-        }
-    }, [scrollDiv])
+        scrollToBottom(bottomRef);
+    })
 
 
     return (
-        groupControl.cameraOn ?
+        cameraOn ?
                 <VideoPlayer /> :
 
         <div className="messageArea">
@@ -118,80 +116,7 @@ const MessageArea = () => {
                 })}
                 <div ref={bottomRef}><li>bottom</li></div>
             </div>
-
-
                 <>
-                    <div className="text-area">
-                        <div>{loading && 'Loading...'}</div>
-                        <div>{error && error}</div>
-                        {/*{streamJoined ?*/}
-                        {/*    <div id="stream-wrapper">*/}
-                        {/*        <div id="video-streams">*/}
-                        {/*            <AgoraUI />*/}
-                        {messages.map((msg, index) => {
-                            if (0 === index) {
-                                return (
-                                    <div ref={topMessageRef} key={msg._id} className="msg-container">
-                                        <img className="pfp" />
-                                        <div className="name-msg">
-                                            {
-                                                typeof msg === 'object' && msg !== null ?
-                                                    <ul>
-                                                        <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
-                                                        <li>{msg.text}</li>
-                                                    </ul> :
-                                                    <ul>
-                                                        <li>{msg}</li> <br />
-                                                    </ul>
-                                            }
-                                        </div>
-                                        <br />
-                                    </div>
-                                )
-                            }
-                            else if (index === messages.length - 1) {
-                                return (
-                                    <div key={msg._id} className="msg-container">
-                                        <img className="pfp" />
-                                        <div className="name-msg">
-                                            {
-                                                typeof msg === 'object' && msg !== null ?
-                                                    <ul>
-                                                        <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
-                                                        <li>{msg.text}</li>
-                                                    </ul> :
-                                                    <ul>
-                                                        <li>{msg}</li> <br />
-                                                    </ul>
-                                            }
-                                        </div>
-                                        <br />
-                                    </div>
-                                )
-                            }
-                            else {
-                                return (
-                                    <div key={msg._id} className="msg-container">
-                                        <img className="pfp" />
-                                        <div className="name-msg">
-                                            {
-                                                typeof msg === 'object' && msg !== null ?
-                                                    <ul>
-                                                        <li>{msg.firstName} {msg.lastName} {msg.time}</li> <br />
-                                                        <li>{msg.text}</li>
-                                                    </ul> :
-                                                    <ul>
-                                                        <li>{msg}</li> <br />
-                                                    </ul>
-                                            }
-                                        </div>
-                                        <br />
-                                    </div>)
-                            }
-                        })}
-                    </div>
-                    <div ref={scrollDiv}></div>
-
                     <div className="msg-input-div">
                         <button className="plus">+</button>
                         {/*<button onClick={() => setStreamJoined(prevState => !prevState)}>{streamJoined? "Leave Stream" : "Join Stream"}</button>*/}
