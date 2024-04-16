@@ -4,8 +4,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "start": "node server.js",
-        "dev": "vite --host",
+        "start": "vite --host",
+        "server": "node server.js",
         "build": "vite build",
         "preview": "vite preview",
         "watch": "nodemon --watch src --ext js,json,jsx,mjs --exec \"npm run build && npm run start\""
