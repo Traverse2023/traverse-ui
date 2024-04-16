@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import Landing from "./pages/Landing";
 import Home from "./pages/Home";
 import Algo from "./pages/Algo";
@@ -45,6 +45,7 @@ function App() {
                     <Route path="/search" element={<Search />} />
                     <Route path="/post" element={<Post type="page" />} />
                     <Route path="/algo" element={<Algo />} />
+                    <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </Router>
         );
@@ -53,7 +54,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<Landing />} />
-                    {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </Router>
         );
