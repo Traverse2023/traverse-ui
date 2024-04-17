@@ -18,7 +18,7 @@ import {VideoPlayerEnum} from "../hooks/call-hook";
 const CallContainer = () => {
     const auth = useContext(AuthContext)
 
-    const { videoPlayerType, setVideoPlayerType, cameraOn, selectedGroup, selectedTextChannel, selectedVoiceChannel, inCall, setInCall } = useContext(GroupContext);
+    const { videoPlayerType, setVideoPlayerType, cameraOn, selectedGroup, selectedTextChannel, selectedVoiceChannel, inCall, setInCall, isMuted } = useContext(GroupContext);
     // Unique string to identify channel when creating agora token and connecting to agora
     // @ts-ignore
     const channelId = selectedGroup.groupId + "-" + selectedVoiceChannel;
@@ -32,6 +32,12 @@ const CallContainer = () => {
     const { audioTracks } = useRemoteAudioTracks(remoteUsers);
 
     usePublish([localMicrophoneTrack])
+
+    useEffect(() => {
+        if (typeof isMuted === "boolean" ) {
+            localMicrophoneTrack?.setMuted(isMuted)
+        }
+    }, [isMuted]);
 
     const getAgoraToken = async () => {
         // @ts-ignore

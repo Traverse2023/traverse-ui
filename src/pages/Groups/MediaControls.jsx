@@ -29,13 +29,13 @@ const MediaControls = () => {
     }
     const mute = async () => {
         console.log('mute')
-        // groupControl.setIsMuted(true)
-        await localMicrophoneTrack?.setMuted(true);
+        groupControl.setIsMuted(true)
+        // await localMicrophoneTrack?.setMuted(true);
     }
     const unmute = async () => {
-        // groupControl.setIsMuted(false)
+        groupControl.setIsMuted(false)
         console.log('unmute')
-        await localMicrophoneTrack?.setEnabled(true);
+        // await localMicrophoneTrack?.setEnabled(true);
     }
 
     const turnOnCamera = () => {
