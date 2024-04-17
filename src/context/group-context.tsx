@@ -24,7 +24,7 @@ interface GroupContextType {
     inCall: boolean,
     setInCall: () => void
     isMuted: boolean
-    setIsMuted: () => void
+    setIsMuted: (isMuted: boolean) => void
     videoPlayerType: VideoPlayerEnum
     setVideoPlayerType: (videoPlayerType: VideoPlayerEnum) => void
     cameraOn: boolean
