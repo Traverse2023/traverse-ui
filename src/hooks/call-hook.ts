@@ -1,6 +1,6 @@
 import React, {useState, useCallback, useEffect, useContext} from "react";
 import {SocketContext} from "../context/friends-socket-context.js";
-import {useRTCClient} from "agora-rtc-react";
+import {FetchArgs, useRTCClient} from "agora-rtc-react";
 import {AuthContext} from "../context/auth-context.js";
 
 export enum VideoPlayerEnum {
@@ -15,14 +15,20 @@ export const useCall = (selectedGroup: any) => {
     //call states
     const [inCall, setInCall] = useState(false)
     const [channelUsersMap, setChannelUsersMap] = useState(new Map(["general", "announcements", "events"].map(channelName => [channelName, []])))
+    const [agoraConfig, setAgoraConfig] = useState({appid: "", channel: "", token: "", uid: undefined})
+
+    useEffect(() => {
+        console.log('invoking agoraconfighook', agoraConfig)
+    }, [agoraConfig]);
 
     //voice call states
     const [selectedVoiceChannel, setSelectedVoiceChannel] = useState(null)
     const [isMuted, setIsMuted] = useState(false)
+    const [speakerUid, setSpeakerUid] = useState(null)
+    const [currentUserUid, setCurrentUserUid] = useState(null)
 
     //video call states
     const [cameraOn, setCameraOn] = useState(false)
-
 
     const [videoPlayerType, setVideoPlayerType] = useState<VideoPlayerEnum>(VideoPlayerEnum.FIT)
 
@@ -38,12 +44,14 @@ export const useCall = (selectedGroup: any) => {
     }
     const joinVoiceChannel = async () => {
         await disconnectVoiceChannel();
+        client.enableAudioVolumeIndicator()
         // @ts-ignore
         chatsSocketApi.joinCall({
             email: auth.email,
             firstName: auth.firstName,
             lastName: auth.lastName,
-            pfpURL: auth.pfpURL
+            pfpURL: auth.pfpURL,
+            agoraUid: agoraConfig.uid
         }, selectedGroup, selectedVoiceChannel)
         setInCall(true);
     }
@@ -129,5 +137,5 @@ export const useCall = (selectedGroup: any) => {
     }, [chatsSocketApi]);
 
 
-    return { cameraOn, setCameraOn, selectedVoiceChannel, setSelectedVoiceChannel, inCall, setInCall, isMuted, setIsMuted, channelUsersMap, videoPlayerType, setVideoPlayerType };
+    return { currentUserUid, setCurrentUserUid, speakerUid, setSpeakerUid, cameraOn, setCameraOn, selectedVoiceChannel, setSelectedVoiceChannel, inCall, setInCall, isMuted, setIsMuted, channelUsersMap, videoPlayerType, setVideoPlayerType, agoraConfig, setAgoraConfig };
 };

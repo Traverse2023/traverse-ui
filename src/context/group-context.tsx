@@ -2,7 +2,7 @@ import {createContext, Dispatch, SetStateAction, useContext, useEffect, useState
 import {getMembers} from "../api/withToken.js";
 import {AuthContext} from "./auth-context.js";
 import {SocketContext} from "./friends-socket-context.js";
-import {useRTCClient} from "agora-rtc-react";
+import {UID, useRTCClient} from "agora-rtc-react";
 import {useCall, VideoPlayerEnum} from "../hooks/call-hook.js";
 
 type Member = {
@@ -29,6 +29,12 @@ interface GroupContextType {
     setVideoPlayerType: (videoPlayerType: VideoPlayerEnum) => void
     cameraOn: boolean
     setCameraOn: () => void
+    agoraConfig: any
+    setAgoraConfig: () => {}
+    speakerUid: number | null
+    setSpeakerUid: (uid: UID) => {}
+    currentUserUid: number | null
+    setCurrentUserUid: (uid: UID) => {}
 }
 
 
@@ -47,7 +53,16 @@ export const GroupContext = createContext<GroupContextType>({
     videoPlayerType: VideoPlayerEnum.FIT,
     setVideoPlayerType: () => {},
     cameraOn: false,
-    setCameraOn: () => {}
+    setCameraOn: () => {},
+    agoraConfig: {},
+    //@ts-ignore
+    setAgoraConfig: () => {},
+    speakerUid: null,
+    //@ts-ignore
+    setSpeakerUid: () => {},
+    currentUserUid: null,
+    //@ts-ignore
+    setCurrentUserUid: () => {}
 });
 
 // @ts-ignore

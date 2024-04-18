@@ -1,18 +1,33 @@
 import Draggable from "react-draggable";
-import {useEffect, useState} from "react";
-import {LocalVideoTrack, useLocalCameraTrack} from "agora-rtc-react";
+import {useContext, useEffect, useState} from "react";
+import {LocalVideoTrack, RemoteVideoTrack, useLocalCameraTrack, useRemoteUsers} from "agora-rtc-react";
+import {GroupContext} from "../context/group-context.tsx";
 
 const PortableMedia = () => {
     const [showControls, setShowControls] = useState(false);
     const [lastClickTime, setLastClickTime] = useState(null);
     const [hasBeenDragged, setHasBeenDragged] = useState(false)
-    // const toggleControls = () => {
-    //     console.log('invoking toggle', isDragging)
-    // };
-    // const handleMouseDown = () => {
-    //     const currentTime = new Date().getTime();
-    //     setLastClickTime(currentTime)
-    // };
+
+    const {speakerUid, currentUserUid} = useContext(GroupContext)
+
+    const remoteUsers = useRemoteUsers()
+
+    useEffect(() => {
+        if (speakerUid) {
+            if (speakerUid === currentUserUid) {
+                setActiveSpeakerVideoTrack({local: true, localCameraTrack})
+            } else {
+                remoteUsers.forEach(user => {
+                    if (user.uid === speakerUid) {
+                        setActiveSpeakerVideoTrack({local: false, track: user.videoTrack})
+                    }
+                })
+            }
+        }
+    }, [speakerUid]);
+
+    const [activeSpeakerVideoTrack, setActiveSpeakerVideoTrack] = useState({})
+
 
     const handleMouseUp = async () => {
         await new Promise((res, rej) => {
@@ -50,7 +65,12 @@ const PortableMedia = () => {
             >
                 <div>
                     <div className={`mini-media-controls ${showControls ? 'visible-controls' : ''}`}>
-                        <LocalVideoTrack track={localCameraTrack} play={true} style={{width: "200px", height: "100px", zIndex: "99999999999999"}}/>
+                        {
+                            activeSpeakerVideoTrack.local ?
+                                <LocalVideoTrack track={localCameraTrack} play={true} style={{width: "200px", height: "100px", zIndex: "99999999999999"}}/>
+                                :
+                                <RemoteVideoTrack track={activeSpeakerVideoTrack.track} play={true} style={{width: "200px", height: "100px", zIndex: "99999999999999"}}/>
+                        }
 
                     </div>
                     <div className="handle floating-button"
