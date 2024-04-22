@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Modal from "../../components/Modal";
@@ -8,16 +8,14 @@ import ServerOptsOverlay, {
 
 import VoiceChannel from "./VoiceChannel.jsx";
 import MediaControls from "./MediaControls.jsx";
-
-//TODO - change this to a tsx file and import group-context.jsx
-import {GroupContext} from "../../context/group-context.tsx";
+import { GroupContext } from "../../context/group-context.tsx";
 
 const SubGroupSelector = () => {
 
     const [show, setShow] = React.useState(false);
     const target = React.useRef(null);
     const [createModal, setCreateModal] = React.useState(false);
-    const {channelUsersMap} = useContext(GroupContext);
+    const { channelUsersMap, setSelectedTextChannel } = useContext(GroupContext);
 
     return (
         <div className="subGroupSelector">
@@ -65,7 +63,7 @@ const SubGroupSelector = () => {
                         <p>Some text in the Modal..</p>
                     </Modal>
                 </div>
-                <div className="channel">
+                <div className="channel" onClick={() => { setSelectedTextChannel("general") }}>
                     <h1>#</h1>
                     <h6>general</h6>
                     <OverlayTrigger
@@ -78,7 +76,7 @@ const SubGroupSelector = () => {
                         <button>*</button>
                     </OverlayTrigger>
                 </div>
-                <div className="channel">
+                <div className="channel" onClick={() => { setSelectedTextChannel("plans") }}>
                     <h1>#</h1>
                     <h6>plans</h6>
                     <OverlayTrigger

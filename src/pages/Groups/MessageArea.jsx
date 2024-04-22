@@ -1,25 +1,25 @@
-import React, {createRef, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
+import React, { createRef, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { SocketContext } from "../../context/friends-socket-context";
 import { GroupContext } from "../../context/group-context.tsx";
 import { AuthContext } from "../../context/auth-context";
 import usePaginatedMessages from "../../hooks/usePaginatedMessages";
 import VideoPlayer from "../../components/VideoPlayer.tsx";
-import {useInView} from 'react-intersection-observer';
+import { useInView } from 'react-intersection-observer';
 
 
-function scrollToBottom(botRef){
+function scrollToBottom(botRef) {
     if (botRef.current) {
-        botRef.current.scrollIntoView({ block: "end"});
+        botRef.current.scrollIntoView({ block: "end" });
     } else {
         console.log("not yet")
     }
 }
 const MessageArea = () => {
 
-    const auth = useContext(AuthContext)
-    const {selectedGroup,selectedTextChannel, members, cameraOn} = useContext(GroupContext);
-    const [typedMsg, setTypedMsg] = useState("")
-    const { chatsSocketApi } = useContext(SocketContext)
+    const auth = useContext(AuthContext);
+    const { selectedGroup, selectedTextChannel, members, cameraOn } = useContext(GroupContext);
+    const [typedMsg, setTypedMsg] = useState("");
+    const { chatsSocketApi } = useContext(SocketContext);
 
     const [newMessageData, setNewMessageData] = useState("");
     const [page, setPage] = useState(0);
@@ -32,9 +32,12 @@ const MessageArea = () => {
     const bottomRef = useRef(null);
 
     useEffect(() => {
-        if (inView && hasMore) {setPage(prev => prev+1);}
+        if (inView && hasMore) { setPage(prev => prev + 1); }
     }, [inView])
 
+    useEffect(() => {
+        console.log("Switching to " + selectedTextChannel + "!")
+    }, [selectedTextChannel])
 
 
     const sendMsg = (event) => {
@@ -55,11 +58,7 @@ const MessageArea = () => {
         }
     }
 
-
-
     useEffect(() => {
-
-
         chatsSocketApi.receiveAddedToGroupNotificationListener((senderEmail, recipientEmail) => {
             console.log('receiveAddedToGroupNotificationListener', senderEmail, recipientEmail)
             setNewMessageData(`${senderEmail} has added ${recipientEmail}`)
@@ -69,7 +68,6 @@ const MessageArea = () => {
             console.log('44', messageData)
             setNewMessageData(messageData);
         })
-
 
     }, []);
 
@@ -85,37 +83,37 @@ const MessageArea = () => {
 
     return (
         cameraOn ?
-                <VideoPlayer /> :
+            <VideoPlayer /> :
 
-        <div className="messageArea">
-            <header># general</header>
-            <div className="text-area">
-                <div ref={ref}><li>top</li></div>
-                {messages.map((msg) => {
+            <div className="messageArea">
+                <header># {selectedTextChannel}</header>
+                <div className="text-area">
+                    <div ref={ref}><li>top</li></div>
+                    {messages.map((msg) => {
 
-                    return (
-                        <div key={msg.id} className="msg-container">
-                            <img className="pfp"/>
-                            <div className="name-msg">
-                                {
-                                    typeof msg === 'object' && msg !== null ?
-                                        <ul>
-                                            <li>{msg.firstName} {msg.lastName} {msg.time}</li>
-                                            <br/>
-                                            <li>{msg.text}</li>
-                                        </ul> :
-                                        <ul>
-                                            <li>{msg}</li>
-                                            <br/>
-                                        </ul>
-                                }
-                            </div>
-                            <br/>
-                        </div>)
+                        return (
+                            <div key={msg.id} className="msg-container">
+                                <img className="pfp" />
+                                <div className="name-msg">
+                                    {
+                                        typeof msg === 'object' && msg !== null ?
+                                            <ul>
+                                                <li>{msg.firstName} {msg.lastName} {msg.time}</li>
+                                                <br />
+                                                <li>{msg.text}</li>
+                                            </ul> :
+                                            <ul>
+                                                <li>{msg}</li>
+                                                <br />
+                                            </ul>
+                                    }
+                                </div>
+                                <br />
+                            </div>)
 
-                })}
-                <div ref={bottomRef}><li>bottom</li></div>
-            </div>
+                    })}
+                    <div ref={bottomRef}><li>bottom</li></div>
+                </div>
                 <>
                     <div className="msg-input-div">
                         <button className="plus">+</button>
@@ -126,7 +124,7 @@ const MessageArea = () => {
 
 
 
-        </div>
+            </div>
     );
 };
 
