@@ -2,11 +2,11 @@ import { createContext } from "react";
 
 export const AuthContext = createContext({
     isLoggedIn: false,
-    email: null,
-    token: null,
-    firstName: null,
-    lastName: null,
-    pfpURL: null,
+    email: "",
+    token: "",
+    firstName: "",
+    lastName: "",
+    pfpURL: "",
     updatePfpURL: () => {},
     login: () => {},
     logout: () => {},

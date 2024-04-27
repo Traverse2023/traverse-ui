@@ -1,11 +1,14 @@
+// @ts-ignore
 import {createContext, Dispatch, SetStateAction, useContext, useEffect, useState} from "react";
 import {getMembers} from "../api/withToken.js";
 import {AuthContext} from "./auth-context.js";
-import {SocketContext} from "./friends-socket-context.js";
-import {UID, useRTCClient} from "agora-rtc-react";
+
+// @ts-ignore
+import {UID} from "agora-rtc-react";
 import {useCall, VideoPlayerEnum} from "../hooks/call-hook.js";
 
 type Member = {
+    id: string
     lastName: string
     firstName: string
     password: string
@@ -13,38 +16,45 @@ type Member = {
     email: string
 }
 
+type SelectedGroup = {
+    groupId: string
+    groupName: string
+}
+
 interface GroupContextType {
-    selectedGroup: string
-    selectedTextChannel: string
+    selectedGroup: SelectedGroup,
+    setSelectedGroup: any,
+    selectedTextChannel: string,
+    setSelectedTextChannel: any,
     selectedVoiceChannel: string | null,
-    setSelectedVoiceChannel: () => void,
+    setSelectedVoiceChannel: any,
     members: Member[],
-    messages: any,
-    setMembers: () => void,
+    setMembers: any,
     inCall: boolean,
-    setInCall: () => void
+    setInCall: any
     isMuted: boolean
     setIsMuted: (isMuted: boolean) => void
     videoPlayerType: VideoPlayerEnum
     setVideoPlayerType: (videoPlayerType: VideoPlayerEnum) => void
     cameraOn: boolean
-    setCameraOn: () => void
+    setCameraOn: any
     agoraConfig: any
-    setAgoraConfig: () => {}
+    setAgoraConfig: any
     speakerUid: number | null
-    setSpeakerUid: (uid: UID) => {}
+    setSpeakerUid: any
     currentUserUid: number | null
-    setCurrentUserUid: (uid: UID) => {}
+    setCurrentUserUid: any
 }
 
 
 export const GroupContext = createContext<GroupContextType>({
-    selectedGroup: "control-center",
+    selectedGroup: {groupName: "control-center", groupId: ""},
+    setSelectedGroup: () => {},
     selectedTextChannel: "general",
+    setSelectedTextChannel: () => {},
     selectedVoiceChannel: null,
     setSelectedVoiceChannel: () => {},
     members: [],
-    messages: [],
     setMembers: () => { },
     inCall: false,
     setInCall: () => {},
@@ -70,7 +80,7 @@ export const GroupProvider = ({children}) => {
     const [selectedGroup, setSelectedGroup] = useState(
         {groupId: "control-center", groupName: "control-center"});
 
-    const [selectedTextChannel, setselectedTextChannel] = useState("general");
+    const [selectedTextChannel, setSelectedTextChannel] = useState("general");
 
     const callHookStates = useCall(selectedGroup)
     const [members, setMembers] = useState([])
@@ -89,14 +99,12 @@ export const GroupProvider = ({children}) => {
     }, [selectedGroup.groupId]);
 
 
-
-
     return (
         <GroupContext.Provider value={{
             selectedGroup: selectedGroup,
             setSelectedGroup: setSelectedGroup,
             selectedTextChannel: selectedTextChannel,
-            setselectedTextChannel: setselectedTextChannel,
+            setSelectedTextChannel: setSelectedTextChannel,
             members: members,
             setMembers: setMembers,
             ...callHookStates

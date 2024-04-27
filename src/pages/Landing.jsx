@@ -5,14 +5,14 @@ import {ToastContainer, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 import {login, register} from "../api/auth";
 import {AuthContext} from "../context/auth-context";
+import {useAuth} from "../hooks/useAuth.js";
 
 const Landing = () => {
     const notify = (msg) => toast.error(msg, {position: "top-center"})
     const registerToast = useRef(null)
     const loginToast = useRef(null)
     const [createModal, setCreateModal] = React.useState(false);
-
-    const auth = React.useContext(AuthContext);
+    const { login, register } = useAuth();
 
     const [userInfo, setUserInfo] = React.useState({});
 
@@ -28,12 +28,7 @@ const Landing = () => {
     const registerHandler = () => {
         if ("email" in userInfo && "firstName" in userInfo && "lastName" in userInfo && "password" in userInfo) {
             registerToast.current = toast.loading("Creating Account...")
-            register(
-                userInfo.email,
-                userInfo.password,
-                userInfo.firstName,
-                userInfo.lastName
-            )
+            register()
                 .then((value) => {
                     setCreateModal(false)
                     toast.update(registerToast.current, {
@@ -86,8 +81,7 @@ const Landing = () => {
             loginToast.current = toast.loading("Logging In...")
             login(loginInfo.email, loginInfo.password)
                 .then((value) => {
-                    console.log(value)
-                    auth.acceptLogin(loginInfo.email, value.firstName, value.lastName, value.pfpURL,  value.token);
+
                     toast.update(loginToast.current, {
                         position: "top-right",
                         type: "success",
@@ -101,7 +95,7 @@ const Landing = () => {
                     })
                 })
                 .catch((err) => {
-                    console.log(err);
+
                     toast.update(loginToast.current, {
                         position: "top-center",
                         type: "error",

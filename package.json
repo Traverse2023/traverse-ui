@@ -37,7 +37,7 @@
         "react-intersection-observer": "^9.8.1",
         "react-quill": "^2.0.0",
         "react-redux": "^9.0.4",
-        "react-router-dom": "^6.8.1",
+        "react-router-dom": "^6.23.0",
         "react-s3": "^1.3.1",
         "react-searchable-dropdown-component": "^1.0.3",
         "react-toastify": "^9.1.3",

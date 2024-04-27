@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const backend = axios.create({
-    baseURL: import.meta.env.VITE_APP_BACKEND_URL + "api/",
+const mainService = axios.create({
+    baseURL: import.meta.env.VITE_APP_BACKEND_URL + "/api",
 });
 
 const createGroup = (token, groupInfo, user1Email) => {
@@ -15,8 +15,8 @@ const createGroup = (token, groupInfo, user1Email) => {
     console.log("====================================");
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.post(
-                "group/createGroup",
+            const response = await mainService.post(
+                "/group/createGroup",
                 { groupName: groupInfo.groupName, user1Email },
                 config
             );
@@ -37,8 +37,8 @@ const getGroups = (token, user1Email) => {
     };
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.get(
-                `group/getGroups/${user1Email}`,
+            const response = await mainService.get(
+                `/getGroups`,
                 config
             );
             console.log(response.data);
@@ -58,8 +58,8 @@ const getMembers = (token, groupId) => {
     };
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.get(
-                `group/getMembers/${groupId}`,
+            const response = await mainService.get(
+                `/group/getMembers/${groupId}`,
                 config
             );
             console.log("withTokenline65", response.data);
@@ -79,8 +79,8 @@ const getFriendsWhoAreNotMembers = (token, user1Email, groupId) => {
     };
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.get(
-                `group/getFriendsWhoAreNotMembers/${user1Email}/${groupId}`,
+            const response = await mainService.get(
+                `/group/getFriendsWhoAreNotMembers/${groupId}`,
                 config
             );
             console.log("withTokenline65", response.data);
@@ -92,7 +92,7 @@ const getFriendsWhoAreNotMembers = (token, user1Email, groupId) => {
     });
 };
 
-const getUser = (token, user1Email) => {
+const getUser = (token) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -100,8 +100,8 @@ const getUser = (token, user1Email) => {
     };
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.get(
-                `search/getUser/${user1Email}`,
+            const response = await mainService.get(
+                `/search/getUser`,
                 config
             );
             console.log(response.data);
@@ -121,8 +121,8 @@ const searchUsers = (token, searcher, searched) => {
     };
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.get(
-                `search/searchUsers/${searcher}/${searched}`,
+            const response = await mainService.get(
+                `/search/searchUsers/${searched}`,
                 config
             );
             console.log(response.data);
@@ -134,19 +134,17 @@ const searchUsers = (token, searcher, searched) => {
     });
 };
 
-const getFriends = (token, user1Email) => {
+const getFriends = (token) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     };
-    console.log("====================================");
-    console.log("35", user1Email);
-    console.log("====================================");
+
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.get(
-                `friends/getFriends/${user1Email}`,
+            const response = await mainService.get(
+                `/friends/getFriends`,
                 config
             );
             console.log(response.data);
@@ -158,19 +156,17 @@ const getFriends = (token, user1Email) => {
     });
 };
 
-const getFriendRequests = (token, user1Email) => {
+const getFriendRequests = (token) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     };
-    console.log("====================================");
-    console.log("35", user1Email);
-    console.log("====================================");
+
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.get(
-                `friends/getFriendRequests/${user1Email}`,
+            const response = await mainService.get(
+                `/friends/getFriendRequests/`,
                 config
             );
             console.log(response.data);
@@ -182,7 +178,7 @@ const getFriendRequests = (token, user1Email) => {
     });
 };
 
-const getMutualFriends = (token, user1Email, user2Email) => {
+const getMutualFriends = (token, otherUserId) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -190,8 +186,8 @@ const getMutualFriends = (token, user1Email, user2Email) => {
     };
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.get(
-                `friends/getMutualFriends/${user1Email}/${user2Email}`,
+            const response = await mainService.get(
+                `/friends/getMutualFriends/${otherUserId}`,
                 config
             );
             console.log(response.data);
@@ -203,17 +199,17 @@ const getMutualFriends = (token, user1Email, user2Email) => {
     });
 };
 
-const getFriendshipStatus = (token, user1Email, user2Email) => {
+const getFriendshipStatus = (token, friendUserId) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     };
-    console.log("55 here", user1Email, user2Email);
+
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.get(
-                `friends/getFriendshipStatus/${user1Email}/${user2Email}`,
+            const response = await mainService.get(
+                `/friends/getFriendshipStatus/${friendUserId}`,
                 config
             );
             console.log(response.data);
@@ -225,7 +221,7 @@ const getFriendshipStatus = (token, user1Email, user2Email) => {
     });
 };
 
-const sendFriendRequest = (token, user1Email, user2Email) => {
+const sendFriendRequest = (token, friendUserId) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -233,9 +229,9 @@ const sendFriendRequest = (token, user1Email, user2Email) => {
     };
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.post(
-                "friends/sendFriendRequest",
-                { user1Email, user2Email },
+            const response = await mainService.post(
+                "/friends/sendFriendRequest",
+                {  friendUserId },
                 config
             );
             console.log(response.data);
@@ -245,39 +241,17 @@ const sendFriendRequest = (token, user1Email, user2Email) => {
     });
 };
 
-const removeFriendRequest = (token, user1Email, user2Email) => {
+const removeFriendRequest = (token, friendUserId) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     };
-    console.log("55 here", user1Email, user2Email);
-    return new Promise(async (resolve, reject) => {
-        try {
-            const response = await backend.get(
-                `friends/removeFriendRequest/${user1Email}/${user2Email}`,
-                config
-            );
-            console.log(response.data);
-            resolve(response.data);
-        } catch (err) {
-            console.log(err);
-            reject(err);
-        }
-    });
-};
 
-const acceptFriendRequest = (token, user1Email, user2Email) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.post(
-                "friends/acceptFriendRequest",
-                { user1Email, user2Email },
+            const response = await mainService.get(
+                `/friends/removeFriendRequest/${friendUserId}`,
                 config
             );
             console.log(response.data);
@@ -289,7 +263,7 @@ const acceptFriendRequest = (token, user1Email, user2Email) => {
     });
 };
 
-const savePFP = (token, user1Email, pfpURL) => {
+const acceptFriendRequest = (token, friendUserId) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -297,9 +271,32 @@ const savePFP = (token, user1Email, pfpURL) => {
     };
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.post(
-                "user/savePFP",
-                { user1Email, pfpURL },
+            const response = await mainService.post(
+                "/friends/acceptFriendRequest",
+                { friendUserId },
+                config
+            );
+            console.log(response.data);
+            resolve(response.data);
+        } catch (err) {
+            console.log(err);
+            reject(err);
+        }
+    });
+};
+
+const savePFP = (token, pfpURL) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await mainService.post(
+                "/user/savePFP",
+                {  pfpURL },
                 config
             );
             console.log(response.data);
@@ -320,7 +317,7 @@ const getAgoraRTCToken = () => {
     // };
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.get(import.meta.env.BACKEND_URL + auth.email + '/' + channelId);
+            const response = await mainService.get(import.meta.env.BACKEND_URL + auth.email + '/' + channelId);
             console.log(response.data);
             resolve(response.data);
         } catch (err) {

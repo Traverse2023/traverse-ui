@@ -7,7 +7,7 @@ import Algo from "./pages/Algo";
 import Groups from "./pages/Groups";
 import Profile from "./pages/Profile";
 import { AuthContext } from "./context/auth-context";
-import { useAuth } from "./hooks/auth-hook";
+import {useAuth, UserProvider} from "./hooks/useAuth.tsx";
 import Search from "./pages/Search";
 import FriendsSocket from "./sockets/friends";
 import {SocketContext} from "./context/friends-socket-context";
@@ -61,18 +61,18 @@ function App() {
     }
 
     return (
-        <AuthContext.Provider
-            value={{
-                isLoggedIn: !!token,
-                email: email,
-                token: token,
-                firstName: firstName,
-                lastName: lastName,
-                pfpURL: pfpURL,
-                acceptLogin: acceptLogin,
-                acceptLogout: acceptLogout,
-                updatePfpURL: updatePfpUrl
-            }}
+        <UserProvider
+            // value={{
+            //     isLoggedIn: !!token,
+            //     email: email,
+            //     token: token,
+            //     firstName: firstName,
+            //     lastName: lastName,
+            //     pfpURL: pfpURL,
+            //     acceptLogin: acceptLogin,
+            //     acceptLogout: acceptLogout,
+            //     updatePfpURL: updatePfpUrl
+            // }}
         >
             <SocketContext.Provider value={{
                 friendsSocketApi: token ? friendsSocket : null,
@@ -85,7 +85,7 @@ function App() {
                     </GroupProvider>
                 </AgoraRTCProvider>
             </SocketContext.Provider>
-        </AuthContext.Provider>
+        </UserProvider>
     );
 }
 
