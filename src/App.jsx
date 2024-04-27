@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
-import Landing from "./pages/Landing";
+import Landing from "./pages/Landing.jsx";
 import Home from "./pages/Home";
 import Algo from "./pages/Algo";
 import Groups from "./pages/Groups";
@@ -45,7 +45,7 @@ function App() {
                     <Route path="/search" element={<Search />} />
                     <Route path="/post" element={<Post type="page" />} />
                     <Route path="/algo" element={<Algo />} />
-                    <Route path="*" element={<Navigate to="/" />} />
+                    {/*<Route path="*" element={<Navigate to="/" />} />*/}
                 </Routes>
             </Router>
         );
@@ -54,7 +54,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<Landing />} />
-                     <Route path="*" element={<Navigate to="/" replace />} />
+                     {/*<Route path="*" element={<Navigate to="/" replace />} />*/}
                 </Routes>
             </Router>
         );
