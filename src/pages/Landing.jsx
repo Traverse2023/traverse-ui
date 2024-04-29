@@ -39,9 +39,7 @@ const Landing = () => {
                     link: "https://www.linkedin.com/in/isfar-oshir/"
                 }],
             quote: "Trying to do better.",
-            bio: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.\n" +
-                "\n" +
-                "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.",
+            bio: "I started Traverse back in my last semester of university at NYU. After setting up the foundation of the project, I reached out to some engineer friends I've made through out the past 4 years. It's been a blast working with the team, and we hope to make Traverse very robust. I am one of the leads in the project and do tasks from discussing components at a high level but then work on down to the very code itself.",
             pfp: "imgs/isfar.png",
             position: "Founder & Lead Engineer/Architect"
         },
@@ -52,8 +50,8 @@ const Landing = () => {
                 socialMediaName: "LinkedIn",
                 link: "https://www.linkedin.com/in/bryan-palomo-059b80223/"
             }],
-            quote: "Trying to do better.",
-            bio: "HI Im",
+            quote: "...",
+            bio: "...",
             pfp: "imgs/bryan.png",
             position: "Founder & Lead Engineer/Architect"
         },
@@ -64,8 +62,8 @@ const Landing = () => {
                 socialMediaName: "LinkedIn",
                 link: "https://www.linkedin.com/in/junming-qiu-32b343191/"
             }],
-            quote: "Trying to do better.",
-            bio: "HI Im",
+            quote: "If it turns on I'll write code for it",
+            bio: "I am a full stack engineer who loves to learn. From the industry standards to new emerging technology, I am able to dive deep in the technology while also keeping a high level view of how it will integrate with existing infrastructure.",
             pfp: "imgs/junming.png",
             position: "Lead Software Engineer"
         },
@@ -76,22 +74,22 @@ const Landing = () => {
                 socialMediaName: "LinkedIn",
                 link: "https://www.linkedin.com/in/ahmedrahi/"
             }],
-            quote: "Trying to do better.",
-            bio: "HI Im",
-            pfp: "imgs/bryan.png",
+            quote: "Building digital bridges, one stack at a time.",
+            bio: "As a full stack engineer, I thrive on building seamless digital experiences, from crafting elegant front-end interfaces to designing robust back-end systems.",
+            pfp: "imgs/rahi.png",
             position: "Software Engineer"
         },
         {
             firstName: "Farhan",
             lastName: "Mashud",
-            quote: "Trying to do better.",
+            quote: "...",
             socials: [{
                 socialMediaName: "LinkedIn",
                 link: "https://www.linkedin.com/in/farhan-mashud/"
             }],
             bio: "HI Im",
             pfp: "imgs/farhan.png",
-            position: "Scrum Master"
+            position: "Product Manager & Scrum Master"
         }
     ]
     const registerHandler = () => {
