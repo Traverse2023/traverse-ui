@@ -35,11 +35,6 @@ const MessageArea = () => {
         if (inView && hasMore) { setPage(prev => prev + 1); }
     }, [inView])
 
-    useEffect(() => {
-        console.log("Switching to " + selectedTextChannel + "!")
-    }, [selectedTextChannel])
-
-
     const sendMsg = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault()

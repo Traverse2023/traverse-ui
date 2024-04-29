@@ -15,12 +15,12 @@ const SubGroupSelector = () => {
     const [show, setShow] = React.useState(false);
     const target = React.useRef(null);
     const [createModal, setCreateModal] = React.useState(false);
-    const { channelUsersMap, setSelectedTextChannel } = useContext(GroupContext);
+    const { channelUsersMap, setSelectedTextChannel, selectedGroup } = useContext(GroupContext);
 
     return (
         <div className="subGroupSelector">
             <h4 className="groupTitle">
-                rox's server
+                {selectedGroup.groupName}
                 <span
                     ref={target}
                     onClick={() =>
