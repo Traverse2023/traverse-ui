@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {GroupContext} from "../context/group-context.jsx";
 import {
     LocalVideoTrack,
@@ -9,10 +9,12 @@ import {
     useRemoteVideoTracks
 } from 'agora-rtc-react'
 import {VideoPlayerEnum} from "../hooks/call-hook.js";
+import {faMicrophone, faMicrophoneSlash} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const VideoPlayer = () => {
 
-    const { videoPlayerType, setVideoPlayerType } = useContext(GroupContext)
+    const { videoPlayerType, setVideoPlayerType, selectedVoiceChannel , isMuted, setIsMuted} = useContext(GroupContext)
 
     useEffect(() => {
         console.log('videoplayer rendered')
@@ -75,58 +77,71 @@ const VideoPlayer = () => {
         return x;
     };
 
-    let videoPlayerStyle = {}
+    let videoPlayerStyle: any = {
+        // display: "grid"
+    }
 
     if (videoPlayerType === VideoPlayerEnum.FIT) {
         videoPlayerStyle = {
-            display: "flex", justifyContent: "center",
-            alignItems: "center", gap: "10px",
-            color: "white",
-            flexWrap: "wrap", backgroundColor: 'black'
+            ...videoPlayerStyle,
+             backgroundColor: 'black'
         }
     } else if (videoPlayerType === VideoPlayerEnum.FULL) {
         videoPlayerStyle = {
+            ...videoPlayerStyle,
             margin: "0 auto",
-            display: "flex", justifyContent: "center",
-            alignItems: "center", gap: "10px",
             color: "white",
-            flexWrap: "wrap", position: 'absolute', width: '100%', height: '100%', backgroundColor: 'black', top: "50%", left: "50%", transform: "translate(-50%, -50%)"
+            zIndex: "99",
+            position: 'absolute', width: '100%', height: '100%', backgroundColor: 'black', top: "50%", left: "50%", transform: "translate(-50%, -50%)"
         }
     }
 
-    return (
-        // <div style={{margin: "0 auto",
-        //     display: "flex", justifyContent: "center",
-        //     alignItems: "center", gap: "10px",
-        //     color: "white",
-        //     flexWrap: "wrap", position: 'absolute', width: '100%', height: '100%', backgroundColor: 'black', top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
-        // <div style={{margin: "0 auto",
-        //     display: "flex", justifyContent: "center",
-        //     alignItems: "center", gap: "10px",
-        //     color: "white",
-        //     top: "0",
-        //     bottom: "0",
-        //     right: "calc((100vw - (200px + 240px + 5fr)) / 2)",
-        //     flexWrap: "wrap", position: 'absolute', width: '60%', height: '40%', backgroundColor: 'black'}}>
-        <div style={videoPlayerStyle}>
-            {currentChildren()}
-            Page {page + 1}
-            {page > 0 && <button style={{color: "black"}} onClick={prev}>Prev</button>}
-            {remoteUsers.length+1 > (page + 1) * max && <button style={{color: "white"}} onClick={next}>Next</button>}
-            {
-                (() => {
-                    switch (videoPlayerType){
-                        case VideoPlayerEnum.FIT:
-                            return <button onClick={() => {setVideoPlayerType(VideoPlayerEnum.FULL)}}>Full Screen</button>
-                        case VideoPlayerEnum.FULL:
-                            return <button onClick={() => {setVideoPlayerType(VideoPlayerEnum.FIT)}}>Fit Screen</button>
-                        default:
-                            return null
-                    }
-                })()
-            }
-            <button onClick={() => setVideoPlayerType(VideoPlayerEnum.PORTABLE)}>Pop Out</button>
 
+    useEffect(() => {
+        console.log('invoking isMuted', isMuted)
+    }, [isMuted]);
+
+    return (
+        <div style={videoPlayerStyle} className="video-player-area">
+            <div className="video-player-header">
+                <p style={{color: 'white', paddingLeft: "5px"}}>{selectedVoiceChannel}</p>
+            </div>
+            <div className="prev-videos">
+                {page > 0 && <button style={{color: "black"}} onClick={prev}>Prev</button>}
+                <button style={{color: "black"}} onClick={prev}>Prev</button>
+            </div>
+            <div className="videos" style={{display: "flex", justifyContent: "center",
+                alignItems: "center", gap: "10px",
+                flexWrap: "wrap"}}>
+            {currentChildren()}
+            </div>
+            {/*<div>*/}
+            {/*    Page {page + 1}*/}
+            {/*</div>*/}
+            <div className="next-videos">
+                {remoteUsers.length+1 > (page + 1) * max && <button onClick={next}>Next</button>}
+                <button onClick={next}>Next</button>
+            </div>
+            <div className="full-media-controls">
+                {/*@ts-ignore*/}
+                <div onClick={() => setIsMuted(prevState => !prevState)} style={{backgroundColor: 'white', borderRadius: "50%", padding: "5px 10px 5px 10px"}}>
+                    {/*@ts-ignore*/}
+                    <FontAwesomeIcon icon={isMuted ?  faMicrophoneSlash : faMicrophone } className="media-control-icon"/>
+                </div>
+                {
+                    (() => {
+                        switch (videoPlayerType){
+                            case VideoPlayerEnum.FIT:
+                                return <button onClick={() => {setVideoPlayerType(VideoPlayerEnum.FULL)}}>Full Screen</button>
+                            case VideoPlayerEnum.FULL:
+                                return <button onClick={() => {setVideoPlayerType(VideoPlayerEnum.FIT)}}>Fit Screen</button>
+                            default:
+                                return null
+                        }
+                    })()
+                }
+                <button onClick={() => setVideoPlayerType(VideoPlayerEnum.PORTABLE)}>Pop Out</button>
+            </div>
         </div>
     )
 }

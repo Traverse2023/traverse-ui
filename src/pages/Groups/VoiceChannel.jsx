@@ -18,9 +18,25 @@ import useSound from "use-sound";
 
 const VoiceChannel = ({ channelName, users }) => {
 
-    const { setSelectedVoiceChannel } = useContext(GroupContext);
+    const { setSelectedVoiceChannel, speakerUid } = useContext(GroupContext);
+
+    useEffect(() => {
+        console.log('invoking speakerUidVC', speakerUid)
+    }, [speakerUid])
     const remoteUsers = useRemoteUsers()
     const {videoTracks} = useRemoteVideoTracks(remoteUsers)
+    const client = useRTCClient();
+    function getUserAudioVolume(uid) {
+        // Get the remote audio stream associated with the user ID
+        console.log('here')
+        const user = client.remoteUsers.find(user => {
+            console.log(user)
+            return user.uid === uid});
+
+        return user?.audioTrack?.getVolumeLevel()
+
+    }
+
     return (
         <>
             <div className="channel" onClick={() => {setSelectedVoiceChannel(channelName)
@@ -43,11 +59,16 @@ const VoiceChannel = ({ channelName, users }) => {
             <div style={{paddingLeft: "30px", marginTop: '-5px', paddingBottom: "5px"}}>
                 {users.get(channelName)?.map(member => (
                     <div style={{display: "flex", alignItems: "center", alignContent: "center", paddingTop: "15px"}}>
-                        <img src={member.pfpURL} style={{width: '20px', paddingRight: "10px"}}/>
+                        {
+                            speakerUid === member.agoraUid ?
+                                <img id={member.agoraUid} src={member.pfpURL} style={{width: '20px', paddingRight: "10px", border: 'solid 2px', borderColor: 'green'}}/>
+                            :
+                                <img id={member.agoraUid} src={member.pfpURL} style={{width: '20px', paddingRight: "10px"}}/>
+                        }
                         <div style={{
                             textAlign: "center",
                             fontSize: "14px"
-                        }} onClick={() => console.log(member.firstName)}>{member.firstName + ' ' + member.lastName}</div>
+                        }} onClick={() => console.log('sound',getUserAudioVolume(member.agoraUid))}>{member.firstName + ' ' + member.lastName + ' ' + member.agoraUid}</div>
                     </div>
                 ))}
             </div>
