@@ -88,7 +88,7 @@ const MessageArea = () => {
                 <VideoPlayer /> :
 
         <div className="messageArea">
-            <header># general</header>
+            <header># {selectedTextChannel}</header>
             <div className="text-area">
                 <div ref={ref}><li>top</li></div>
                 {messages.map((msg) => {

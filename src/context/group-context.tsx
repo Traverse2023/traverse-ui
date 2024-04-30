@@ -15,6 +15,7 @@ type Member = {
 
 interface GroupContextType {
     selectedGroup: string
+    // Defines the user selected text channel. User can be part of a text channel as well as a voice channel.
     selectedTextChannel: string
     selectedVoiceChannel: string | null,
     setSelectedVoiceChannel: () => void,
@@ -70,7 +71,7 @@ export const GroupProvider = ({children}) => {
     const [selectedGroup, setSelectedGroup] = useState(
         {groupId: "control-center", groupName: "control-center"});
 
-    const [selectedTextChannel, setselectedTextChannel] = useState("general");
+    const [selectedTextChannel, setSelectedTextChannel] = useState("general");
 
     const callHookStates = useCall(selectedGroup)
     const [members, setMembers] = useState([])
@@ -96,7 +97,7 @@ export const GroupProvider = ({children}) => {
             selectedGroup: selectedGroup,
             setSelectedGroup: setSelectedGroup,
             selectedTextChannel: selectedTextChannel,
-            setselectedTextChannel: setselectedTextChannel,
+            setSelectedTextChannel: setSelectedTextChannel,
             members: members,
             setMembers: setMembers,
             ...callHookStates

@@ -17,12 +17,12 @@ const SubGroupSelector = () => {
     const [show, setShow] = React.useState(false);
     const target = React.useRef(null);
     const [createModal, setCreateModal] = React.useState(false);
-    const {channelUsersMap} = useContext(GroupContext);
+    const {channelUsersMap, setSelectedTextChannel, selectedGroup} = useContext(GroupContext);
 
     return (
         <div className="subGroupSelector">
             <h4 className="groupTitle">
-                rox's server
+                {selectedGroup.groupName}
                 <span
                     ref={target}
                     onClick={() =>
@@ -65,7 +65,7 @@ const SubGroupSelector = () => {
                         <p>Some text in the Modal..</p>
                     </Modal>
                 </div>
-                <div className="channel">
+                <div className="channel" onClick={() => { setSelectedTextChannel("general") }}>
                     <h1>#</h1>
                     <h6>general</h6>
                     <OverlayTrigger
@@ -78,7 +78,7 @@ const SubGroupSelector = () => {
                         <button>*</button>
                     </OverlayTrigger>
                 </div>
-                <div className="channel">
+                <div className="channel" onClick={() => { setSelectedTextChannel("plans") }}>
                     <h1>#</h1>
                     <h6>plans</h6>
                     <OverlayTrigger
