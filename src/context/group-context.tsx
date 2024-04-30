@@ -32,7 +32,7 @@ interface GroupContextType {
     agoraConfig: any
     setAgoraConfig: () => {}
     speakerUid: number | null
-    setSpeakerUid: (uid: UID) => {}
+    setSpeakerUid: (uid: UID | null) => {}
     currentUserUid: number | null
     setCurrentUserUid: (uid: UID) => {}
 }
