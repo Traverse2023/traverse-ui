@@ -86,11 +86,20 @@ const CallContainer = () => {
     });
 
     useClientEvent(client, "volume-indicator", volumes => {
-        console.log("this user's volume", currentUserUid)
-        volumes.forEach(volume => {
-            console.log("uid", volume.uid, "level", volume.level)
-            if (volume.level > 40) {
-                setSpeakerUid(volume.uid)
+        let isAnyoneSpeaking = false
+        const speakerPromise  = () => new Promise((res, rej) => {
+            volumes.forEach(volume => {
+                if (volume.level > 40) {
+                    setSpeakerUid(volume.uid)
+                    res(true)
+                }
+            })
+            res(false)
+        })
+
+        speakerPromise().then(isAnyoneSpeaking => {
+            if (!isAnyoneSpeaking) {
+                setSpeakerUid(null)
             }
         })
     })
