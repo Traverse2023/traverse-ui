@@ -1,10 +1,22 @@
 import axios from "axios";
 
+// const storageServiceBaseURL = `${
+//     "https://storage-service.traverse.zone"
+// }/api/v1`;
+
 const storageServiceBaseURL = `${
+<<<<<<< Updated upstream
     import.meta.env.VITE_APP_STORAGE_SERVICE_URL
 }/api/v1`;
 
 const getMessages = (groupId, channelName, cursor) => {
+=======
+    "http://127.0.0.1:8080"
+}/api/v1`;
+
+
+const getPaginatedMessages = (groupId, channelName, pageNumber) => {
+>>>>>>> Stashed changes
     console.log(groupId);
     console.log(channelName);
     console.log(

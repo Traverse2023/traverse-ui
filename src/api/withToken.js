@@ -1,7 +1,13 @@
 import axios from "axios";
 
+
 const backend = axios.create({
+<<<<<<< Updated upstream
     baseURL: import.meta.env.VITE_APP_BACKEND_URL + "api/",
+=======
+    // baseURL: "https://main-service.traverse.zone/" + "api/",
+    baseURL: "http://127.0.0.1:8000/api/"
+>>>>>>> Stashed changes
 });
 
 const createGroup = (token, groupInfo, user1Email) => {

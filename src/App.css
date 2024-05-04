@@ -1090,7 +1090,8 @@ border-radius: 8px;
 }
 
 .members ul span{
-  padding-left: 10px;
+  padding-left: 3px;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 }
 
 .navbar{
@@ -1767,6 +1768,7 @@ border-radius: 8px;
   background-color: #5ac8fa;
 }
 
+<<<<<<< Updated upstream
 
 
 
@@ -1905,3 +1907,226 @@ border-radius: 8px;
 
 
 
+=======
+.add-button {
+  background-color: #007bff; /* Blue color */
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer; /* Center the button horizontally */
+  display: block; /* Ensure the button is a block element */
+  margin: 10px auto;
+}
+
+.add-button:hover {
+  background-color: #0056b3; /* Darker blue color on hover */
+}
+
+.add-button:disabled {
+  background-color: #ccc; /* Gray color for disabled button */
+  color: #666;
+  cursor: not-allowed;
+}
+
+.Modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  text-align: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 15px; /* Set the border radius to 15px for rounded corners */
+  max-width: 320px; /* Optional: Set a maximum width for the modal content */
+  width: 100%;
+  max-height: 80vh; /* Optional: Set a maximum height for the modal content */
+  overflow-y: auto; /* Enable vertical scrolling if content exceeds the height */
+}
+
+/*.members ul li button.friend-button {*/
+/*  background-color: rgb(127, 86, 1000);*/
+/*  color: white;*/
+/*  margin: 10px auto; !* Center the button horizontally with top and bottom margins *!*/
+/*  display: block; !* Ensure the button is displayed as a block element *!*/
+/*  width: fit-content; !* Set the width of the button to fit its content *!*/
+/*}*/
+
+.filteredFriendsListWrapper {
+  max-height: 150px; /* Set a fixed height */
+  overflow-y: scroll; /* Enable vertical scrolling */
+  width: 100%; /* Make the wrapper full width */
+  display: flex;
+  justify-content: left;
+  max-width: 280px;
+  margin: 0 auto;
+  padding-left: 20px; /* Add an indent of 20px to the left */
+}
+
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+}
+
+.button-container button {
+  background-color: rgb(127, 86, 1000);
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+div.modal-content {
+  align-content: center;
+}
+
+/*filteredFriendsListWrapper {*/
+/*  width: 100%; !* Make the wrapper full width *!*/
+/*  display: flex;*/
+/*  justify-content: center; !* Center the content horizontally *!*/
+/*}*/
+
+.filteredFriendsList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.filteredFriendsList li {
+  margin-bottom: 10px;
+}
+
+/*.friend-button {*/
+/*  background-color: rgb(127, 86, 1000);*/
+/*  color: white;*/
+/*  padding: 5px 10px;*/
+/*  border: none;*/
+/*  border-radius: 5px;*/
+/*  cursor: pointer;*/
+/*  margin: 0 auto; !* Center the button horizontally *!*/
+/*}*/
+
+/*.friend-button span {*/
+/*  margin-left: -10px;*/
+/*}*/
+
+.friend-name {
+  cursor: pointer; /* Add cursor pointer to indicate clickable */
+}
+
+.friend-name:hover {
+  text-decoration: underline; /* Add underline on hover to indicate clickable */
+  color: #888888;
+}
+
+.remove-container {
+  background-color: rgb(127, 86, 1000);
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.remove-friend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center items horizontally */
+}
+
+.remove-friend li {
+  flex-basis: 50%; /* Each item takes up half the width */
+  padding: 5px; /* Add some padding for spacing */
+  box-sizing: border-box; /* Include padding in width calculation */
+  text-align: center; /* Center text */
+}
+
+.selected-friends-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  margin-top: 20px;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  margin-left: 25px; /* Adjust the margin-left to move the list more to the right */
+}
+
+.selected-friends-list li {
+  display: inline-block;
+  text-align: left;
+  /*width: calc(50% - 25px);*/
+  /*padding-left: 10px;*/
+  margin: 0 5px;
+}
+
+.selected-friends-list li:last-child {
+  margin-right: 0;
+}
+
+.remove-button {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  background-color: #f9f9f9;
+}
+
+.create-group-button {
+  background-color: rgb(127, 86, 1000);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.create-group-button:hover {
+  background-color: #0056b3;
+}
+
+input[type="text"] {
+  width: 90%; /* Adjust the width as needed */
+  padding: 6px 10px; /* Adjust the padding for a slightly bigger size */
+  font-size: 14px; /* Adjust the font size for a slightly bigger size */
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.selected-text {
+  text-align: left; /* Align the text to the left */
+  font-weight: normal; /* Set the font weight to normal */
+  padding-left: 40px;
+}
+
+.remove-button {
+  background-color: #7B8FFA; /* Light blue background */
+  border: 1px solid #ccc;
+  border-radius: 20px; /* Set the border radius to 5px for a square shape */
+  cursor: pointer;
+  color: white; /* White text color */
+}
+
+.remove-button:hover {
+  background-color: #5B73D5; /* Lighter blue on hover */
+}
+>>>>>>> Stashed changes

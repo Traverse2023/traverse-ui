@@ -11,11 +11,17 @@ const initialState = {
 export const addNotificationAsync = createAsyncThunk(
     "notifications/addNotification",
     async (notification) => {
+        // const response = await axios.post(
+        //     `
+        //         https://storage-service.traverse.zone`,
+        //     notification
+        // );
         const response = await axios.post(
             `
-                https://storage-service.traverse.zone`,
+                http://127.0.0.1:8080`,
             notification
         );
+
         return response.data;
     }
 );
@@ -23,8 +29,11 @@ export const addNotificationAsync = createAsyncThunk(
 export const loadAllNotificationsAsync = createAsyncThunk(
     "notifications/loadAllNotifications",
     async (forEmail) => {
+        // const response = await axios.get(
+        //     `https://storage-service.traverse.zone/api/v1/notifications/getNotifications/${forEmail}`
+        // );
         const response = await axios.get(
-            `https://storage-service.traverse.zone/api/v1/notifications/getNotifications/${forEmail}`
+            `http://127.0.0.1:8080/api/v1/notifications/getNotifications/${forEmail}`
         );
         return response.data;
     }
