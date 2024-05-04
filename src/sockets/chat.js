@@ -4,16 +4,7 @@ class ChatSocket {
     socket
     constructor(email) {
         this.email = email
-<<<<<<< Updated upstream
         this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}groups`, {
-=======
-        // this.socket = io(`https://main-service.traverse.zone/groups`, {
-        //     query: {
-        //         email: email
-        //     }
-        // });
-        this.socket = io(`http://localhost:8000/groups`, {
->>>>>>> Stashed changes
             query: {
                 email: email
             }
@@ -63,11 +54,7 @@ class ChatSocket {
     }
 
     addMembers(potentialMembers, groupId) {
-        // potentialMembers.forEach(potentialMembers => {
-        //     this.socket.emit("addMembers", potentialMembers, groupId);
-        // });
         this.socket.emit("addMembers", potentialMembers, groupId);
-        // Instead of for loop, lines 62-64 add an s
     }
 
     receiveAddedToGroupNotificationListener(callback) {

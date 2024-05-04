@@ -1768,14 +1768,7 @@ border-radius: 8px;
   background-color: #5ac8fa;
 }
 
-<<<<<<< Updated upstream
-
-
-
-
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap");
-
-
 
 .footer {
   position: relative;
@@ -1893,21 +1886,6 @@ border-radius: 8px;
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
 .add-button {
   background-color: #007bff; /* Blue color */
   color: white;
@@ -2129,4 +2107,3 @@ input[type="text"] {
 .remove-button:hover {
   background-color: #5B73D5; /* Lighter blue on hover */
 }
->>>>>>> Stashed changes

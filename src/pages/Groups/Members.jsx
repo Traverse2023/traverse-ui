@@ -1,19 +1,10 @@
-<<<<<<< Updated upstream
 import {useContext, useEffect, useState} from "react";
 import {getGroups, getMembers, getFriendsWhoAreNotMembers} from "../../api/withToken";
 import {AuthContext} from "../../context/auth-context";
 import {GroupContext} from "../../context/group-context.tsx";
 import Modal from "../../components/Modal";
 import {SocketContext} from "../../context/friends-socket-context";
-=======
->>>>>>> Stashed changes
 // import {Dropdown} from 'react-searchable-dropdown-component';
-import { useContext, useEffect, useState } from "react";
-import { getFriendsWhoAreNotMembers, getMembers } from "../../api/withToken";
-import { AuthContext } from "../../context/auth-context";
-import { GroupContext } from "../../context/group-context";
-import Modal from "../../components/Modal";
-import { SocketContext } from "../../context/friends-socket-context";
 import { Link, useNavigate } from 'react-router-dom';
 
 // Component to render a list of friends
@@ -76,16 +67,6 @@ const Members = () => {
         }
     };
 
-<<<<<<< Updated upstream
-    const addMemberChangeHandler = (e) => {
-        const index = e.target.selectedIndex;
-        const el = e.target.childNodes[index]
-        const id =  el.getAttribute('id');
-        const name = el.getAttribute('name')
-        const [firstName, lastName] = name.split(' ');
-        setPotentialMember({email: id, firstName, lastName})
-    }
-=======
     // Load group members when the group changes
     useEffect(() => {
         getMembers(auth.token, groupControl.selectedGroup.groupId)
@@ -108,7 +89,6 @@ const Members = () => {
     ).filter(
         friend => !selectedFriends.find(selectedFriend => selectedFriend.email === friend.email)
     );
->>>>>>> Stashed changes
 
     return (
         <div className="members">

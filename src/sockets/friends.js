@@ -4,16 +4,7 @@ class FriendsSocket {
     socket;
     constructor(email) {
         this.email = email;
-<<<<<<< Updated upstream
         this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}friends`, {
-=======
-        // this.socket = io(`https://main-service.traverse.zone/friends`, {
-        //     query: {
-        //         email: email,
-        //     },
-        // });
-        this.socket = io( `http://127.0.0.1:8000/friends`, {
->>>>>>> Stashed changes
             query: {
                 email: email,
             },

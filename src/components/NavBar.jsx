@@ -34,33 +34,6 @@ const NavBar = () => {
         console.log("Change in notifications:\n", notifications);
     }, [notifications]);
 
-<<<<<<< Updated upstream
-=======
-    const loadNotifications = async () => {
-        // console.log(
-        //     "STORAGE SERV URL",
-        //     "https://storage-service.traverse.zone"
-        // );
-        console.log(
-            "STORAGE SERV URL",
-            "http://127.0.0.1:8080"
-        );
-        // const currentNotifications = await axios.get(
-        //     `${
-        //         "https://storage-service.traverse.zone"
-        //     }/api/v1/notifications/getNotifications/${auth.email}`
-        // );
-        const currentNotifications = await axios.get(
-            `${
-                "http://127.0.0.1:8080"
-            }/api/v1/notifications/getNotifications/${auth.email}`
-        );
-        if (currentNotification) {
-            setNotifications(currentNotifications.data);
-            console.log("CURR NOTS", currentNotifications.data);
-        }
-    };
->>>>>>> Stashed changes
 
     notificationsSocketApi.receiveNotification((notification) => {
         console.log("Receive notification:\n", notification);

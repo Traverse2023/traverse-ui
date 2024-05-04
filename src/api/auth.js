@@ -1,13 +1,7 @@
 import axios from "axios";
-import { loadAllNotificationsAsync } from "../redux/slices/notificationSlice";
 
 const backend = axios.create({
-<<<<<<< Updated upstream
     baseURL: import.meta.env.VITE_APP_BACKEND_URL + "api/",
-=======
-    // baseURL: "https://main-service.traverse.zone/" + "api/",
-    baseURL: "http://127.0.0.1:8000/api/"
->>>>>>> Stashed changes
 });
 
 const login = (email, password) => {
@@ -21,7 +15,6 @@ const login = (email, password) => {
                 password,
             });
             console.log("here", response.data);
-            loadAllNotificationsAsync(email);
             resolve(response.data);
         } catch (err) {
             console.log("=====================================");
