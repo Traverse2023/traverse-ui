@@ -2,6 +2,7 @@ import React, {createRef, useCallback, useContext, useEffect, useLayoutEffect, u
 import { SocketContext } from "../../context/friends-socket-context";
 import { GroupContext } from "../../context/group-context.tsx";
 import { AuthContext } from "../../context/auth-context";
+import { VideoPlayerEnum } from "../../hooks/call-hook.ts";
 import usePaginatedMessages from "../../hooks/usePaginatedMessages";
 import VideoPlayer from "../../components/VideoPlayer.tsx";
 import {useInView} from 'react-intersection-observer';
@@ -17,7 +18,7 @@ function scrollToBottom(botRef){
 const MessageArea = () => {
 
     const auth = useContext(AuthContext)
-    const {selectedGroup,selectedTextChannel, members, cameraOn} = useContext(GroupContext);
+    const {selectedGroup,selectedTextChannel, members, cameraOn, videoPlayerType} = useContext(GroupContext);
     const [typedMsg, setTypedMsg] = useState("")
     const { chatsSocketApi } = useContext(SocketContext)
 
@@ -84,7 +85,7 @@ const MessageArea = () => {
 
 
     return (
-        cameraOn ?
+        cameraOn && videoPlayerType !== VideoPlayerEnum.PORTABLE  ?
                 <VideoPlayer /> :
 
         <div className="messageArea">
