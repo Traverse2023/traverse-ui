@@ -7,6 +7,7 @@ import ServerOptsOverlay, {
 } from "./ServerOptsOverlay";
 
 import VoiceChannel from "./VoiceChannel.jsx";
+import TextChannel from "./TextChannel.jsx";
 import MediaControls from "./MediaControls.jsx";
 
 //TODO - change this to a tsx file and import group-context.jsx
@@ -17,7 +18,7 @@ const SubGroupSelector = () => {
     const [show, setShow] = React.useState(false);
     const target = React.useRef(null);
     const [createModal, setCreateModal] = React.useState(false);
-    const {channelUsersMap, setSelectedTextChannel, selectedGroup} = useContext(GroupContext);
+    const {channelUsersMap, selectedGroup} = useContext(GroupContext);
 
     return (
         <div className="subGroupSelector">
@@ -65,32 +66,8 @@ const SubGroupSelector = () => {
                         <p>Some text in the Modal..</p>
                     </Modal>
                 </div>
-                <div className="channel" onClick={() => { setSelectedTextChannel("general") }}>
-                    <h1>#</h1>
-                    <h6>general</h6>
-                    <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={
-                            <Tooltip className="tooltip">Edit Channel</Tooltip>
-                        }
-                    >
-                        <button>*</button>
-                    </OverlayTrigger>
-                </div>
-                <div className="channel" onClick={() => { setSelectedTextChannel("plans") }}>
-                    <h1>#</h1>
-                    <h6>plans</h6>
-                    <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={
-                            <Tooltip className="tooltip">Edit Channel</Tooltip>
-                        }
-                    >
-                        <button>*</button>
-                    </OverlayTrigger>
-                </div>
+                <TextChannel channelName="general"/>
+                <TextChannel channelName="plans"/>
             </div>
             <div className="text-channel">
                 <div className="text-channel-header">
