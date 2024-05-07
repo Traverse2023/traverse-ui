@@ -855,7 +855,7 @@ border-radius: 8px;
   border-radius: 5px;
 }
 
-.channel:hover{
+.channel.inactive:hover{
   background-color: lightgray;
 }
 
@@ -876,6 +876,10 @@ border-radius: 8px;
   flex-grow: 0.1;
   cursor: pointer;
   background-color: transparent;
+}
+
+.channel.active {
+  background-color: lightgray;
 }
 
 .bottom-tab{
