@@ -63,6 +63,9 @@ const MessageArea = () => {
         chatsSocketApi.receiveAddedToGroupNotificationListener((senderEmail, recipientEmail) => {
             console.log('receiveAddedToGroupNotificationListener', senderEmail, recipientEmail)
             setNewMessageData(`${senderEmail} has added ${recipientEmail}`)
+            // Letting the group chat know the new user was added to the group like in messenger.
+            // Want to close model, useContext here, show that they have been added properly.
+            // Update the newState
         })
 
         chatsSocketApi.receiveMessageListener((messageData) => {

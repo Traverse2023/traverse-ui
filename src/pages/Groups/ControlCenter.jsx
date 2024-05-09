@@ -28,7 +28,7 @@ const ControlCenter = () => {
 
     return (
         <div>
-            <button onClick={() => setCreateGroupModal(true)}>
+            <button className="create-group-button" onClick={() => setCreateGroupModal(true)}>
                 Create Group
             </button>
             <Modal show={createGroupModal} setModalStatus={setCreateGroupModal}>
