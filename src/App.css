@@ -1924,16 +1924,16 @@ border-radius: 8px;
   z-index: 1000;
 }
 
-.modal-content {
-  text-align: center;
-  background-color: white;
-  padding: 20px;
-  border-radius: 15px; /* Set the border radius to 15px for rounded corners */
-  max-width: 320px; /* Optional: Set a maximum width for the modal content */
-  width: 100%;
-  max-height: 80vh; /* Optional: Set a maximum height for the modal content */
-  overflow-y: auto; /* Enable vertical scrolling if content exceeds the height */
-}
+/*.modal-content {*/
+/*  text-align: center;*/
+/*  background-color: white;*/
+/*  padding: 20px;*/
+/*  border-radius: 15px; !* Set the border radius to 15px for rounded corners *!*/
+/*  max-width: 320px; !* Optional: Set a maximum width for the modal content *!*/
+/*  width: 100%;*/
+/*  max-height: 80vh; !* Optional: Set a maximum height for the modal content *!*/
+/*  overflow-y: auto; !* Enable vertical scrolling if content exceeds the height *!*/
+/*}*/
 
 /*.members ul li button.friend-button {*/
 /*  background-color: rgb(127, 86, 1000);*/

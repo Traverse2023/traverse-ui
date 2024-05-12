@@ -100,7 +100,16 @@ const Members = () => {
 
             <h4>Offline</h4>
 
-            <Modal show={addMemberModal} setModalStatus={setAddMemberModal}>
+            <Modal show={addMemberModal} setModalStatus={setAddMemberModal} style={{
+                textAlign: 'center',
+                backgroundColor: 'white',
+                padding: '20px',
+                borderRadius: '15px',
+                maxWidth: '320px',
+                width: '100%',
+                maxHeight: '80vh',
+                overflowY: 'auto',
+            }}>
                 <label className="addMember"></label>
                 <br/>
                 <br/>
