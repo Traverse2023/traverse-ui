@@ -1,8 +1,15 @@
 import axios from "axios";
 
+const storageService = axios.create({
+    baseURL: import.meta.env.VITE_APP_BACKEND_URL + "storage-service/api/v1",
+});
 const storageServiceBaseURL = `${
     import.meta.env.VITE_APP_STORAGE_SERVICE_URL
 }/api/v1`;
+
+function setStorageServiceToken(token) {
+    mainService.defaults.headers["Authorization"] = token;
+}
 
 const getMessages = (groupId, channelName, cursor) => {
     console.log(groupId);

@@ -3,9 +3,7 @@ import {Link} from "react-router-dom";
 import Modal from "../components/Modal";
 import {ToastContainer, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
-import {login, register} from "../api/auth";
-import {AuthContext} from "../context/auth-context";
-import {useAuth} from "../hooks/useAuth.js";
+import {useAuth} from "../hooks/useAuth.tsx";
 
 const Landing = () => {
     const notify = (msg) => toast.error(msg, {position: "top-center"})

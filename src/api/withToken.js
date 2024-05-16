@@ -4,21 +4,16 @@ const mainService = axios.create({
     baseURL: import.meta.env.VITE_APP_BACKEND_URL + "/api",
 });
 
-const createGroup = (token, groupInfo, user1Email) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-    console.log("====================================");
-    console.log(groupInfo);
-    console.log("====================================");
+function setMainServiceToken(token) {
+    mainService.defaults.headers["Authorization"] = token;
+}
+
+const createGroup = ( groupInfo, user1Email) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
                 "/group/createGroup",
                 { groupName: groupInfo.groupName, user1Email },
-                config
             );
             console.log(response.data);
             resolve(response.data);
@@ -30,16 +25,11 @@ const createGroup = (token, groupInfo, user1Email) => {
 };
 
 const getGroups = (token, user1Email) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
+
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
                 `/getGroups`,
-                config
             );
             console.log(response.data);
             resolve(response.data);
@@ -51,18 +41,12 @@ const getGroups = (token, user1Email) => {
 };
 
 const getMembers = (token, groupId) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
+
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
                 `/group/getMembers/${groupId}`,
-                config
             );
-            console.log("withTokenline65", response.data);
             resolve(response.data);
         } catch (err) {
             console.log(err);
@@ -71,19 +55,12 @@ const getMembers = (token, groupId) => {
     });
 };
 
-const getFriendsWhoAreNotMembers = (token, user1Email, groupId) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
+const getFriendsWhoAreNotMembers = (token, groupId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
                 `/group/getFriendsWhoAreNotMembers/${groupId}`,
-                config
             );
-            console.log("withTokenline65", response.data);
             resolve(response.data);
         } catch (err) {
             console.log(err);
@@ -93,16 +70,10 @@ const getFriendsWhoAreNotMembers = (token, user1Email, groupId) => {
 };
 
 const getUser = (token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
                 `/search/getUser`,
-                config
             );
             console.log(response.data);
             resolve(response.data);
@@ -113,17 +84,11 @@ const getUser = (token) => {
     });
 };
 
-const searchUsers = (token, searcher, searched) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
+const searchUsers = (searched) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
                 `/search/searchUsers/${searched}`,
-                config
             );
             console.log(response.data);
             resolve(response.data);
@@ -135,17 +100,10 @@ const searchUsers = (token, searcher, searched) => {
 };
 
 const getFriends = (token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
                 `/friends/getFriends`,
-                config
             );
             console.log(response.data);
             resolve(response.data);
@@ -157,17 +115,10 @@ const getFriends = (token) => {
 };
 
 const getFriendRequests = (token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
                 `/friends/getFriendRequests/`,
-                config
             );
             console.log(response.data);
             resolve(response.data);
@@ -179,16 +130,10 @@ const getFriendRequests = (token) => {
 };
 
 const getMutualFriends = (token, otherUserId) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
                 `/friends/getMutualFriends/${otherUserId}`,
-                config
             );
             console.log(response.data);
             resolve(response.data);
@@ -200,17 +145,10 @@ const getMutualFriends = (token, otherUserId) => {
 };
 
 const getFriendshipStatus = (token, friendUserId) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
                 `/friends/getFriendshipStatus/${friendUserId}`,
-                config
             );
             console.log(response.data);
             resolve(response.data);
@@ -222,17 +160,11 @@ const getFriendshipStatus = (token, friendUserId) => {
 };
 
 const sendFriendRequest = (token, friendUserId) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
                 "/friends/sendFriendRequest",
                 {  friendUserId },
-                config
             );
             console.log(response.data);
         } catch (err) {
@@ -242,17 +174,10 @@ const sendFriendRequest = (token, friendUserId) => {
 };
 
 const removeFriendRequest = (token, friendUserId) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
                 `/friends/removeFriendRequest/${friendUserId}`,
-                config
             );
             console.log(response.data);
             resolve(response.data);
@@ -264,17 +189,11 @@ const removeFriendRequest = (token, friendUserId) => {
 };
 
 const acceptFriendRequest = (token, friendUserId) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
                 "/friends/acceptFriendRequest",
                 { friendUserId },
-                config
             );
             console.log(response.data);
             resolve(response.data);
@@ -286,18 +205,11 @@ const acceptFriendRequest = (token, friendUserId) => {
 };
 
 const savePFP = (token, pfpURL) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
                 "/user/savePFP",
                 {  pfpURL },
-                config
             );
             console.log(response.data);
             resolve(response.data);
@@ -330,6 +242,7 @@ const getAgoraRTCToken = () => {
 
 
 export {
+    setMainServiceToken,
     getAgoraRTCToken,
     searchUsers,
     sendFriendRequest,

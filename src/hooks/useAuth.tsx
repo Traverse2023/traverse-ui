@@ -3,66 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {loginUser, registerUser} from "../api/auth";
 import axios from "axios";
 
-//
-// export const useAuth = () => {
-//     const [token, setToken] = React.useState(false);
-//     const [email, setEmail] = React.useState(false);
-//     const [firstName, setFirstName] = React.useState(false)
-//     const [lastName, setLastName] = React.useState(false)
-//     const [pfpURL, setPfpURL] = React.useState(false)
-//
-//     const acceptLogin = useCallback((token) => {
-//         setToken(token);
-//         localStorage.setItem("email", email);
-//         localStorage.setItem("token", token);
-//         localStorage.setItem("firstName", firstName)
-//         localStorage.setItem("lastName", lastName)
-//         localStorage.setItem("expiration", tokenExpirationDate);
-//         localStorage.setItem("pfpURL", pfpURL)
-//         setEmail(email);
-//         setFirstName(firstName)
-//         setLastName(lastName)
-//         setPfpURL(pfpURL)
-//     }, []);
-//
-//     const acceptLogout = useCallback(() => {
-//         setToken(null);
-//         localStorage.clear();
-//         setEmail(null);
-//         setTokenExpirationDate(null);
-//     });
-//
-//     const updatePfpUrl = useCallback((location) => {
-//         setPfpURL(location)
-//         localStorage.setItem("pfpURL", location)
-//     })
-//
-//     useEffect(() => {
-//         if (
-//             localStorage.getItem("token") &&
-//             localStorage.getItem("email")
-//         ) {
-//             acceptLogin(
-//                 localStorage.getItem("email"),
-//                 localStorage.getItem("firstName"),
-//                 localStorage.getItem("lastName"),
-//                 localStorage.getItem("pfpURL"),
-//                 localStorage.getItem("token"),
-//             );
-//         }
-//     }, [acceptLogin]);
-//
-//     useEffect(() => {
-//         if (token && tokenExpirationDate) {
-//             const remainingTime =
-//                 tokenExpirationDate.getTime() - new Date().getTime();
-//         } else {
-//             clearTimeout(logoutTimer);
-//         }
-//     }, [token, acceptLogout, tokenExpirationDate]);
-//
-//     return { token, email, firstName, lastName, pfpURL, acceptLogin, acceptLogout, updatePfpUrl };
-// };
+
 
 type UserContextType = {
     user: User | null;
