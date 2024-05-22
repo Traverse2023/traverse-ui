@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { searchUsers } from "../../api/withToken";
+import { searchUsers } from "../../api/main-service.js";
 import FriendOpts from "../../components/FriendsOpts";
 import { AuthContext } from "../../context/auth-context";
 

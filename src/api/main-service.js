@@ -1,19 +1,19 @@
 import axios from "axios";
 
 const mainService = axios.create({
-    baseURL: import.meta.env.VITE_APP_BACKEND_URL + "/api",
+    baseURL: import.meta.env.VITE_APP_BACKEND_URL + "/main-service",
 });
 
 function setMainServiceToken(token) {
     mainService.defaults.headers["Authorization"] = token;
 }
 
-const createGroup = ( groupInfo, user1Email) => {
+const createGroup = ( groupInfo) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
                 "/group/createGroup",
-                { groupName: groupInfo.groupName, user1Email },
+                { groupName: groupInfo.groupName },
             );
             console.log(response.data);
             resolve(response.data);
@@ -24,7 +24,7 @@ const createGroup = ( groupInfo, user1Email) => {
     });
 };
 
-const getGroups = (token, user1Email) => {
+const getGroups = () => {
 
     return new Promise(async (resolve, reject) => {
         try {
@@ -40,7 +40,7 @@ const getGroups = (token, user1Email) => {
     });
 };
 
-const getMembers = (token, groupId) => {
+const getMembers = (groupId) => {
 
     return new Promise(async (resolve, reject) => {
         try {
@@ -55,7 +55,7 @@ const getMembers = (token, groupId) => {
     });
 };
 
-const getFriendsWhoAreNotMembers = (token, groupId) => {
+const getFriendsWhoAreNotMembers = (groupId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
@@ -69,11 +69,11 @@ const getFriendsWhoAreNotMembers = (token, groupId) => {
     });
 };
 
-const getUser = (token) => {
+const getUser = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
-                `/search/getUser`,
+                `/user/getUser`,
             );
             console.log(response.data);
             resolve(response.data);
@@ -99,7 +99,7 @@ const searchUsers = (searched) => {
     });
 };
 
-const getFriends = (token) => {
+const getFriends = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
@@ -114,7 +114,7 @@ const getFriends = (token) => {
     });
 };
 
-const getFriendRequests = (token) => {
+const getFriendRequests = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
@@ -129,7 +129,7 @@ const getFriendRequests = (token) => {
     });
 };
 
-const getMutualFriends = (token, otherUserId) => {
+const getMutualFriends = (otherUserId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
@@ -144,7 +144,7 @@ const getMutualFriends = (token, otherUserId) => {
     });
 };
 
-const getFriendshipStatus = (token, friendUserId) => {
+const getFriendshipStatus = (friendUserId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
@@ -159,7 +159,7 @@ const getFriendshipStatus = (token, friendUserId) => {
     });
 };
 
-const sendFriendRequest = (token, friendUserId) => {
+const sendFriendRequest = (friendUserId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
@@ -173,7 +173,7 @@ const sendFriendRequest = (token, friendUserId) => {
     });
 };
 
-const removeFriendRequest = (token, friendUserId) => {
+const removeFriendRequest = (friendUserId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
@@ -188,7 +188,7 @@ const removeFriendRequest = (token, friendUserId) => {
     });
 };
 
-const acceptFriendRequest = (token, friendUserId) => {
+const acceptFriendRequest = (friendUserId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
@@ -204,7 +204,7 @@ const acceptFriendRequest = (token, friendUserId) => {
     });
 };
 
-const savePFP = (token, pfpURL) => {
+const savePFP = (pfpURL) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(

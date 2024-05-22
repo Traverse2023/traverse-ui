@@ -4,7 +4,7 @@ import {
     getUser,
     getFriendRequests,
     savePFP,
-} from "../../api/withToken";
+} from "../../api/main-service.js";
 import FriendOpts from "../../components/FriendsOpts";
 import NavBar from "../../components/NavBar";
 import { AuthContext } from "../../context/auth-context";

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { getGroups } from "../../api/withToken";
+import { getGroups } from "../../api/main-service.js";
 import { AuthContext } from "../../context/auth-context";
 import { GroupContext } from "../../context/group-context.tsx";
 import ChatSocket from "../../sockets/chat";

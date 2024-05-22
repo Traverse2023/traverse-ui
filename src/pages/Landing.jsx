@@ -4,18 +4,39 @@ import Modal from "../components/Modal";
 import {ToastContainer, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 import {useAuth} from "../hooks/useAuth.tsx";
+import * as Yup from "yup";
+
+
 
 const Landing = () => {
     const notify = (msg) => toast.error(msg, {position: "top-center"})
     const registerToast = useRef(null)
     const loginToast = useRef(null)
+
+    const [loginModal, setLoginModal] = React.useState(false);
     const [createModal, setCreateModal] = React.useState(false);
     const { login, register } = useAuth();
 
-    const [userInfo, setUserInfo] = React.useState({});
 
+    const [loginInfo, setLoginInfo] = React.useState({});
+    const [registerInfo, setRegisterInfo] = React.useState({});
+
+    const loginValidation = Yup.object().shape({
+        email: Yup.string().required("Email address is required"),
+        password: Yup.string().required("Password is required"),
+    })
+
+    const registerValidation = Yup.object().shape({
+        firstName: Yup.string().required("First name is required"),
+        lastName: Yup.string().required("Last name is required"),
+        email: Yup.string().required("Email address is required"),
+        password: Yup.string().required("Password is required"),
+        // confirmPassword: Yup.string().required(),
+    })
+
+    // Update state when user types in login form
     const userInfoHandler = (event) => {
-        setUserInfo((prev) => {
+        setRegisterInfo((prev) => {
             return {
                 ...prev,
                 [event.target.id]: event.target.value,
@@ -23,48 +44,7 @@ const Landing = () => {
         });
     };
 
-    const registerHandler = () => {
-        if ("email" in userInfo && "firstName" in userInfo && "lastName" in userInfo && "password" in userInfo) {
-            registerToast.current = toast.loading("Creating Account...")
-            register()
-                .then((value) => {
-                    setCreateModal(false)
-                    toast.update(registerToast.current, {
-                        position: "top-right",
-                        type: "success",
-                        isLoading: false,
-                        render: "Account Created!",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        closeButton: true
-                    })
-                    // toast.success("Account Created!")
-                })
-                .catch((err) => {
-                    toast.update(registerToast.current, {
-                        position: "top-center",
-                        type: "error",
-                        isLoading: false,
-                        render: err.response.data.msg,
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        closeButton: true
-                    })
-                    // notify(err.response.data.msg)
-                    console.log(err);
-                });
-        } else {
-            notify("Please fill out all fields")
-        }
-    };
-
-    const [loginModal, setLoginModal] = React.useState(false);
-    const [loginInfo, setLoginInfo] = React.useState({});
-
+    // Update state when user types in register form
     const loginInfoHandler = (event) => {
         setLoginInfo((prev) => {
             return {
@@ -74,41 +54,25 @@ const Landing = () => {
         });
     };
 
-    const loginHandler = () => {
-        if ("email" in loginInfo && "password" in loginInfo) {
-            loginToast.current = toast.loading("Logging In...")
+    // Handle registration. Perform input validation then call hook to register
+    const registerHandler = async () => {
+        registerValidation.validate(registerInfo).then(() =>
+            register(loginInfo.firstName, loginInfo.lastName, loginInfo.email, loginInfo.password)
+        ).catch(err => {
+            console.log(`Error validating register ${err}`);
+            toast.warn(err.message, {position: "top-center"});
+        })
+    };
+
+
+    // Validate login inputs then call login hook
+    const loginHandler = async () => {
+        loginValidation.validate(loginInfo).then( () =>
             login(loginInfo.email, loginInfo.password)
-                .then((value) => {
-
-                    toast.update(loginToast.current, {
-                        position: "top-right",
-                        type: "success",
-                        isLoading: false,
-                        render: "Logged In!",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        closeButton: true
-                    })
-                })
-                .catch((err) => {
-
-                    toast.update(loginToast.current, {
-                        position: "top-center",
-                        type: "error",
-                        isLoading: false,
-                        render: err.response.data.msg,
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        closeButton: true
-                    })
-                });
-        } else {
-            notify("Please fill out all fields.")
-        }
+        ).catch(err => {
+                console.log(`Error validating login: ${err}`);
+                toast.warn(err.message, {position: "top-center"});
+        });
     };
 
     return (

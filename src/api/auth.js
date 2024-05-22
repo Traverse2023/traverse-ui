@@ -6,9 +6,11 @@ const mainService = axios.create({
 });
 
 const authService = axios.create({
-    baseURL: import.meta.env.VITE_APP_AUTH_SERVICE_URL,
+    baseURL: import.meta.env.VITE_APP_BACKEND_URL,
 });
 
+// Login user with username and password. Use the access token to get user from main service.
+// Return tokens and user data.
 const loginUser = (email, password) => {
     console.log("Authenticating user...")
     return new Promise(async (resolve, reject) => {
@@ -17,11 +19,16 @@ const loginUser = (email, password) => {
                 email,
                 password,
             });
-            console.log(`Login response received: ${authResponse.data}`);
+            console.log(`Login response: ${authResponse.data}`);
             let {accessToken, refreshToken} = authResponse.data;
 
-            const getUserResponse = await mainService.get("/user/getUser");
-            console.log(`Get user responser received: ${getUserResponse.data}`)
+            const getUserResponse = await mainService.get("/user/getUser",
+                {
+                    headers: {
+                        "Authorization" : `Bearer ${accessToken}`
+                    }});
+
+            console.log(`Get user response: ${getUserResponse.data}`);
             // username is email
             let {id, username, firstName, lastName, pfpUrl} = getUserResponse.data;
 

@@ -1,6 +1,6 @@
 // @ts-ignore
 import {createContext, Dispatch, SetStateAction, useContext, useEffect, useState} from "react";
-import {getMembers} from "../api/withToken.js";
+import {getMembers} from "../api/main-service.js";
 import {AuthContext} from "./auth-context.js";
 
 // @ts-ignore

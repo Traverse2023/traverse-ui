@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { createGroup } from "../../api/withToken";
+import { createGroup } from "../../api/main-service.js";
 import Modal from "../../components/Modal";
 import { AuthContext } from "../../context/auth-context";
 

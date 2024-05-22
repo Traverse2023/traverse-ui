@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import { getFriends, getMutualFriends, getUser } from "../../api/withToken";
+import { getFriends, getMutualFriends, getUser } from "../../api/main-service.js";
 import FriendOpts from "../../components/FriendsOpts";
 import NavBar from "../../components/NavBar";
 import { AuthContext } from "../../context/auth-context";

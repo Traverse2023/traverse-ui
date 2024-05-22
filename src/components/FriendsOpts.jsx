@@ -4,7 +4,7 @@ import {
     getFriendshipStatus,
     removeFriendRequest,
     sendFriendRequest,
-} from "../api/withToken";
+} from "../api/main-service.js";
 import { AuthContext } from "../context/auth-context";
 import {SocketContext} from "../context/friends-socket-context";
 
