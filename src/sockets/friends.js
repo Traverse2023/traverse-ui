@@ -2,11 +2,12 @@ import io from "socket.io-client";
 class FriendsSocket {
     userId;
     socket;
-    constructor(userId) {
+    constructor(userId, token) {
         this.userId = userId;
         this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}/friends`, {
             query: {
                 userId: userId,
+                token: token
             },
         });
     }

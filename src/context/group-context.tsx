@@ -1,10 +1,6 @@
 // @ts-ignore
-import {createContext, Dispatch, SetStateAction, useContext, useEffect, useState} from "react";
+import {createContext, useEffect, useRef, useState} from "react";
 import {getMembers} from "../api/main-service.js";
-import {AuthContext} from "./auth-context.js";
-
-// @ts-ignore
-import {UID} from "agora-rtc-react";
 import {useCall, VideoPlayerEnum} from "../hooks/call-hook.js";
 
 type Member = {
@@ -77,6 +73,7 @@ export const GroupContext = createContext<GroupContextType>({
 
 // @ts-ignore
 export const GroupProvider = ({children}) => {
+    const isInitialRender = useRef(true)
     const [selectedGroup, setSelectedGroup] = useState(
         {groupId: "control-center", groupName: "control-center"});
 
@@ -85,17 +82,22 @@ export const GroupProvider = ({children}) => {
     const callHookStates = useCall(selectedGroup)
     const [members, setMembers] = useState([])
     // const [isPortableMediaToggled, setIsPortableMediaToggled] = useState(false)
-    // @ts-ignore
-    const {token} = useContext(AuthContext)
 
-    //get members whenever group is changed
+
+    // Get members whenever group is changed
+    // should only run after on update of group and not on initial render to avoid
+    // unauthorized calls to api that will result in 401
     useEffect(() => {
-        getMembers(token, selectedGroup.groupId)
-            .then((response) => {
-                setMembers(response);
-                console.log('54', response);
-            })
-            .catch((err) => console.error(err));
+        if (isInitialRender.current) {
+            isInitialRender.current = false;
+        } else{
+            getMembers(selectedGroup.groupId)
+                .then((response) => {
+                    setMembers(response);
+                    console.log('54', response);
+                })
+                .catch((err) => console.error(err));
+        }
     }, [selectedGroup.groupId]);
 
 

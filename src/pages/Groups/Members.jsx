@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import {getGroups, getMembers, getFriendsWhoAreNotMembers} from "../../api/main-service.js";
+import { getFriendsWhoAreNotMembers} from "../../api/main-service.js";
 import {AuthContext} from "../../context/auth-context";
 import {GroupContext} from "../../context/group-context.tsx";
 import Modal from "../../components/Modal";

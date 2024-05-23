@@ -39,7 +39,7 @@ export const UserProvider = ({children}: Props) => {
     useEffect(() => {
         const user = localStorage.getItem("user");
         const token = localStorage.getItem("token");
-
+        console.log(`useAuth: ${user}, ready? ${isReady}`)
         if(user && token) {
             setUser(JSON.parse(user));
             setToken(token);
@@ -69,20 +69,21 @@ export const UserProvider = ({children}: Props) => {
 
     // Perform login using UI form data. Save response containing token and user to local storage and state
     const login = async(username: string, password: string) => {
-        await loginUser(username, password).then((res) => {
+        console.log(`Performing login with user: ${username}`);
+        await loginUser(username, password).then((data) => {
             const userLoggedIn: User = {
-                id: res?.data.id,
-                username: res?.data.username,
-                firstName: res?.data.firstName,
-                lastName: res?.data.lastName,
-                pfpUrl: res?.data.lastName ? res.data.lastName : ""
+                id: data.id,
+                username: data.username,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                pfpUrl: data.pfpUrl ? data.pfpUrl : ""
 
             };
-            console.log(`User logged in: \n${userLoggedIn}`);
+            console.log(`User logged in: ${JSON.stringify(userLoggedIn)}`);
             localStorage.setItem("user", JSON.stringify(userLoggedIn));
-            localStorage.setItem("refreshToken", res?.data.refreshToken);
-            localStorage.setItem("token", res?.data.accessToken);
-            setToken(res?.data.accessToken!);
+            localStorage.setItem("refreshToken", data.refreshToken);
+            localStorage.setItem("token", data.accessToken);
+            setToken(data.accessToken!);
             setUser(userLoggedIn!);
         }).catch((err) => {
             console.log(`An error occurred when logging in: ${err}`);
@@ -92,7 +93,7 @@ export const UserProvider = ({children}: Props) => {
 
     // Returns if user is currently logged in
     const isLoggedIn = () => {
-        return !user;
+        return !!user;
     }
 
     // Perform logout by removing user and tokens from local storage

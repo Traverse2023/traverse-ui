@@ -20,7 +20,7 @@ import {useAuth} from "../hooks/useAuth.tsx";
 
 
 const NavBar = () => {
-    const { logout } = useAuth();
+    const { logout, username } = useAuth();
     const { notificationsSocketApi} = useContext(SocketContext);
     const [play] = useSound("/audio/notificationsound.mp3");
     const navigate = useNavigate();
@@ -144,7 +144,7 @@ const NavBar = () => {
                                 </Tooltip>
                             }
                         >
-                            <Link to={`/profile/${auth.email}`}>
+                            <Link to={`/profile/${username}`}>
                                 <FontAwesomeIcon icon={faUser} />
                             </Link>
                         </OverlayTrigger>

@@ -4,11 +4,12 @@ class NotificationSocket {
     userId;
     socket
 
-    constructor(userId) {
+    constructor(userId, token) {
         this.userId = userId
         this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}/notifications`, {
             query: {
-                userId: userId
+                userId: userId,
+                token: token
             }
         });
     }

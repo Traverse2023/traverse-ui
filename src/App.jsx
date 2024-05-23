@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import Landing from "./pages/Landing";
@@ -19,18 +19,17 @@ import {getGroups} from "./api/main-service.js";
 
 
 function App() {
-    const { user, isLoggedIn} = useAuth();
+    const { user, token, isLoggedIn } = useAuth();
     const client = useRTCClient(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
-
 
     let routes;
     let friendsSocket;
     let chatsSocket;
     let notificationsSocket;
-    if (isLoggedIn) {
-        friendsSocket = new FriendsSocket(user.id)
-        chatsSocket = new ChatSocket(user.id)
-        notificationsSocket = new NotificationSocket(user.id)
+    if (isLoggedIn()) {
+        friendsSocket = new FriendsSocket(user.id, token);
+        chatsSocket = new ChatSocket(user.id, token);
+        notificationsSocket = new NotificationSocket(user.id, token);
         getGroups().then( (groups) => {
             console.log("Groups: ", groups);
             groups.forEach(g => notificationsSocket.joinRoom(g.groupId));
@@ -60,20 +59,18 @@ function App() {
     }
 
     return (
-        <UserProvider>
             <SocketContext.Provider value={{
                 friendsSocketApi: friendsSocket,
                 chatsSocketApi: chatsSocket,
-                notificationsSocketApi: notificationsSocket
-            }}>
+                notificationsSocketApi: notificationsSocket}}>
                 <AgoraRTCProvider client={client}>
                     <GroupProvider>
                         <div className="App">{routes}</div>
                     </GroupProvider>
                 </AgoraRTCProvider>
             </SocketContext.Provider>
-        </UserProvider>
     );
 }
+
 
 export default App;

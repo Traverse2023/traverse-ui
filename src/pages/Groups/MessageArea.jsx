@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/auth-context";
 import usePaginatedMessages from "../../hooks/usePaginatedMessages";
 import VideoPlayer from "../../components/VideoPlayer.tsx";
 import {useInView} from 'react-intersection-observer';
+import {useAuth} from "../../hooks/useAuth.tsx";
 
 
 function scrollToBottom(botRef){
@@ -16,7 +17,7 @@ function scrollToBottom(botRef){
 }
 const MessageArea = () => {
 
-    const auth = useContext(AuthContext)
+    const {user} = useAuth();
     const {selectedGroup,selectedTextChannel, members, cameraOn} = useContext(GroupContext);
     const [typedMsg, setTypedMsg] = useState("")
     const { chatsSocketApi } = useContext(SocketContext)
@@ -45,7 +46,7 @@ const MessageArea = () => {
                 const message_info = {
                     msg: typedMsg,
                     channelName: selectedTextChannel,
-                    email: auth.email,
+                    email: user.username,
                     members: members,
                     groupName: selectedGroup.groupName
                 }

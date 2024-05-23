@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const mainService = axios.create({
-    baseURL: import.meta.env.VITE_APP_BACKEND_URL + "/api",
+    baseURL: import.meta.env.VITE_APP_BACKEND_URL + "/main-service",
 });
 
 const authService = axios.create({
@@ -16,8 +16,8 @@ const loginUser = (email, password) => {
     return new Promise(async (resolve, reject) => {
         try {
             const authResponse = await authService.post("/auth/login", {
-                email,
-                password,
+                "username": email,
+                "password": password,
             });
             console.log(`Login response: ${authResponse.data}`);
             let {accessToken, refreshToken} = authResponse.data;
@@ -25,13 +25,12 @@ const loginUser = (email, password) => {
             const getUserResponse = await mainService.get("/user/getUser",
                 {
                     headers: {
-                        "Authorization" : `Bearer ${accessToken}`
+                        Authorization : `Bearer ${accessToken}`
                     }});
 
-            console.log(`Get user response: ${getUserResponse.data}`);
+            console.log(`Get user response: ${JSON.stringify(getUserResponse.data)}`);
             // username is email
             let {id, username, firstName, lastName, pfpUrl} = getUserResponse.data;
-
             resolve({refreshToken, accessToken, id, username, firstName, lastName, pfpUrl});
         } catch (err) {
             console.log(`Error while attempting login ${err}`);
