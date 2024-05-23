@@ -94,7 +94,7 @@ export const GroupProvider = ({children}) => {
             getMembers(selectedGroup.groupId)
                 .then((response) => {
                     setMembers(response);
-                    console.log('54', response);
+                    console.log(`Get members from context: ${JSON.stringify(response)}`);
                 })
                 .catch((err) => console.error(err));
         }

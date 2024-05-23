@@ -7,7 +7,7 @@ class ChatSocket {
         this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}/groups`, {
             query: {
                 userId: userId,
-                token: token,
+                access_token: token,
             }
         });
     }

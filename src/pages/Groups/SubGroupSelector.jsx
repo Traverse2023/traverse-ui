@@ -2,8 +2,9 @@ import React, {useContext} from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Modal from "../../components/Modal";
-import ServerOptsOverlay, {
+import  {
     titleOverlayTargetHandler,
+    ServerOptsOverlay
 } from "./ServerOptsOverlay";
 
 import VoiceChannel from "./VoiceChannel.jsx";
@@ -109,7 +110,7 @@ const SubGroupSelector = () => {
                         <button className="add-channel-btn">+</button>
                     </OverlayTrigger>
                 </div>
-                {[...channelUsersMap?.keys()].map(channelName => <VoiceChannel channelName={channelName} users={channelUsersMap} />)}
+                {[...channelUsersMap?.keys()].map(channelName => <VoiceChannel key={channelName} channelName={channelName} users={channelUsersMap} />)}
             </div>
             <div className="bottom-tab">
                 <MediaControls />

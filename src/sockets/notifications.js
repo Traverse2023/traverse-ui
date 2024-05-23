@@ -9,7 +9,7 @@ class NotificationSocket {
         this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}/notifications`, {
             query: {
                 userId: userId,
-                token: token
+                access_token: token
             }
         });
     }

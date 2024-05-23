@@ -33,19 +33,10 @@ const GroupSelector = () => {
 
     const groupClickHandler = (event) => {
         window.history.replaceState({}, document.title)
-
-        // navigate({
-        //     pathname: location.pathname,
-        //     search: location.search,
-        //     state: { resetState: true },
-        // });
-
         groupControl.setSelectedGroup({groupId: event.target.id, groupName: event.target.getAttribute("data-name")});
-        // chatsSocketApi.disconnect()
         chatsSocketApi.joinRoom(event.target.id)
     };
 
-    console.log("7", groupControl.selectedGroup);
     return (
         <div className="groupSelector">
             <div
@@ -63,6 +54,7 @@ const GroupSelector = () => {
             {groups.map((group) => {
                 return (
                     <div
+                        key={group.groupId}
                         className={
                             groupControl.selectedGroup.groupId === group.groupId
                                 ? "groupSelected"

@@ -7,13 +7,12 @@ import {SocketContext} from "../../context/friends-socket-context";
 // import {Dropdown} from 'react-searchable-dropdown-component';
 
 const FriendsComponent = ({ arr }) => {
-    console.log(arr);
     return (
         <ul>
             {arr.map((user) => {
                 return (
-                    <li>
-                        <img className="pfp" src={user.pfpURL} /> <span>{`${user.firstName} ${user.lastName}`}</span>
+                    <li key={user.email}>
+                        <img className="pfp"   src={user.pfpURL} /> <span>{`${user.firstName} ${user.lastName}`}</span>
                     </li>
                 );
             })}
@@ -32,7 +31,7 @@ const Members = () => {
     const [potentialMember, setPotentialMember] = useState(null)
 
     useEffect(() => {
-        getFriendsWhoAreNotMembers(auth.token, auth.email, groupControl.selectedGroup.groupId)
+        getFriendsWhoAreNotMembers(groupControl.selectedGroup.groupId)
             .then((response) => {
                 setFriendsWhoAreNotMembers(response);
             })
@@ -66,7 +65,7 @@ const Members = () => {
         <div className="members">
             <button onClick={() => setAddMemberModal(true)}>Add Member</button>
             <h4>Online</h4>
-            <FriendsComponent arr={members} />
+            <FriendsComponent arr={members} key={members}/>
 
             <h4>Offline</h4>
 
@@ -82,7 +81,7 @@ const Members = () => {
                 <select onChange={addMemberChangeHandler}>
                     <option></option>
                     {friendsWhoAreNotMembers.map((friend, i) =>
-                    <option id={friend.email} name={friend.firstName + " " + friend.lastName} key={i}>{friend.firstName} {friend.lastName}</option>)}
+                    <option key={friend.id} id={friend.email} name={friend.firstName + " " + friend.lastName} >{friend.firstName} {friend.lastName}</option>)}
                 </select>
                 <br /><br />
                 <button onClick={addMemberHandler}>Add</button>

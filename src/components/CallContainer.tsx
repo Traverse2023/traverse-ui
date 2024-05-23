@@ -1,5 +1,4 @@
-import {
-    FetchArgs, UID,
+import {UID,
     useClientEvent,
     useJoin,
     useLocalMicrophoneTrack,
@@ -8,16 +7,13 @@ import {
     useRemoteUsers,
     useRTCClient
 } from "agora-rtc-react";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect} from "react";
 import {GroupContext} from "../context/group-context.jsx";
-import axios from "axios";
-import {AuthContext} from "../context/auth-context.js";
-import VideoPlayer from "./VideoPlayer.js";
 import PortableMedia from "./PortableMedia.jsx";
 import {VideoPlayerEnum} from "../hooks/call-hook";
+import {getAgoraRTCToken} from "../api/main-service";
 
 const CallContainer = () => {
-    const auth = useContext(AuthContext)
 
     const { currentUserUid, setCurrentUserUid, videoPlayerType, setVideoPlayerType, cameraOn, selectedGroup, selectedTextChannel, selectedVoiceChannel, inCall, setInCall, isMuted, agoraConfig, setAgoraConfig, setSpeakerUid } = useContext(GroupContext);
     // Unique string to identify channel when creating agora token and connecting to agora
@@ -40,22 +36,19 @@ const CallContainer = () => {
         }
     }, [isMuted]);
 
-    // const [uid, setUid] = useState(null)
-    // const [agoraConfig, setAgoraConfig] = useState<FetchArgs>({appid: "", channel: "", token: "", uid: undefined})
-
     useEffect(() => {
         //@ts-ignore
-        getAgoraToken().then(config => setAgoraConfig(config))
-    }, []);
+        getToken().then(config => setAgoraConfig(config))
+    }, [selectedVoiceChannel]);
 
     useEffect(() => {
-        console.log('invoking agoraconfig', agoraConfig)
+        console.log('Agora config: ', agoraConfig);
     }, [agoraConfig]);
 
-    const getAgoraToken = async () => {
+    const getToken = async () => {
         // @ts-ignore
-        const res = await axios.get(import.meta.env.VITE_APP_BACKEND_URL+'getAgoraToken/' + auth.email + '/' + channelId);
-        const token = res.data.token;
+        const res = await getAgoraRTCToken(channelId);
+        const token: string = res.data.token;
         setCurrentUserUid(res.data.uid)
         console.log("Token:  " + token, "invoking uid: ", res.data.uid)
         return {
@@ -66,7 +59,9 @@ const CallContainer = () => {
         };
     }
 
-    useJoin(agoraConfig,
+    useJoin(async () => {
+            return getToken();
+        },
         inCall
     );
 
@@ -82,7 +77,6 @@ const CallContainer = () => {
 
     useClientEvent(client, "user-joined", (user) => {
         console.log("user joined", user.uid);
-        // console.log('this user', uid)
     });
 
     useClientEvent(client, "volume-indicator", volumes => {
@@ -94,6 +88,7 @@ const CallContainer = () => {
             }
         })
     })
+
     function getUserAudioVolume(uid: UID) {
         // Get the remote audio stream associated with the user ID
         const user = client.remoteUsers.find(user => user.uid === uid);

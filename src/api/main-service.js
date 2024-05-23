@@ -5,7 +5,7 @@ const mainService = axios.create({
 });
 
 function setMainServiceToken(token) {
-    mainService.defaults.headers["Authorization"] = token;
+    mainService.defaults.headers["Authorization"] = "Bearer " + token;
 }
 
 const createGroup = ( groupInfo) => {
@@ -25,11 +25,10 @@ const createGroup = ( groupInfo) => {
 };
 
 const getGroups = () => {
-
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
-                `/getGroups`,
+                `/group/getGroups`,
             );
             console.log(response.data);
             resolve(response.data);
@@ -57,6 +56,7 @@ const getMembers = (groupId) => {
 
 const getFriendsWhoAreNotMembers = (groupId) => {
     return new Promise(async (resolve, reject) => {
+        console.log(`Get friends who aren't members for group ${groupId}`);
         try {
             const response = await mainService.get(
                 `/group/getFriendsWhoAreNotMembers/${groupId}`,
@@ -220,16 +220,10 @@ const savePFP = (pfpURL) => {
     });
 };
 
-const getAgoraRTCToken = () => {
-    // TODO: configure this endpoint to use token in header
-    // const config = {
-    //     headers: {
-    //         Authorization: `Bearer ${token}`,
-    //     },
-    // };
+const getAgoraRTCToken = (channelId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await mainService.get(import.meta.env.BACKEND_URL + auth.email + '/' + channelId);
+            const response = await mainService.get('/agora/getToken/' + channelId);
             console.log(response.data);
             resolve(response.data);
         } catch (err) {
