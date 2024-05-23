@@ -1728,6 +1728,8 @@ border-radius: 8px;
 }
 
 .algo-container{
+  height: 100%;
+  width: 100%;
   /*display: grid;*/
   /*grid-template-areas:*/
   /*  'question editor'*/
@@ -1739,10 +1741,11 @@ border-radius: 8px;
 }
 
 .question {
-  grid-area: question;
+  /*grid-area: question;*/
   background-color: #7F56D9;
-  height: 100% !important;
-  width: 50%;
+  min-height: 40% !important;
+  max-height: 100% !important;
+  /*width: 50%;*/
 }
 
 .editor {
@@ -1753,4 +1756,8 @@ border-radius: 8px;
 .result {
   grid-area: result;
   background-color: #5ac8fa;
+}
+
+.communication {
+  background-color: #c428d7;
 }
