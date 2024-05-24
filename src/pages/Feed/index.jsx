@@ -13,7 +13,6 @@ const Feed = () => {
     return (
     // <div className={showComments ? "feed-container-show" : "feed-container"}>
         <div className={`feed-container ${showComments ? 'feed-container-show' : ''}`}>
-            <CallContainer />
         <div className="left-panel">
             <h3>Preferences</h3>
             <div className="checkbox-wrapper-3">
