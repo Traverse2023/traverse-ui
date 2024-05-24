@@ -14,6 +14,8 @@ type Member = {
 }
 
 interface GroupContextType {
+    showVideoView: boolean
+    setShowVideoView: () => void
     selectedGroup: string
     // Defines the user selected text channel. User can be part of a text channel as well as a voice channel.
     selectedTextChannel: string
@@ -41,6 +43,8 @@ interface GroupContextType {
 
 export const GroupContext = createContext<GroupContextType>({
     selectedGroup: "control-center",
+    showVideoView: false,
+    setShowVideoView: () => {},
     selectedTextChannel: "general",
     selectedVoiceChannel: null,
     setSelectedVoiceChannel: () => {},
@@ -72,7 +76,7 @@ export const GroupProvider = ({children}) => {
         {groupId: "control-center", groupName: "control-center"});
 
     const [selectedTextChannel, setSelectedTextChannel] = useState("general");
-
+    const [showVideoView, setShowVideoView] = useState(false)
     const callHookStates = useCall(selectedGroup)
     const [members, setMembers] = useState([])
     // const [isPortableMediaToggled, setIsPortableMediaToggled] = useState(false)
@@ -100,6 +104,8 @@ export const GroupProvider = ({children}) => {
             setSelectedTextChannel: setSelectedTextChannel,
             members: members,
             setMembers: setMembers,
+            showVideoView: showVideoView,
+            setShowVideoView: setShowVideoView,
             ...callHookStates
             }}>
             {children}

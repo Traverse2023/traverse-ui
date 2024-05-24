@@ -5,19 +5,30 @@ import {GroupContext} from "../../context/group-context.tsx";
 
 
 const TextChannel = ({channelName}) => {
-    const {selectedTextChannel, setSelectedTextChannel} = useContext(GroupContext);
+    const {showVideoView, selectedTextChannel, setSelectedTextChannel, setShowVideoView} = useContext(GroupContext);
     const [channelStyle, setChannelStyle] = React.useState("channel inactive");
 
     useEffect(() => {
-        if (channelName == selectedTextChannel) {
-            setChannelStyle("channel active");
-        } else {
+
+    }, [showVideoView]);
+
+    useEffect(() => {
+        if (showVideoView){
             setChannelStyle("channel inactive");
+        } else {
+            if (channelName === selectedTextChannel) {
+                setChannelStyle("channel active");
+            } else {
+                setChannelStyle("channel inactive");
+            }
         }
-    }, [selectedTextChannel])
+    }, [selectedTextChannel, showVideoView])
 
     return (
-        <div className={channelStyle} onClick={() => {setSelectedTextChannel(channelName)}}>
+        <div className={channelStyle} onClick={() => {
+            setSelectedTextChannel(channelName)
+            setShowVideoView(false)
+        }}>
             <h1>#</h1>
             <h6>{channelName}</h6>
             <OverlayTrigger

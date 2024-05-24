@@ -1,7 +1,7 @@
 import {
     FetchArgs, UID,
     useClientEvent,
-    useJoin,
+    useJoin, useLocalCameraTrack,
     useLocalMicrophoneTrack,
     usePublish,
     useRemoteAudioTracks,
@@ -27,6 +27,7 @@ const CallContainer = () => {
     const client = useRTCClient();
     // Get local microphone tracks
     const { isLoading: isLoadingMic, localMicrophoneTrack } = useLocalMicrophoneTrack();
+
     // Get auto updating remote user objects
     const remoteUsers = useRemoteUsers()
 
@@ -46,11 +47,15 @@ const CallContainer = () => {
     useEffect(() => {
         //@ts-ignore
         getAgoraToken().then(config => setAgoraConfig(config))
-    }, []);
+    }, [selectedVoiceChannel]);
 
     useEffect(() => {
-        console.log('invoking agoraconfig', agoraConfig)
+        console.log('53agoraConfig', agoraConfig)
     }, [agoraConfig]);
+
+    useEffect(() => {
+        console.log('invoking cameraOn2', cameraOn)
+    }, [cameraOn]);
 
     const getAgoraToken = async () => {
         // @ts-ignore

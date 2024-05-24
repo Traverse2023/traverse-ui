@@ -18,7 +18,7 @@ import useSound from "use-sound";
 
 const VoiceChannel = ({ channelName, users }) => {
 
-    const { setSelectedVoiceChannel, selectedVoiceChannel, speakerUid } = useContext(GroupContext);
+    const { setShowVideoView, setSelectedVoiceChannel, selectedVoiceChannel, speakerUid } = useContext(GroupContext);
 
     useEffect(() => {
         console.log('invoking speakerUidVC', speakerUid)
@@ -49,7 +49,11 @@ const VoiceChannel = ({ channelName, users }) => {
 
     return (
         <>
-            <div className={channelStyle} onClick={() => {setSelectedVoiceChannel(channelName)
+            <div className={channelStyle} onClick={() => {
+                if (selectedVoiceChannel === channelName) {
+                    setShowVideoView(prevState => !prevState)
+                }
+                setSelectedVoiceChannel(channelName)
                 console.log('invoking videoTracksinvoicechannel', videoTracks, remoteUsers)
             }}>
                 <h1>#</h1>
