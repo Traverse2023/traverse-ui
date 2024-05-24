@@ -18,7 +18,7 @@ function scrollToBottom(botRef){
 const MessageArea = () => {
 
     const auth = useContext(AuthContext)
-    const {selectedGroup,selectedTextChannel, members, cameraOn, videoPlayerType} = useContext(GroupContext);
+    const {showVideoView, selectedGroup,selectedTextChannel, members, cameraOn, videoPlayerType} = useContext(GroupContext);
     const [typedMsg, setTypedMsg] = useState("")
     const { chatsSocketApi } = useContext(SocketContext)
 
@@ -88,7 +88,7 @@ const MessageArea = () => {
 
 
     return (
-        cameraOn && videoPlayerType !== VideoPlayerEnum.PORTABLE  ?
+        showVideoView ?
                 <VideoPlayer /> :
 
         <div className="messageArea">

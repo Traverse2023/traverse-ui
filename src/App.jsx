@@ -17,6 +17,7 @@ import AgoraRTC, {AgoraRTCProvider, useRTCClient} from "agora-rtc-react";
 import {GroupProvider} from "./context/group-context.tsx";
 import NotificationSocket from "./sockets/notifications.js";
 import {getGroups} from "./api/withToken.js";
+import CallContainer from "./components/CallContainer.tsx";
 
 
 function App() {
@@ -81,6 +82,7 @@ function App() {
             }}>
                 <AgoraRTCProvider client={client}>
                     <GroupProvider>
+                        <CallContainer />
                         <div className="App">{routes}</div>
                     </GroupProvider>
                 </AgoraRTCProvider>
