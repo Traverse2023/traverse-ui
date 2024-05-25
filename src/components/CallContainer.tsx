@@ -46,7 +46,7 @@ const CallContainer = () => {
 
     useEffect(() => {
         //@ts-ignore
-        getAgoraToken().then(config => setAgoraConfig(config))
+        getAgoraToken().then((config) => setAgoraConfig(config))
     }, [selectedVoiceChannel]);
 
     useEffect(() => {
@@ -59,7 +59,7 @@ const CallContainer = () => {
 
     const getAgoraToken = async () => {
         // @ts-ignore
-        const res = await axios.get(import.meta.env.VITE_APP_BACKEND_URL+'getAgoraToken/' + auth.email + '/' + channelId);
+        const res = await axios.get(import.meta.env.VITE_APP_BACKEND_URL + 'getAgoraToken/' + auth.email + '/' + channelId);
         const token = res.data.token;
         setCurrentUserUid(res.data.uid)
         console.log("Token:  " + token, "invoking uid: ", res.data.uid)
@@ -71,9 +71,20 @@ const CallContainer = () => {
         };
     }
 
-    useJoin(agoraConfig,
+    useJoin(async() => {
+            return getAgoraToken()
+        },
         inCall
     );
+    // useJoin(
+    //     {
+    // //         appid: "056e7ee25ec24b4586f17ec177e121d1",
+    // //         channel: channelId,
+    // //
+    // //         token: getAgoraToken()
+    // //     },
+    //     inCall
+    // );
 
     audioTracks.map((track) => track.play())
 
