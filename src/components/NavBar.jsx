@@ -70,7 +70,6 @@ const NavBar = () => {
 
     return (
         <div className="navbar">
-            <CallContainer />
             <div className="logo2">
                 <div className="logo-wrapper">
                     <img

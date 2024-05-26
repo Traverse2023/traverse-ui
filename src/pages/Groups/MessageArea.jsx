@@ -2,6 +2,7 @@ import React, {createRef, useCallback, useContext, useEffect, useLayoutEffect, u
 import { SocketContext } from "../../context/friends-socket-context";
 import { GroupContext } from "../../context/group-context.tsx";
 import { AuthContext } from "../../context/auth-context";
+import { VideoPlayerEnum } from "../../hooks/call-hook.ts";
 import usePaginatedMessages from "../../hooks/usePaginatedMessages";
 import VideoPlayer from "../../components/VideoPlayer.tsx";
 import {useInView} from 'react-intersection-observer';
@@ -16,9 +17,9 @@ function scrollToBottom(botRef){
     }
 }
 const MessageArea = () => {
-
     const {user} = useAuth();
-    const {selectedGroup,selectedTextChannel, members, cameraOn} = useContext(GroupContext);
+    const {showVideoView, selectedGroup,selectedTextChannel, members, cameraOn, videoPlayerType} = useContext(GroupContext);
+
     const [typedMsg, setTypedMsg] = useState("")
     const { chatsSocketApi } = useContext(SocketContext)
 
@@ -64,6 +65,9 @@ const MessageArea = () => {
         chatsSocketApi.receiveAddedToGroupNotificationListener((senderEmail, recipientEmail) => {
             console.log('receiveAddedToGroupNotificationListener', senderEmail, recipientEmail)
             setNewMessageData(`${senderEmail} has added ${recipientEmail}`)
+            // Letting the group chat know the new user was added to the group like in messenger.
+            // Want to close model, useContext here, show that they have been added properly.
+            // Update the newState
         })
 
         chatsSocketApi.receiveMessageListener((messageData) => {
@@ -85,11 +89,11 @@ const MessageArea = () => {
 
 
     return (
-        cameraOn ?
+        showVideoView ?
                 <VideoPlayer /> :
 
         <div className="messageArea">
-            <header># general</header>
+            <header># {selectedTextChannel}</header>
             <div className="text-area">
                 <div ref={ref}><li>top</li></div>
                 {messages.map((msg) => {

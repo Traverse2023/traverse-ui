@@ -4,7 +4,7 @@ import {LocalVideoTrack, RemoteVideoTrack, useLocalCameraTrack, useRemoteUsers} 
 import {GroupContext} from "../context/group-context.tsx";
 
 const PortableMedia = () => {
-    const [showControls, setShowControls] = useState(false);
+    const [showControls, setShowControls] = useState(true);
     const [lastClickTime, setLastClickTime] = useState(null);
     const [hasBeenDragged, setHasBeenDragged] = useState(false)
 

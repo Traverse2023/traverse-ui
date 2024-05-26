@@ -32,6 +32,7 @@ const loginUser = (email, password) => {
             // username is email
             let {id, username, firstName, lastName, pfpUrl} = getUserResponse.data;
             resolve({refreshToken, accessToken, id, username, firstName, lastName, pfpUrl});
+
         } catch (err) {
             console.log(`Error while attempting login ${err}`);
             reject(err);

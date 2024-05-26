@@ -44,7 +44,7 @@ const MediaControls = () => {
     }
 
     useEffect(() => {
-        console.log(groupControl.cameraOn)
+        console.log('invoking cameraON', groupControl.cameraOn)
     }, [groupControl.cameraOn]);
 
     return (
@@ -91,7 +91,10 @@ const MediaControls = () => {
                             <Tooltip className="tooltip">Turn On Camera</Tooltip>
                         }
                     >
-                        <FontAwesomeIcon onClick={turnOnCamera} icon={faVideo} className="media-control-icon"/>
+                        <FontAwesomeIcon onClick={() => {
+                            groupControl.setCameraOn(prevState => !prevState)
+                            groupControl.setShowVideoView(true)
+                        }} icon={faVideo} className="media-control-icon"/>
                     </OverlayTrigger>
                 }
                 <OverlayTrigger

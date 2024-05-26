@@ -54,8 +54,8 @@ class ChatSocket {
         this.socket.on('joinMessage', callback);
     }
 
-    addMember(potentialMember, groupId) {
-        this.socket.emit("addMember", potentialMember, groupId)
+    addMembers(potentialMembers, groupId) {
+        this.socket.emit("addMembers", potentialMembers, groupId);
     }
 
     receiveAddedToGroupNotificationListener(callback) {

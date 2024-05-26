@@ -1,6 +1,6 @@
 import {UID,
     useClientEvent,
-    useJoin,
+    useJoin, useLocalCameraTrack,
     useLocalMicrophoneTrack,
     usePublish,
     useRemoteAudioTracks,
@@ -23,6 +23,7 @@ const CallContainer = () => {
     const client = useRTCClient();
     // Get local microphone tracks
     const { isLoading: isLoadingMic, localMicrophoneTrack } = useLocalMicrophoneTrack();
+
     // Get auto updating remote user objects
     const remoteUsers = useRemoteUsers()
 
@@ -45,11 +46,15 @@ const CallContainer = () => {
         console.log('Agora config: ', agoraConfig);
     }, [agoraConfig]);
 
+    useEffect(() => {
+        console.log('invoking cameraOn2', cameraOn)
+    }, [cameraOn]);
+
     const getToken = async () => {
         // @ts-ignore
         const res = await getAgoraRTCToken(channelId);
         const token: string = res.data.token;
-        setCurrentUserUid(res.data.uid)
+        setCurrentUserUid(res.data.uid);
         console.log("Token:  " + token, "invoking uid: ", res.data.uid)
         return {
             appid: "056e7ee25ec24b4586f17ec177e121d1",
@@ -59,10 +64,10 @@ const CallContainer = () => {
         };
     }
 
+
     useJoin(async () => {
             return getToken();
-        },
-        inCall
+        }, inCall
     );
 
     audioTracks.map((track) => track.play())
@@ -80,11 +85,20 @@ const CallContainer = () => {
     });
 
     useClientEvent(client, "volume-indicator", volumes => {
-        console.log("this user's volume", currentUserUid)
-        volumes.forEach(volume => {
-            console.log("uid", volume.uid, "level", volume.level)
-            if (volume.level > 40) {
-                setSpeakerUid(volume.uid)
+        let isAnyoneSpeaking = false
+        const speakerPromise  = () => new Promise((res, rej) => {
+            volumes.forEach(volume => {
+                if (volume.level > 40) {
+                    setSpeakerUid(volume.uid)
+                    res(true)
+                }
+            })
+            res(false)
+        })
+
+        speakerPromise().then(isAnyoneSpeaking => {
+            if (!isAnyoneSpeaking) {
+                setSpeakerUid(null)
             }
         })
     })
@@ -119,4 +133,4 @@ const CallContainer = () => {
     )
 }
 
-export default CallContainer
+export default CallContainer;

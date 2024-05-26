@@ -14,13 +14,19 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const VideoPlayer = () => {
 
-    const { videoPlayerType, setVideoPlayerType, selectedVoiceChannel , isMuted, setIsMuted} = useContext(GroupContext)
+    const { cameraOn, videoPlayerType, setVideoPlayerType, selectedVoiceChannel , isMuted, setIsMuted} = useContext(GroupContext)
 
     useEffect(() => {
         console.log('videoplayer rendered')
     }, []);
 
     const {localCameraTrack} = useLocalCameraTrack()
+
+    useEffect(() => {
+        console.log('invoking cameraOn3', cameraOn)
+        localCameraTrack?.setEnabled(cameraOn)
+    }, [cameraOn]);
+
     usePublish([localCameraTrack])
 
     const remoteUsers = useRemoteUsers()

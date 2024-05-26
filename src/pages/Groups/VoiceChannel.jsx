@@ -18,7 +18,7 @@ import useSound from "use-sound";
 
 const VoiceChannel = ({ channelName, users }) => {
 
-    const { setSelectedVoiceChannel, speakerUid } = useContext(GroupContext);
+    const { setShowVideoView, setSelectedVoiceChannel, selectedVoiceChannel, speakerUid } = useContext(GroupContext);
 
     useEffect(() => {
         console.log('invoking speakerUidVC', speakerUid)
@@ -37,9 +37,23 @@ const VoiceChannel = ({ channelName, users }) => {
 
     }
 
+    const [channelStyle, setChannelStyle] = React.useState("channel inactive");
+
+    useEffect(() => {
+        if (channelName == selectedVoiceChannel) {
+            setChannelStyle("channel active");
+        } else {
+            setChannelStyle("channel inactive");
+        }
+    }, [selectedVoiceChannel])
+
     return (
         <>
-            <div className="channel" onClick={() => {setSelectedVoiceChannel(channelName)
+            <div className={channelStyle} onClick={() => {
+                if (selectedVoiceChannel === channelName) {
+                    setShowVideoView(prevState => !prevState)
+                }
+                setSelectedVoiceChannel(channelName)
                 console.log('invoking videoTracksinvoicechannel', videoTracks, remoteUsers)
             }}>
                 <h1>#</h1>

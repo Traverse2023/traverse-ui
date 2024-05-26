@@ -1,10 +1,11 @@
-// @ts-ignore
-import {createContext, useEffect, useRef, useState} from "react";
-import {getMembers} from "../api/main-service.js";
+import {createContext, Dispatch, SetStateAction, useContext, useEffect, useState} from "react";
+import {getMembers} from "../api/withToken.js";
+import {AuthContext} from "./auth-context.js";
+import {SocketContext} from "./friends-socket-context.js";
+import {UID, useRTCClient} from "agora-rtc-react";
 import {useCall, VideoPlayerEnum} from "../hooks/call-hook.js";
 
 type Member = {
-    id: string
     lastName: string
     firstName: string
     password: string
@@ -12,45 +13,43 @@ type Member = {
     email: string
 }
 
-type SelectedGroup = {
-    groupId: string
-    groupName: string
-}
-
 interface GroupContextType {
-    selectedGroup: SelectedGroup,
-    setSelectedGroup: any,
-    selectedTextChannel: string,
-    setSelectedTextChannel: any,
+    showVideoView: boolean
+    setShowVideoView: (showVideoView: boolean) => void
+    selectedGroup: {},
+    // Defines the user selected text channel. User can be part of a text channel as well as a voice channel.
+    selectedTextChannel: string
     selectedVoiceChannel: string | null,
-    setSelectedVoiceChannel: any,
+    setSelectedVoiceChannel: () => void,
     members: Member[],
-    setMembers: any,
+    messages: any,
+    setMembers: (members:[]) => void,
     inCall: boolean,
-    setInCall: any
+    setInCall: () => void
     isMuted: boolean
     setIsMuted: (isMuted: boolean) => void
     videoPlayerType: VideoPlayerEnum
     setVideoPlayerType: (videoPlayerType: VideoPlayerEnum) => void
     cameraOn: boolean
-    setCameraOn: any
+    setCameraOn: () => void
     agoraConfig: any
-    setAgoraConfig: any
+    setAgoraConfig: () => {}
     speakerUid: number | null
-    setSpeakerUid: any
+    setSpeakerUid: (uid: UID | null) => {}
     currentUserUid: number | null
-    setCurrentUserUid: any
+    setCurrentUserUid: (uid: UID) => {}
 }
 
 
 export const GroupContext = createContext<GroupContextType>({
-    selectedGroup: {groupName: "control-center", groupId: ""},
-    setSelectedGroup: () => {},
+    selectedGroup: {},
+    showVideoView: false,
+    setShowVideoView: () => {},
     selectedTextChannel: "general",
-    setSelectedTextChannel: () => {},
     selectedVoiceChannel: null,
     setSelectedVoiceChannel: () => {},
     members: [],
+    messages: [],
     setMembers: () => { },
     inCall: false,
     setInCall: () => {},
@@ -73,32 +72,29 @@ export const GroupContext = createContext<GroupContextType>({
 
 // @ts-ignore
 export const GroupProvider = ({children}) => {
-    const isInitialRender = useRef(true)
     const [selectedGroup, setSelectedGroup] = useState(
         {groupId: "control-center", groupName: "control-center"});
 
     const [selectedTextChannel, setSelectedTextChannel] = useState("general");
-
+    const [showVideoView, setShowVideoView] = useState(false)
     const callHookStates = useCall(selectedGroup)
     const [members, setMembers] = useState([])
     // const [isPortableMediaToggled, setIsPortableMediaToggled] = useState(false)
+    // @ts-ignore
+    const {token} = useContext(AuthContext)
 
-
-    // Get members whenever group is changed
-    // should only run after on update of group and not on initial render to avoid
-    // unauthorized calls to api that will result in 401
+    //get members whenever group is changed
     useEffect(() => {
-        if (isInitialRender.current) {
-            isInitialRender.current = false;
-        } else{
-            getMembers(selectedGroup.groupId)
-                .then((response) => {
-                    setMembers(response);
-                    console.log(`Get members from context: ${JSON.stringify(response)}`);
-                })
-                .catch((err) => console.error(err));
-        }
+        // @ts-ignore
+        getMembers(token, selectedGroup.groupId)
+            .then((response: any) => {
+                setMembers(response);
+                console.log('54', response);
+            })
+            .catch((err: any) => console.error(err));
     }, [selectedGroup.groupId]);
+
+
 
 
     return (
@@ -109,8 +105,10 @@ export const GroupProvider = ({children}) => {
             setSelectedTextChannel: setSelectedTextChannel,
             members: members,
             setMembers: setMembers,
+            showVideoView: showVideoView,
+            setShowVideoView: setShowVideoView,
             ...callHookStates
-            }}>
+        }}>
             {children}
         </GroupContext.Provider>
     )
