@@ -20,7 +20,7 @@ import {useAuth} from "../hooks/useAuth.tsx";
 
 
 const NavBar = () => {
-    const { logout, username } = useAuth();
+    const { logout, user } = useAuth();
     const { notificationsSocketApi} = useContext(SocketContext);
     const [play] = useSound("/audio/notificationsound.mp3");
     const navigate = useNavigate();
@@ -64,7 +64,7 @@ const NavBar = () => {
 
     const tempHandler = (e, groupId, groupName) => {
         e.preventDefault();
-        groupControl.setSelectedGroup({ groupId, groupName });
+        setSelectedGroup({ groupId, groupName });
         console.log("clickedLink", notifications);
     };
 
@@ -143,7 +143,7 @@ const NavBar = () => {
                                 </Tooltip>
                             }
                         >
-                            <Link to={`/profile/${username}`}>
+                            <Link to={`/profile/${user.id}`}>
                                 <FontAwesomeIcon icon={faUser} />
                             </Link>
                         </OverlayTrigger>

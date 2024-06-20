@@ -82,7 +82,16 @@
   /* text-align: center; */
   height: 100%;
   width: 100%;
+  display: grid;
+  grid-template-rows: 50px 1fr;
+  grid-template-areas: "navbar"
+"content";
   /* margin: auto; */
+}
+
+.content {
+  grid-area: content;
+
 }
 
 
@@ -710,9 +719,8 @@ border-radius: 8px;
   display: grid;
   height: 100%;
   grid-template-columns: 200px 240px 5fr 240px;
-  grid-template-rows: 1fr 25fr;
-  grid-template-areas: "navbar navbar navbar navbar" 
-  "groupSelector subGroupSelector messageArea members"; 
+  grid-template-rows: 1fr;
+  grid-template-areas: "groupSelector subGroupSelector messageArea members";
 }
 
 .groupSelector{

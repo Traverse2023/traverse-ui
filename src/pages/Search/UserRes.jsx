@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { searchUsers } from "../../api/main-service.js";
 import FriendOpts from "../../components/FriendsOpts";
-import { AuthContext } from "../../context/auth-context";
+import {useAuth} from "../../hooks/useAuth.tsx";
 
 const Spinner = () => {
     return (
@@ -19,13 +19,13 @@ const Spinner = () => {
 };
 
 const UserRes = () => {
-    const auth = useContext(AuthContext);
+    const {user} = useAuth()
     const [userResults, setUserResults] = useState([]);
     const [loading, setLoading] = useState(true);
     const location = useLocation();
 
     useEffect(() => {
-        searchUsers(auth.token, auth.email, location.state.searchVal)
+        searchUsers(location.state.searchVal)
             .then((response) => {
                 setUserResults(response);
             })
@@ -34,18 +34,18 @@ const UserRes = () => {
 
     return (
         <ul className="people">
-            {userResults.length ? userResults.map((result, i) => {
+            {userResults.length ? userResults.map((user, i) => {
                 return (
                     <>
                         <li className="person">
                             <div className="pfp"></div>{" "}
                             <h4>
-                                {result.firstName} {result.lastName}
+                                {user.firstName} {user.lastName}
                             </h4>
                             <div className="options">
                                 {
                                     <FriendOpts
-                                        user2Email={result.email}
+                                        user2Id={user.id}
                                         locationState={location}
                                         index={i}
                                     />

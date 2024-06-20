@@ -2,7 +2,7 @@ import React, {useState, useEffect, createContext,} from "react";
 import {useNavigate} from "react-router-dom";
 import {loginUser, registerUser} from "../api/auth";
 import axios from "axios";
-import {setMainServiceToken} from "../api/main-service";
+import {mainService, setMainServiceToken} from "../api/main-service";
 import {toast} from "react-toastify";
 import {setStorageServiceToken} from "../api/storageService";
 
@@ -15,6 +15,7 @@ type UserContextType = {
     login: (username: string, password: string) => void;
     logout: () => void;
     isLoggedIn: () => boolean;
+    updatePfp: (pfpUrl:string) => {}
 }
 
 //username is email
@@ -24,7 +25,7 @@ type User = {
     password?: string | null;
     firstName: string;
     lastName: string;
-    pfpUrl: string | null;
+    pfpUrl: string;
 }
 
 type Props = {children: React.ReactNode};
@@ -49,6 +50,15 @@ export const UserProvider = ({children}: Props) => {
         setIsReady(true);
     }, []);
 
+    useEffect(() => {
+        if (user && token) {
+            localStorage.setItem("user", JSON.stringify(user))
+        } else {
+            logout()
+        }
+
+    }, [user]);
+
     // Create user from submitted UI data and perform register call
     const register = async(firstName: string, lastName: string, email: string, password: string) => {
         const user: User = {
@@ -67,6 +77,14 @@ export const UserProvider = ({children}: Props) => {
         })
     }
 
+    const updatePfp = async(pfpUrl: string) => {
+        if (user !== null) {
+            user.pfpUrl = pfpUrl
+        } else {
+            logout()
+        }
+    }
+
     // Perform login using UI form data. Save response containing token and user to local storage and state
     const login = async(username: string, password: string) => {
         console.log(`Performing login with user: ${username}`);
@@ -83,8 +101,12 @@ export const UserProvider = ({children}: Props) => {
             localStorage.setItem("user", JSON.stringify(userLoggedIn));
             localStorage.setItem("refreshToken", data.refreshToken);
             localStorage.setItem("token", data.accessToken);
-            setToken(data.accessToken!);
+            setToken(data.accessToken);
+            console.log('invoking token87', data.accessToken);
+            setMainServiceToken(data.accessToken);
+            setStorageServiceToken(data.accessToken);
             setUser(userLoggedIn!);
+
         }).catch((err) => {
             console.log(`An error occurred when logging in: ${err}`);
             toast.error(err.message);
@@ -93,11 +115,13 @@ export const UserProvider = ({children}: Props) => {
 
     // Returns if user is currently logged in
     const isLoggedIn = () => {
-        return !!user;
+        console.log('mainServiceHeaders', mainService.defaults.headers["Authorization"])
+        return (!!user && !!token)
     }
 
     // Perform logout by removing user and tokens from local storage
     const logout = () => {
+        console.log("Logging user out. Deleting user and token...")
         localStorage.removeItem("token");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("user");
@@ -106,7 +130,7 @@ export const UserProvider = ({children}: Props) => {
     }
 
     return (
-        <UserContext.Provider value={{ login, user, token, logout, isLoggedIn, register }}>
+        <UserContext.Provider value={{ login, user, token, logout, isLoggedIn, register, updatePfp }}>
         {isReady ? children : null}
         </UserContext.Provider>
     );

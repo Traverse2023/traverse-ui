@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const mainService = axios.create({
+export const mainService = axios.create({
     baseURL: import.meta.env.VITE_APP_BACKEND_URL + "/main-service",
 });
 
@@ -42,6 +42,8 @@ const getGroups = () => {
 const getMembers = (groupId) => {
 
     return new Promise(async (resolve, reject) => {
+        console.log(`Getting members of group ${groupId}`)
+
         try {
             const response = await mainService.get(
                 `/group/getMembers/${groupId}`,
@@ -223,9 +225,10 @@ const savePFP = (pfpURL) => {
 const getAgoraRTCToken = (channelId) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log("Getting agora token with channelId: ", channelId)
             const response = await mainService.get('/agora/getToken/' + channelId);
-            console.log(response.data);
-            resolve(response.data);
+            console.log(response);
+            resolve(response);
         } catch (err) {
             console.log(err);
             reject(err);

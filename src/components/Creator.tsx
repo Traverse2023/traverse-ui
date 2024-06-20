@@ -1,8 +1,6 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faLinkedin} from "@fortawesome/free-brands-svg-icons";
 import {Link} from "react-router-dom";
-import Modal from "../components/Modal";
-import {useState} from "react";
 
 type Social = {
     link: string

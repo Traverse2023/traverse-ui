@@ -17,7 +17,9 @@ const VideoPlayer = () => {
     const { cameraOn, videoPlayerType, setVideoPlayerType, selectedVoiceChannel , isMuted, setIsMuted} = useContext(GroupContext)
 
     useEffect(() => {
-        console.log('videoplayer rendered')
+        console.log('Video player rendered with states:' +
+            `\nvideoPlayerType: ${videoPlayerType}\nselectedVoiceChannel: ${selectedVoiceChannel}
+            \nisMuted: ${isMuted}`)
     }, []);
 
     const {localCameraTrack} = useLocalCameraTrack()

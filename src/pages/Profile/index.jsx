@@ -1,15 +1,13 @@
 import React, { useContext, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { getFriends } from "../../api/main-service.js";
-import NavBar from "../../components/NavBar";
-import { AuthContext } from "../../context/auth-context";
+import { useParams } from "react-router-dom";
 import Other from "./Other";
 import Self from "./Self";
+import {useAuth} from "../../hooks/useAuth.tsx";
 
 const Profile = () => {
-    const { email } = useParams();
-    const auth = useContext(AuthContext);
-    if (email === auth.email) {
+    const { userId } = useParams();
+    const { user } = useAuth();
+    if (userId === user.id) {
         return <Self />;
     }
     return <Other />;

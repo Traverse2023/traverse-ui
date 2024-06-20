@@ -17,6 +17,7 @@ import {GroupProvider} from "./context/group-context.tsx";
 import NotificationSocket from "./sockets/notifications.js";
 import {getGroups} from "./api/main-service.js";
 import CallContainer from "./components/CallContainer.tsx";
+import NavBar from "./components/NavBar.jsx";
 
 
 
@@ -28,7 +29,9 @@ function App() {
     let friendsSocket;
     let chatsSocket;
     let notificationsSocket;
+    console.log('invoking isLoggedIn', isLoggedIn());
     if (isLoggedIn()) {
+        console.log("IS LOGGED IN")
         friendsSocket = new FriendsSocket(user.id, token);
         chatsSocket = new ChatSocket(user.id, token);
         notificationsSocket = new NotificationSocket(user.id, token);
@@ -37,17 +40,28 @@ function App() {
             groups.forEach(g => notificationsSocket.joinRoom(g.groupId));
         })
         routes = (
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/groups" element={<Groups />} />
-                    <Route path="/profile/:email" element={<Profile />} />
-                    <Route path="/search" element={<Search />} />
-                    <Route path="/post" element={<Post type="page" />} />
-                    <Route path="/algo" element={<Algo />} />
-                    {/*<Route path="*" element={<Navigate to="/" />} />*/}
-                </Routes>
-            </Router>
+            <SocketContext.Provider value={{
+                friendsSocketApi: friendsSocket,
+                chatsSocketApi: chatsSocket,
+                notificationsSocketApi: notificationsSocket}}>
+                <AgoraRTCProvider client={client}>
+                    <GroupProvider>
+                        <Router>
+                            <CallContainer />
+                            <NavBar/>
+                            <div className="content"><Routes>
+                                <Route path="/" element={<Home />} />
+                                <Route path="/groups" element={<Groups />} />
+                                <Route path="/profile/:userId" element={<Profile />} />
+                                <Route path="/search" element={<Search />} />
+                                <Route path="/post" element={<Post type="page" />} />
+                                <Route path="/algo" element={<Algo />} />
+                                {/*<Route path="*" element={<Navigate to="/" />} />*/}
+                            </Routes></div>
+                        </Router>
+                    </GroupProvider>
+                </AgoraRTCProvider>
+            </SocketContext.Provider>
         );
     } else {
         routes = (
@@ -61,17 +75,7 @@ function App() {
     }
 
     return (
-            <SocketContext.Provider value={{
-                friendsSocketApi: friendsSocket,
-                chatsSocketApi: chatsSocket,
-                notificationsSocketApi: notificationsSocket}}>
-                <AgoraRTCProvider client={client}>
-                    <GroupProvider>
-                        <CallContainer />
-                        <div className="App">{routes}</div>
-                    </GroupProvider>
-                </AgoraRTCProvider>
-            </SocketContext.Provider>
+          <div className="App">{routes}</div>
     );
 }
 

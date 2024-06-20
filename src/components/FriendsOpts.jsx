@@ -1,54 +1,47 @@
 import { useEffect, useState, useContext } from "react";
-import {
-    acceptFriendRequest,
-    getFriendshipStatus,
-    removeFriendRequest,
-    sendFriendRequest,
-} from "../api/main-service.js";
-import { AuthContext } from "../context/auth-context";
+import {getFriendshipStatus,} from "../api/main-service.js";
 import {SocketContext} from "../context/friends-socket-context";
+import {useAuth} from "../hooks/useAuth.tsx";
 
-const FriendOpts = ({ user2Email, locationState = null, index, component = null, triggers=[] }) => {
-    const auth = useContext(AuthContext);
+const FriendOpts = ({ user2Id, locationState = null, index, component = null, triggers=[] }) => {
     const { friendsSocketApi } = useContext(SocketContext)
-
-    const [friendshipStatusState, setFriendshipStatusState] = useState(false);
-
-    friendsSocketApi.friendRequestListener((senderEmail) => {
-        console.log('line18', index, senderEmail)
-        if (user2Email === senderEmail) {
-            setFriendshipStatusState({friendshipStatus: 'FRIEND_REQUEST', initiatedUser: senderEmail})
+    const [friendshipStatusState, setFriendshipStatusState] = useState({});
+    const { user } = useAuth();
+    friendsSocketApi.friendRequestListener((senderId) => {
+        console.log('line18', index, senderId)
+        if (user2Id === senderId) {
+            setFriendshipStatusState({friendshipStatus: 'FRIEND_REQUEST', initiatedUser: senderId})
             triggers.forEach(fn => fn())
         }
         })
 
-    friendsSocketApi.acceptListener((senderEmail) => {
-        console.log('line23', index, senderEmail)
-        if (user2Email === senderEmail) {
-            setFriendshipStatusState({friendshipStatus: 'FRIENDS', initiatedUser: senderEmail})
+    friendsSocketApi.acceptListener((senderId) => {
+        console.log('line23', index, senderId)
+        if (user2Id === senderId) {
+            setFriendshipStatusState({friendshipStatus: 'FRIENDS', initiatedUser: senderId})
             triggers.forEach(fn => fn())
         }
     })
 
-    friendsSocketApi.declineFriendRequestListener((senderEmail) => {
-        console.log('here32 ', senderEmail, "declinedFriendRequest")
-        if (user2Email === senderEmail) {
+    friendsSocketApi.declineFriendRequestListener((senderId) => {
+        console.log('here32 ', senderId, "declinedFriendRequest")
+        if (user2Id === senderId) {
             setFriendshipStatusState({friendshipStatusState: undefined})
             triggers.forEach(fn => fn())
         }
     })
 
-    friendsSocketApi.unfriendListener((senderEmail) => {
-        console.log('here32 ', senderEmail, "declinedFriendRequest")
-        if (user2Email === senderEmail) {
+    friendsSocketApi.unfriendListener((senderId) => {
+        console.log('here32 ', senderId, "declinedFriendRequest")
+        if (user2Id === senderId) {
             setFriendshipStatusState({friendshipStatusState: undefined})
             triggers.forEach(fn => fn())
         }
     })
 
     useEffect(() => {
-        console.log('infriendsopt50', friendshipStatusState, auth.email, user2Email);
-        getFriendshipStatus(auth.token, auth.email, user2Email)
+        console.log('infriendsopt50', friendshipStatusState, user.id, user2Id);
+        getFriendshipStatus(user.id, user2Id)
             .then(({ friendshipStatus, initiatedUser }) => {
                 console.log('49fo', initiatedUser, friendshipStatus)
                 setFriendshipStatusState({
@@ -65,7 +58,7 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null,
         // sendFriendRequest(auth.token, auth.email, potentialFriend);
         setFriendshipStatusState({
             friendshipStatus: "FRIEND_REQUEST",
-            initiatedUser: auth.email,
+            initiatedUser: user.id,
         });
         friendsSocketApi.sendFriendRequest(potentialFriend)
         triggers.forEach(fn => fn())
@@ -84,7 +77,6 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null,
     };
 
     const removeFriendRequestHandler = (potentialFriend) => {
-        // removeFriendRequest(auth.token, auth.email, potentialFriend);
         setFriendshipStatusState({ friendshipStatus: undefined });
         friendsSocketApi.declineFriendRequest(potentialFriend)
         triggers.forEach(fn => fn())
@@ -100,7 +92,7 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null,
         triggers.forEach(fn => fn())
     };
 
-    if (user2Email === auth.email) {
+    if (user2Id === user.id) {
         return (
             <div className="inner-options">
                 <p className="friend-options">You </p>
@@ -116,7 +108,7 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null,
                         <button
                             className="friend-options"
                             onClick={() => {
-                                addFriend(user2Email);
+                                addFriend(user2Id);
                             }}
                         >
                             Add Friend
@@ -124,14 +116,14 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null,
                     </div>
                 );
             case "FRIEND_REQUEST":
-                if (friendshipStatusState.initiatedUser === auth.email) {
+                if (friendshipStatusState.initiatedUser === user.id) {
                     return (
                         <div className="inner-options">
                             <p className="friend-options">Request Sent</p>
                             <button
                                 className="friend-options"
                                 onClick={() =>
-                                    removeFriendRequestHandler(user2Email)
+                                    removeFriendRequestHandler(user2Id)
                                 }
                             >
                                 Remove Request
@@ -144,7 +136,7 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null,
                             <button
                                 className="friend-options"
                                 onClick={() =>
-                                    acceptFriendRequestHandler(user2Email)
+                                    acceptFriendRequestHandler(user2Id)
                                 }
                             >
                                 Accept Request
@@ -152,7 +144,7 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null,
                             <button
                                 className="friend-options"
                                 onClick={() =>
-                                    removeFriendRequestHandler(user2Email)
+                                    removeFriendRequestHandler(user2Id)
                                 }
                             >
                                 Decline Request
@@ -163,14 +155,14 @@ const FriendOpts = ({ user2Email, locationState = null, index, component = null,
             case "FRIENDS":
                 return component === "Profile" ? (
                     <div className="inner-options">
-                        <button className="friend-options" onClick={() => unfriendHandler(user2Email)}>
+                        <button className="friend-options" onClick={() => unfriendHandler(user2Id)}>
                             Remove Friend
                         </button>
                     </div>
                 ) : (
                     <div className="inner-options">
                         <p className="friend-options">&#10003; Friends</p>
-                        <button className="friend-options" onClick={() => unfriendHandler(user2Email)}>
+                        <button className="friend-options" onClick={() => unfriendHandler(user2Id)}>
                             Remove Friend
                         </button>
                     </div>
