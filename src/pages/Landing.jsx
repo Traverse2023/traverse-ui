@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLinkedin} from "@fortawesome/free-brands-svg-icons";
 import Creator from "../components/Creator.tsx";
+import {faGithub} from "@fortawesome/free-brands-svg-icons";
 
 
 const Landing = () => {
@@ -81,10 +82,17 @@ const Landing = () => {
        {
             firstName: "Isfar",
             lastName: "Oshir",
-            socials: [{
+            socials: [
+                {
                     socialMediaName: "LinkedIn",
                     link: "https://www.linkedin.com/in/isfar-oshir/"
-                }],
+                },
+                {
+                    socialMediaName: "Github",
+                    link: "https://github.com/iao233"
+                }
+                ],
+
             quote: "Trying to do better.",
             bio: "I started Traverse back in my last semester of university at NYU. After setting up the foundation of the project, I reached out to some engineer friends I've made through out the past 4 years. It's been a blast working with the team, and we hope to make Traverse very robust. I am one of the leads in the project and do tasks from discussing components at a high level but then work on down to the very code itself.",
             pfp: "imgs/isfar.png",
@@ -93,10 +101,16 @@ const Landing = () => {
         {
             firstName: "Bryan",
             lastName: "Palomo",
-            socials: [{
+            socials: [
+                {
                 socialMediaName: "LinkedIn",
                 link: "https://www.linkedin.com/in/bryan-palomo-059b80223/"
-            }],
+                },
+                {
+                    socialMediaName: "Github",
+                    link: "https://github.com/briplomo1"
+                }
+            ],
             quote: "...",
             bio: "...",
             pfp: "imgs/bryan.png",
@@ -105,10 +119,16 @@ const Landing = () => {
         {
             firstName: "Junming",
             lastName: "Qiu",
-            socials: [{
+            socials: [
+                {
                 socialMediaName: "LinkedIn",
                 link: "https://www.linkedin.com/in/junming-qiu-32b343191/"
-            }],
+                },
+                {
+                    socialMediaName: "Github",
+                    link: "https://github.com/Junming-Qiu"
+                }
+                ],
             quote: "If it turns on I'll write code for it",
             bio: "I am a full stack engineer who loves to learn. From the industry standards to new emerging technology, I am able to dive deep in the technology while also keeping a high level view of how it will integrate with existing infrastructure.",
             pfp: "imgs/junming.png",
@@ -117,10 +137,16 @@ const Landing = () => {
         {
             firstName: "Ahmed",
             lastName: "Rahi",
-            socials: [{
+            socials: [
+                {
                 socialMediaName: "LinkedIn",
                 link: "https://www.linkedin.com/in/ahmedrahi/"
-            }],
+                },
+                {
+                    socialMediaName: "Github",
+                    link: "https://github.com/arahi7860"
+                }
+            ],
             quote: "Building digital bridges, one stack at a time.",
             bio: "As a full stack engineer, I thrive on building seamless digital experiences, from crafting elegant front-end interfaces to designing robust back-end systems.",
             pfp: "imgs/rahi.png",
@@ -130,16 +156,123 @@ const Landing = () => {
             firstName: "Farhan",
             lastName: "Mashud",
             quote: "...",
-            socials: [{
+            socials: [
+                {
                 socialMediaName: "LinkedIn",
                 link: "https://www.linkedin.com/in/farhan-mashud/"
-            }],
+                },
+                {
+                    socialMediaName: "Github",
+                    link: "https://github.com/fm1539"
+                }
+                ],
             bio: "HI Im",
             pfp: "imgs/farhan.png",
             position: "Product Manager & Scrum Master"
         }
     ]
 
+<<<<<<< HEAD
+=======
+        if ("email" in userInfo && "firstName" in userInfo && "lastName" in userInfo && "password" in userInfo) {
+            registerToast.current = toast.loading("Creating Account...")
+            register(
+                userInfo.email,
+                userInfo.password,
+                userInfo.firstName,
+                userInfo.lastName
+            )
+                .then((value) => {
+                    setCreateModal(false)
+                    toast.update(registerToast.current, {
+                        position: "top-right",
+                        type: "success",
+                        isLoading: false,
+                        render: "Account Created!",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        closeButton: true
+                    })
+                    // toast.success("Account Created!")
+                })
+                .catch((err) => {
+                    toast.update(registerToast.current, {
+                        position: "top-center",
+                        type: "error",
+                        isLoading: false,
+                        render: err.response.data.msg,
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        closeButton: true
+                    })
+                    // notify(err.response.data.msg)
+                    console.log(err);
+                });
+        } else {
+            notify("Please fill out all fields")
+        }
+    };
+
+    const [loginModal, setLoginModal] = React.useState(false);
+    const [loginInfo, setLoginInfo] = React.useState({});
+
+    const loginInfoHandler = (event) => {
+        setLoginInfo((prev) => {
+            return {
+                ...prev,
+                [event.target.id]: event.target.value,
+            };
+        });
+    };
+
+    const loginHandler = () => {
+        if ("email" in loginInfo && "password" in loginInfo) {
+            loginToast.current = toast.loading("Logging In...")
+            login(loginInfo.email, loginInfo.password)
+                .then((value) => {
+                    console.log(value)
+                    auth.acceptLogin(loginInfo.email, value.firstName, value.lastName, value.pfpURL,  value.token);
+                    toast.update(loginToast.current, {
+                        position: "top-right",
+                        type: "success",
+                        isLoading: false,
+                        render: "Logged In!",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        closeButton: true
+                    })
+                })
+                .catch((err) => {
+                    console.log(err);
+                    toast.update(loginToast.current, {
+                        position: "top-center",
+                        type: "error",
+                        isLoading: false,
+                        render: err.response.data.msg,
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        closeButton: true
+                    })
+                });
+        } else {
+            notify("Please fill out all fields.")
+        }
+    };
+
+    const iconMap = new Map([
+            ["LinkedIn", <FontAwesomeIcon icon={faLinkedin} style={{height: "25px"}} />],
+            ["GitHub", <FontAwesomeIcon icon={faGithub} style={{height: "25px"}} />]
+        ]
+    )
+>>>>>>> 48105b3 (the social media icons have color now)
 
     return (
         <React.Fragment>
@@ -386,37 +519,64 @@ const Landing = () => {
                     {members.map(member => {
                         return (
                             <Creator setBioModal={setBioModal} creator={member} setSelectedCreator={setSelectedCreator}
-                                     socials={[{
+                                     socials={[
+                                         {
                                          socialMediaName: "LinkedIn",
                                          link: "https://www.linkedin.com/in/isfar-oshir/"
-                                     }]}
+                                     },
+                                         {
+                                             socialMediaName: "Github",
+                                             link: "https://github.com/iao233"
+                                         }
+                                     ]}
                             />
                         )
                     })
                     }
-                    <Modal show={bioModal} setModalStatus={setBioModal} style={{height: 'fit-content', width: '800px'}}>
-                        <div style={{display: "flex"}}>
+                    <Modal show={bioModal} setModalStatus={setBioModal} style={{ height: 'fit-content', width: '800px' }}>
+                        <div style={{ display: "flex" }}>
                             <div>
-                                <img src={selectedCreator?.pfp} style={{width: "300px"}}/>
-                                <br/><br/>
-                                <div style={{display: "flex"}}>
-                                    {selectedCreator?.socials?.map(({socialMediaName, link}) => <Link to={link} target="_blank" style={{position: 'relative', zIndex: "10"}}>{iconMap.get(socialMediaName)}</Link>)}
-                                </div>
+                                <img src={selectedCreator?.pfp} style={{ width: "300px" }} />
                             </div>
-                            <div>
-                                <h1 style={{textAlign: "left"}}>{selectedCreator.firstName} {selectedCreator.lastName}</h1>
-                                <h4 style={{textAlign: "left", color: "#7F56D9"}}>{selectedCreator.position}</h4>
-                                <p style={{textAlign: "left"}}>
-                                    {selectedCreator.bio}
-                                </p>
+                            <div style={{ marginLeft: "20px" }}>
+                                <div>
+                                    <h1 style={{
+                                        textAlign: "left",
+                                        marginRight: "10px",
+                                    }}>{selectedCreator.firstName} {selectedCreator.lastName}</h1>
+                                    <div style={{ display: "flex", alignItems: "center", marginTop: "5px" }}>
+                                        {selectedCreator?.socials?.map(({ socialMediaName, link }) => (
+                                            <div key={socialMediaName} style={{ marginRight: "10px" }}>
+                                                {socialMediaName === "LinkedIn" && (
+                                                    <a href={link} target="_blank" rel="noopener noreferrer">
+                                                        <FontAwesomeIcon icon={faLinkedin} style={{ height: "25px" }} />
+                                                    </a>
+                                                )}
+                                                {socialMediaName === "Github" && (
+                                                    <a href={link} target="_blank" rel="noopener noreferrer">
+                                                        <FontAwesomeIcon icon={faGithub} style={{ height: "25px" }} />
+                                                    </a>
+                                                )}
+                                                {socialMediaName === "Twitter" && (
+                                                    <a href={link} target="_blank" rel="noopener noreferrer">
+                                                        <FontAwesomeIcon icon={faTwitter} style={{ height: "25px" }} />
+                                                    </a>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <h4 style={{
+                                    textAlign: "left",
+                                    color: "#7F56D9",
+                                    marginBottom: "5px"
+                                }}>{selectedCreator.position}</h4>
+                                <p style={{ textAlign: "left", marginTop: "0" }}>{selectedCreator.bio}</p>
                             </div>
                         </div>
                     </Modal>
                 </div>
             </section>
-
-
-
 
 
             <footer className="footer">
