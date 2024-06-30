@@ -253,6 +253,7 @@ nav{
   width: 260px;
   height: 310px;
 }
+
 /* 
 .nav {
   grid-area: nav;
@@ -1784,6 +1785,7 @@ border-radius: 8px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-top: 200px;
 }
 
 .social-icon,
