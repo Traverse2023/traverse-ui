@@ -1,12 +1,13 @@
 import { useContext, useState } from "react";
-import { createGroup } from "../../api/withToken";
+import { createGroup } from "../../api/main-service.js";
 import Modal from "../../components/Modal";
-import { AuthContext } from "../../context/auth-context";
+import {useAuth} from "../../hooks/useAuth.tsx";
+
 
 const ControlCenter = () => {
+    const {user} = useAuth();
     const [createGroupModal, setCreateGroupModal] = useState(false);
     const [groupInfo, setGroupInfo] = useState();
-    const auth = useContext(AuthContext);
 
     const groupInfoHandler = (event) => {
         setGroupInfo((prev) => {
@@ -18,7 +19,7 @@ const ControlCenter = () => {
     };
 
     const createGroupHandler = () => {
-        createGroup(auth.token, groupInfo, auth.email)
+        createGroup(groupInfo, user.id)
             .then((response) => {
                 console.log(response);
                 window.location = "/groups";

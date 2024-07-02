@@ -1,18 +1,16 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { getGroups } from "../../api/withToken";
-import { AuthContext } from "../../context/auth-context";
+import { getGroups } from "../../api/main-service.js";
 import { GroupContext } from "../../context/group-context.tsx";
-import ChatSocket from "../../sockets/chat";
 import {SocketContext} from "../../context/friends-socket-context";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useAuth} from "../../hooks/useAuth.tsx";
 
 const GroupSelector = () => {
+    const  {user} = useAuth()
     const groupControl = useContext(GroupContext);
-    const auth = useContext(AuthContext);
     const { chatsSocketApi } = useContext(SocketContext)
 
     let { state } = useLocation();
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (state) {
@@ -24,7 +22,7 @@ const GroupSelector = () => {
 
     const [groups, setGroups] = useState([]);
     useEffect(() => {
-        getGroups(auth.token, auth.email)
+        getGroups(user.id)
             .then((response) => {
                 setGroups(response);
             })
@@ -33,19 +31,10 @@ const GroupSelector = () => {
 
     const groupClickHandler = (event) => {
         window.history.replaceState({}, document.title)
-
-        // navigate({
-        //     pathname: location.pathname,
-        //     search: location.search,
-        //     state: { resetState: true },
-        // });
-
         groupControl.setSelectedGroup({groupId: event.target.id, groupName: event.target.getAttribute("data-name")});
-        // chatsSocketApi.disconnect()
         chatsSocketApi.joinRoom(event.target.id)
     };
 
-    console.log("7", groupControl.selectedGroup);
     return (
         <div className="groupSelector">
             <div
@@ -63,6 +52,7 @@ const GroupSelector = () => {
             {groups.map((group) => {
                 return (
                     <div
+                        key={group.groupId}
                         className={
                             groupControl.selectedGroup.groupId === group.groupId
                                 ? "groupSelected"

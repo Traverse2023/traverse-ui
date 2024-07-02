@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import { getFriends, getMutualFriends, getUser } from "../../api/withToken";
+import { getFriends, getMutualFriends, getUser } from "../../api/main-service.js";
 import FriendOpts from "../../components/FriendsOpts";
-import NavBar from "../../components/NavBar";
-import { AuthContext } from "../../context/auth-context";
+
 
 const FriendsTable = ({ friends }) => {
     const navigate = useNavigate()
@@ -11,29 +10,29 @@ const FriendsTable = ({ friends }) => {
         <table>
             {friends.map((arr) => (
                 <tr>
-                    {arr.map((friendObj) =>
-                        friendObj ? (
+                    {arr.map((friend) =>
+                        friend ? (
                             <td>
                                 <div
-                                    onClick={() => window.location = `/profile/${friendObj.email}`}
+                                    onClick={() => window.location = `/profile/${friend.id}`}
                                     style={{
                                         paddingTop: "20px",
                                         paddingLeft: "20px",
                                         paddingBottom: "20px",
                                     }}
                                 >
-                                    <img className="pfp" src={friendObj.pfpURL}/>
+                                    <img className="pfp" src={friend.pfpURL}/>
                                     <div
                                         style={{
                                             paddingLeft: "20px",
                                         }}
                                     >
-                                        {friendObj.firstName}{" "}
-                                        {friendObj.lastName}
+                                        {friend.firstName}{" "}
+                                        {friend.lastName}
                                     </div>
                                     <div style={{width:'10px'}}></div>
                                     <FriendOpts
-                                        user2Email={friendObj.email}
+                                        user2Id={friend.email}
                                         component="Profile"
                                     />
                                 </div>
@@ -47,19 +46,25 @@ const FriendsTable = ({ friends }) => {
 };
 
 const Other = () => {
-    const { email } = useParams();
+    const { userId } = useParams();
     const [allFriends, setAllFriends] = useState([]);
     const [mutualFriends, setMutualFriends] = useState([]);
-    const auth = useContext(AuthContext);
     const [numOfFriends, setNumOfFriends] = useState();
-    const [profile, setProfile] = useState(false);
+    const [profile, setProfile] = useState(null);
     const loc = useLocation()
     const [tabState, setTabState] = useState("posts")
+    const [friendsTabs, setFriendsTabs] = useState("ALL_FRIENDS");
+    const friendsMap = {
+        ALL_FRIENDS: allFriends,
+        MUTUAL_FRIENDS: mutualFriends,
+    };
+
     useEffect(() => {
-        getUser(auth.token, email).then((response) => {
-            setProfile(response);
+        getUser(userId).then((res) => {
+            setProfile(res);
         });
-        getMutualFriends(auth.token, email, auth.email)
+
+        getMutualFriends(profile.id)
             .then((response) => {
                 console.log("====================================");
                 console.log("56mutual friends", response);
@@ -73,7 +78,7 @@ const Other = () => {
                 console.log("====================================");
             })
             .catch((err) => console.error(err));
-        getFriends(auth.token, email)
+        getFriends(userId)
             .then((response) => {
                 console.log("12", response);
                 setNumOfFriends(response.length);
@@ -101,11 +106,6 @@ const Other = () => {
             .catch((err) => console.error(err));
     }, []);
 
-    const [friendsTabs, setFriendsTabs] = useState("ALL_FRIENDS");
-    const friendsMap = {
-        ALL_FRIENDS: allFriends,
-        MUTUAL_FRIENDS: mutualFriends,
-    };
 
     const FriendsTabsComponent = () => {
         if (friendsTabs === "ALL_FRIENDS") {
@@ -180,12 +180,11 @@ const Other = () => {
 
     return (
         <div style={{ height: "100%" }}>
-            <NavBar />
             <div className="top-overlay"></div>
             <div className="bottom-overlay"></div>
             <div className="profile">
                 <header className="other-header">
-                    <img className="pfp-profile" src={profile.pfpURL}/>
+                    <img className="pfp-profile" src={profile.pfpUrl} alt="Profile"/>
                     <div className="header-text header-text-other">
                         <h1>
                             {profile.firstName} {profile.lastName}
@@ -198,7 +197,7 @@ const Other = () => {
                     </div>
                     <div style={{marginRight: "0", marginTop: "145px"}}>
                         <FriendOpts
-                            user2Email={loc.pathname.split('/')[loc.pathname.split('/').length-1]}
+                            user2Id={loc.pathname.split('/')[loc.pathname.split('/').length-1]}
                             locationState="other-profile"
                             component="Profile"
                         />

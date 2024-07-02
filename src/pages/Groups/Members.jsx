@@ -1,10 +1,8 @@
 import {useContext, useEffect, useState} from "react";
-import {getGroups, getMembers, getFriendsWhoAreNotMembers} from "../../api/withToken";
-import {AuthContext} from "../../context/auth-context";
+import {getFriendsWhoAreNotMembers, getMembers} from "../../api/main-service.js";
 import {GroupContext} from "../../context/group-context.tsx";
 import Modal from "../../components/Modal";
 import {SocketContext} from "../../context/friends-socket-context";
-// import {Dropdown} from 'react-searchable-dropdown-component';
 import { Link, useNavigate } from 'react-router-dom';
 
 // Component to render a list of friends
@@ -13,8 +11,8 @@ const FriendsComponent = ({ arr }) => {
         <ul>
             {arr.map((user) => {
                 return (
-                    <li key={user.email}>
-                        <Link to={`/profile/${user.email}`}>
+                    <li key={user.id}>
+                        <Link to={`/profile/${user.id}`}>
                             <img className="pfp" src={user.pfpURL} alt="profile" /> <span>{`${user.firstName} ${user.lastName}`}</span>
                         </Link>
                     </li>
@@ -27,18 +25,16 @@ const FriendsComponent = ({ arr }) => {
 // Component for managing group members
 const Members = () => {
     const { chatsSocketApi } = useContext(SocketContext)
-    const auth = useContext(AuthContext);
     const groupControl = useContext(GroupContext);
     const { members, setMembers } = useContext(GroupContext);
     const [addMemberModal, setAddMemberModal] = useState(false);
     const [friendsWhoAreNotMembers, setFriendsWhoAreNotMembers] = useState([])
     const [selectedFriends, setSelectedFriends] = useState([]);
     const [searchText, setSearchText] = useState('');
-    const navigate = useNavigate();
 
     // Load friends who are not members when the modal is opened
     useEffect(() => {
-        getFriendsWhoAreNotMembers(auth.token, auth.email, groupControl.selectedGroup.groupId)
+        getFriendsWhoAreNotMembers(groupControl.selectedGroup.groupId)
             .then((response) => {
                 setFriendsWhoAreNotMembers(response);
             })
@@ -53,8 +49,7 @@ const Members = () => {
     // Handler to add selected members to the group
     const addMemberHandler = async () => {
         try {
-            const memberEmails = selectedFriends.map(friend => friend.email);
-            await chatsSocketApi.addMembers(memberEmails, groupControl.selectedGroup.groupId);
+            await chatsSocketApi.addMembers(selectedFriends, groupControl.selectedGroup.groupId);
             setAddMemberModal(false);
             setMembers([...members, ...selectedFriends]);
 
@@ -69,7 +64,7 @@ const Members = () => {
 
     // Load group members when the group changes
     useEffect(() => {
-        getMembers(auth.token, groupControl.selectedGroup.groupId)
+        getMembers(groupControl.selectedGroup.groupId)
             .then((response) => {
                 setMembers(response);
             })
@@ -96,6 +91,7 @@ const Members = () => {
                 <button onClick={() => setAddMemberModal(true)}>Add Member</button>
             </div>
             <h4>Online</h4>
+
             <FriendsComponent arr={members}/>
 
             <h4>Offline</h4>

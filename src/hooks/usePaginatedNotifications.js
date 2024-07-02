@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {getMessages, getNotifications} from "../api/storageService";
 
-export default function usePaginatedNotifications(userId, page, newNotification) {
+export default function usePaginatedNotifications(page, newNotification) {
     const [hasMore, setHasMore] = useState(false)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
@@ -10,10 +10,10 @@ export default function usePaginatedNotifications(userId, page, newNotification)
 
     // Called when scroll reaches last message to load additional page of messages
     useEffect(() => {
-        console.log(`Loading notifications for user: ${userId}`)
+        console.log(`Loading notifications...`)
         setLoading(true)
         setError(false)
-        getNotifications(userId, cursor)
+        getNotifications(cursor)
             .then(value => {
                 if (value) {
                     setCursor(value.cursor ? value.cursor : null);

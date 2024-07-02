@@ -1,20 +1,12 @@
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import React, {useContext, useEffect, useState} from "react";
-import {SocketContext} from "../../context/friends-socket-context.js";
-import {AuthContext} from "../../context/auth-context.js";
 import {GroupContext} from "../../context/group-context.tsx";
-import axios from "axios";
 import {
-    useClientEvent,
-    useJoin,
-    useLocalMicrophoneTrack,
-    usePublish,
-    useRemoteAudioTracks,
     useRemoteUsers, useRemoteVideoTracks,
     useRTCClient,
 } from "agora-rtc-react";
-import useSound from "use-sound";
+
 
 const VoiceChannel = ({ channelName, users }) => {
 
@@ -40,7 +32,7 @@ const VoiceChannel = ({ channelName, users }) => {
     const [channelStyle, setChannelStyle] = React.useState("channel inactive");
 
     useEffect(() => {
-        if (channelName == selectedVoiceChannel) {
+        if (channelName === selectedVoiceChannel) {
             setChannelStyle("channel active");
         } else {
             setChannelStyle("channel inactive");

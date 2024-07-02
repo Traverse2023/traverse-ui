@@ -10,16 +10,13 @@ import {
 } from "agora-rtc-react";
 import {useContext, useEffect, useState} from "react";
 import {GroupContext} from "../context/group-context.jsx";
-import axios from "axios";
-import {AuthContext} from "../context/auth-context.js";
-import VideoPlayer from "./VideoPlayer.js";
+
 import PortableMedia from "./PortableMedia.jsx";
 import {VideoPlayerEnum} from "../hooks/call-hook";
+import {getAgoraRTCToken} from "../api/main-service";
 
 const CallContainer = () => {
-    const auth = useContext(AuthContext)
-
-    const { currentUserUid, setCurrentUserUid, videoPlayerType, setVideoPlayerType, cameraOn, selectedGroup, selectedTextChannel, selectedVoiceChannel, inCall, setInCall, isMuted, agoraConfig, setAgoraConfig, setSpeakerUid } = useContext(GroupContext);
+    const { inCall, setCurrentUserUid, videoPlayerType, cameraOn, selectedGroup, selectedVoiceChannel, isMuted, agoraConfig, setAgoraConfig, setSpeakerUid } = useContext(GroupContext);
     // Unique string to identify channel when creating agora token and connecting to agora
     // @ts-ignore
     const channelId = selectedGroup.groupId + "-" + selectedVoiceChannel;
@@ -46,7 +43,7 @@ const CallContainer = () => {
 
     useEffect(() => {
         //@ts-ignore
-        getAgoraToken().then((config) => setAgoraConfig(config))
+        getToken().then((config) => setAgoraConfig(config))
     }, [selectedVoiceChannel]);
 
     useEffect(() => {
@@ -57,9 +54,8 @@ const CallContainer = () => {
         console.log('invoking cameraOn2', cameraOn)
     }, [cameraOn]);
 
-    const getAgoraToken = async () => {
-        // @ts-ignore
-        const res = await axios.get(import.meta.env.VITE_APP_BACKEND_URL + 'getAgoraToken/' + auth.email + '/' + channelId);
+    const getToken = async () => {
+        const res = await getAgoraRTCToken(channelId);
         const token = res.data.token;
         setCurrentUserUid(res.data.uid)
         console.log("Token:  " + token, "invoking uid: ", res.data.uid)
@@ -72,19 +68,8 @@ const CallContainer = () => {
     }
 
     useJoin(async() => {
-            return getAgoraToken()
-        },
-        inCall
-    );
-    // useJoin(
-    //     {
-    // //         appid: "056e7ee25ec24b4586f17ec177e121d1",
-    // //         channel: channelId,
-    // //
-    // //         token: getAgoraToken()
-    // //     },
-    //     inCall
-    // );
+        return getToken()
+    },  inCall);
 
     audioTracks.map((track) => track.play())
 
@@ -144,7 +129,7 @@ const CallContainer = () => {
                         return null
                 }
             })()
-        :
+            :
             null
     )
 }

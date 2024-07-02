@@ -5,7 +5,6 @@ import Feed from "./Feed";
 const Home = () => {
     return (
         <div style={{height: '100%'}}>
-            <NavBar />
             <Feed />
         </div>
     );

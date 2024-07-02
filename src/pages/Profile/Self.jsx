@@ -4,13 +4,13 @@ import {
     getUser,
     getFriendRequests,
     savePFP,
-} from "../../api/withToken";
+} from "../../api/main-service.js";
 import FriendOpts from "../../components/FriendsOpts";
-import NavBar from "../../components/NavBar";
-import { AuthContext } from "../../context/auth-context";
+
 import { useNavigate } from "react-router-dom";
 
 import ReactS3 from "react-s3";
+import {useAuth} from "../../hooks/useAuth.tsx";
 
 const FriendsTable = ({ allFriends, location, triggers }) => {
     const navigate = useNavigate();
@@ -18,12 +18,12 @@ const FriendsTable = ({ allFriends, location, triggers }) => {
         <table>
             {allFriends.map((arr) => (
                 <tr>
-                    {arr.map((friendObj) =>
-                        friendObj ? (
+                    {arr.map((friend) =>
+                        friend ? (
                             <td>
                                 <div
                                     onClick={() =>
-                                        (window.location = `/profile/${friendObj.email}`)
+                                        (window.location = `/profile/${friend.id}`)
                                     }
                                     style={{
                                         paddingTop: "20px",
@@ -33,19 +33,19 @@ const FriendsTable = ({ allFriends, location, triggers }) => {
                                 >
                                     <img
                                         className="pfp"
-                                        src={friendObj.pfpURL}
+                                        src={friend.pfpURL}
                                     />
                                     <div
                                         style={{
                                             paddingLeft: "20px",
                                         }}
                                     >
-                                        {friendObj.firstName}{" "}
-                                        {friendObj.lastName}
+                                        {friend.firstName}{" "}
+                                        {friend.lastName}
                                     </div>
                                     <div style={{ width: "10px" }}></div>
                                     <FriendOpts
-                                        user2Email={friendObj.email}
+                                        user2Id={friend.id}
                                         component="Profile"
                                         locationState={location}
                                         triggers={triggers}
@@ -61,7 +61,7 @@ const FriendsTable = ({ allFriends, location, triggers }) => {
 };
 
 const Self = () => {
-    const auth = useContext(AuthContext);
+    const {user, updatePfp} = useAuth();
     const [profile, setProfile] = useState(false);
     const [allFriends, setAllFriends] = useState([]);
     const [friendRequests, setFriendRequests] = useState([]);
@@ -70,15 +70,16 @@ const Self = () => {
     const [tabState, setTabState] = useState("posts");
     const [friendsTabState, setFriendsTabState] = useState("friends");
     useEffect(() => {
-        console.log("mounted", auth.pfpURL);
-        getUser(auth.token, auth.email).then((response) => {
-            setProfile(response);
-        });
+        // TODO: Not needed if user is in global state?
+        // console.log("mounted", user.pfpUrl);
+        // getUser().then((response) => {
+        //     setProfile(response);
+        // });
         getFriendsAndReqs();
     }, []);
 
     const getFriendsAndReqs = () => {
-        getFriendRequests(auth.token, auth.email)
+        getFriendRequests()
             .then((response) => {
                 console.log("12", response);
                 setNumOfFriendRequests(response.length);
@@ -95,7 +96,7 @@ const Self = () => {
             })
             .catch((err) => console.error(err));
 
-        getFriends(auth.token, auth.email)
+        getFriends()
             .then((response) => {
                 console.log("12", response);
                 setNumOfFriends(response.length);
@@ -177,14 +178,14 @@ const Self = () => {
                 </div>
                 {friendsTabState === "friends" ? (
                     <FriendsTable
-                        user1Email={auth.email}
+                        user1Email={user.id}
                         allFriends={allFriends}
                         location="friends"
                         triggers={[getFriendsAndReqs]}
                     />
                 ) : (
                     <FriendsTable
-                        user1Email={auth.email}
+                        user1Email={user.id}
                         allFriends={friendRequests}
                         location="friendReqs"
                         triggers={[getFriendsAndReqs]}
@@ -203,26 +204,28 @@ const Self = () => {
     };
 
     const uploadPfp = (e) => {
+        // TODO: Do not interact with s3 directly. Make bucket private
         console.log(e.target.files[0]);
         ReactS3.uploadFile(e.target.files[0], config)
             .then((data) => {
                 console.log(data);
-                savePFP(auth.token, auth.email, data.location);
-                auth.updatePfpURL(data.location);
+                savePFP(data.location).then((url) =>{
+                    updatePfp(data.location);
+                } );
+
             })
             .catch((err) => alert(err));
     };
 
     return (
         <div style={{ height: "100%" }}>
-            <NavBar />
             <div className="top-overlay"></div>
             <div className="bottom-overlay"></div>
             <div className="profile">
                 <header>
                     <img
-                        onClick={() => console.log("185", auth.pfpURL)}
-                        src={auth.pfpURL}
+                        onClick={() => console.log("185", user.pfpUrl)}
+                        src={user.pfpUrl}
                         className="pfp-profile"
                     ></img>
                     <div className="pfp-edit-container">
@@ -239,7 +242,7 @@ const Self = () => {
                     </div>
                     <div className="header-text">
                         <h1>
-                            {profile.firstName} {profile.lastName}
+                            {user.firstName} {user.lastName}
                         </h1>
 
                         <h4>

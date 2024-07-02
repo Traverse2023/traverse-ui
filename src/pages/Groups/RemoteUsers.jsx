@@ -1,12 +1,11 @@
 
 import {useContext, useEffect} from "react";
-import {AuthContext} from "../../context/auth-context.js";
 import {RemoteAudioTrack} from "agora-rtc-react";
 export function RenderRemoteUsers({ videoTracks, audioTracks }) {
     useEffect(() => {
         console.log('audioTracks', audioTracks)
     }, [audioTracks]);
-    const auth = useContext(AuthContext)
+    const auth = useContext()
     return (
         <>
             {/*{videoTracks.map((track) => (*/}

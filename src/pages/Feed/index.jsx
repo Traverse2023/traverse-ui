@@ -1,7 +1,6 @@
 import FeedArea from "./FeedArea";
 import React, {useEffect, useState} from "react";
-import Draggable from 'react-draggable'
-import CallContainer from "../../components/CallContainer.tsx";
+
 
 const Feed = () => {
     const [showComments, setShowComments] = useState(false)

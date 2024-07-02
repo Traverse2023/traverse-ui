@@ -1,14 +1,15 @@
 import io from "socket.io-client";
 
 class NotificationSocket {
-    email;
+    userId;
     socket
 
-    constructor(email) {
-        this.email = email
-        this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}notifications`, {
+    constructor(userId, token) {
+        this.userId = userId
+        this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}/notifications`, {
             query: {
-                email: email
+                userId: userId,
+                access_token: token
             }
         });
     }

@@ -9,7 +9,7 @@ import {
 } from "agora-rtc-react";
 import {useContext} from "react";
 
-import {AuthContext} from "../../context/auth-context.js";
+import {} from "../../context/auth-context.js";
 
 export function Room({
                          micOn,
@@ -19,7 +19,7 @@ export function Room({
                          renderRemoteUsers,
                      }) {
     const isConnected = useIsConnected();
-    const auth = useContext(AuthContext)
+    const auth = useContext()
     const uid = useCurrentUID() || 0;
     const userName = auth.firstName + " " + auth.lastName
     const userAvatar = auth.pfpURL
