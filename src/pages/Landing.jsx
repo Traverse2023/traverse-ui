@@ -11,6 +11,7 @@ import Creator from "../components/Creator.tsx";
 import {faGithub} from "@fortawesome/free-brands-svg-icons";
 
 
+
 const Landing = () => {
     const [loginModal, setLoginModal] = React.useState(false);
     const [createModal, setCreateModal] = React.useState(false);
@@ -72,11 +73,6 @@ const Landing = () => {
             toast.warn(err.message, {position: "top-center"});
         });
     };
-
-    const iconMap = new Map([
-            ["LinkedIn", <FontAwesomeIcon icon={faLinkedin} style={{height: "25px"}} />]
-        ]
-    )
 
     const members = [
        {
@@ -171,7 +167,6 @@ const Landing = () => {
             position: "Product Manager & Scrum Master"
         }
     ]
-
 
 
     const iconMap = new Map([
