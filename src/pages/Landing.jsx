@@ -7,9 +7,13 @@ import {useAuth} from "../hooks/useAuth.tsx";
 import * as Yup from "yup";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLinkedin} from "@fortawesome/free-brands-svg-icons";
+<<<<<<< HEAD
 import Creator from "../components/Creator.tsx";
 import {faGithub} from "@fortawesome/free-brands-svg-icons";
 
+=======
+import {faGithub} from "@fortawesome/free-brands-svg-icons";
+>>>>>>> 48105b3 (the social media icons have color now)
 
 const Landing = () => {
     const [loginModal, setLoginModal] = React.useState(false);
@@ -171,108 +175,6 @@ const Landing = () => {
             position: "Product Manager & Scrum Master"
         }
     ]
-
-<<<<<<< HEAD
-=======
-        if ("email" in userInfo && "firstName" in userInfo && "lastName" in userInfo && "password" in userInfo) {
-            registerToast.current = toast.loading("Creating Account...")
-            register(
-                userInfo.email,
-                userInfo.password,
-                userInfo.firstName,
-                userInfo.lastName
-            )
-                .then((value) => {
-                    setCreateModal(false)
-                    toast.update(registerToast.current, {
-                        position: "top-right",
-                        type: "success",
-                        isLoading: false,
-                        render: "Account Created!",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        closeButton: true
-                    })
-                    // toast.success("Account Created!")
-                })
-                .catch((err) => {
-                    toast.update(registerToast.current, {
-                        position: "top-center",
-                        type: "error",
-                        isLoading: false,
-                        render: err.response.data.msg,
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        closeButton: true
-                    })
-                    // notify(err.response.data.msg)
-                    console.log(err);
-                });
-        } else {
-            notify("Please fill out all fields")
-        }
-    };
-
-    const [loginModal, setLoginModal] = React.useState(false);
-    const [loginInfo, setLoginInfo] = React.useState({});
-
-    const loginInfoHandler = (event) => {
-        setLoginInfo((prev) => {
-            return {
-                ...prev,
-                [event.target.id]: event.target.value,
-            };
-        });
-    };
-
-    const loginHandler = () => {
-        if ("email" in loginInfo && "password" in loginInfo) {
-            loginToast.current = toast.loading("Logging In...")
-            login(loginInfo.email, loginInfo.password)
-                .then((value) => {
-                    console.log(value)
-                    auth.acceptLogin(loginInfo.email, value.firstName, value.lastName, value.pfpURL,  value.token);
-                    toast.update(loginToast.current, {
-                        position: "top-right",
-                        type: "success",
-                        isLoading: false,
-                        render: "Logged In!",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        closeButton: true
-                    })
-                })
-                .catch((err) => {
-                    console.log(err);
-                    toast.update(loginToast.current, {
-                        position: "top-center",
-                        type: "error",
-                        isLoading: false,
-                        render: err.response.data.msg,
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        closeButton: true
-                    })
-                });
-        } else {
-            notify("Please fill out all fields.")
-        }
-    };
-
-    const iconMap = new Map([
-            ["LinkedIn", <FontAwesomeIcon icon={faLinkedin} style={{height: "25px"}} />],
-            ["GitHub", <FontAwesomeIcon icon={faGithub} style={{height: "25px"}} />]
-        ]
-    )
->>>>>>> 48105b3 (the social media icons have color now)
 
     return (
         <React.Fragment>
