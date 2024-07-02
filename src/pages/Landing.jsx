@@ -7,13 +7,9 @@ import {useAuth} from "../hooks/useAuth.tsx";
 import * as Yup from "yup";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLinkedin} from "@fortawesome/free-brands-svg-icons";
-<<<<<<< HEAD
 import Creator from "../components/Creator.tsx";
 import {faGithub} from "@fortawesome/free-brands-svg-icons";
 
-=======
-import {faGithub} from "@fortawesome/free-brands-svg-icons";
->>>>>>> 48105b3 (the social media icons have color now)
 
 const Landing = () => {
     const [loginModal, setLoginModal] = React.useState(false);
@@ -175,6 +171,15 @@ const Landing = () => {
             position: "Product Manager & Scrum Master"
         }
     ]
+
+
+
+    const iconMap = new Map([
+            ["LinkedIn", <FontAwesomeIcon icon={faLinkedin} style={{height: "25px"}} />],
+            ["GitHub", <FontAwesomeIcon icon={faGithub} style={{height: "25px"}} />]
+        ]
+    )
+
 
     return (
         <React.Fragment>

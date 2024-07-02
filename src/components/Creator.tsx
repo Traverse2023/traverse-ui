@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-import {Link} from "react-router-dom";
-import LinkedIn from "./icons/LinkedIn";
-import Github from "./icons/Github";
 
-=======
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faLinkedin, faGithub} from "@fortawesome/free-brands-svg-icons";
 import {Link} from "react-router-dom";
@@ -11,7 +6,6 @@ import Modal from "../components/Modal";
 import {useState} from "react";
 import LinkedIn from "./icons/LinkedIn";
 import Github from "./icons/Github";
->>>>>>> 48105b3 (the social media icons have color now)
 
 type Social = {
     link: string
