@@ -1,19 +1,18 @@
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import React, {useContext, useEffect, useState} from "react";
-import {GroupContext} from "../../context/group-context.tsx";
+import React, { useContext, useEffect, useState } from "react";
+import { GroupContext } from "../../context/group-context.tsx";
 
 
-const TextChannel = ({channelName}) => {
-    const {showVideoView, selectedTextChannel, setSelectedTextChannel, setShowVideoView} = useContext(GroupContext);
+const TextChannel = ({ channelName }) => {
+    const { showVideoView, selectedTextChannel, setSelectedTextChannel, setShowVideoView, selectedGroup } = useContext(GroupContext);
     const [channelStyle, setChannelStyle] = React.useState("channel inactive");
-
     useEffect(() => {
 
     }, [showVideoView]);
 
     useEffect(() => {
-        if (showVideoView){
+        if (showVideoView) {
             setChannelStyle("channel inactive");
         } else {
             if (channelName === selectedTextChannel) {
@@ -28,6 +27,7 @@ const TextChannel = ({channelName}) => {
         <div className={channelStyle} onClick={() => {
             setSelectedTextChannel(channelName)
             setShowVideoView(false)
+            chatsSocketApi.joinRoom(selectedGroup.groupId, channelName)
         }}>
             <h1>#</h1>
             <h6>{channelName}</h6>

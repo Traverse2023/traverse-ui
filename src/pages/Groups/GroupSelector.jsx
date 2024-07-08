@@ -3,8 +3,8 @@ import { getGroups } from "../../api/withToken";
 import { AuthContext } from "../../context/auth-context";
 import { GroupContext } from "../../context/group-context.tsx";
 import ChatSocket from "../../sockets/chat";
-import {SocketContext} from "../../context/friends-socket-context";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import { SocketContext } from "../../context/friends-socket-context";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const GroupSelector = () => {
     const groupControl = useContext(GroupContext);
@@ -17,7 +17,7 @@ const GroupSelector = () => {
     useEffect(() => {
         if (state) {
             console.log('17', state)
-            groupControl.setSelectedGroup({groupId: state, groupName: "X"})
+            groupControl.setSelectedGroup({ groupId: state, groupName: "X" })
         }
     }, [state]);
 
@@ -40,9 +40,12 @@ const GroupSelector = () => {
         //     state: { resetState: true },
         // });
 
-        groupControl.setSelectedGroup({groupId: event.target.id, groupName: event.target.getAttribute("data-name")});
-        // chatsSocketApi.disconnect()
-        chatsSocketApi.joinRoom(event.target.id)
+        groupControl.setSelectedGroup({
+            groupId: event.target.id,
+            groupName: event.target.getAttribute("data-name")
+        });
+        chatsSocketApi.disconnect()
+        chatsSocketApi.joinRoom(event.target.id, "general")
     };
 
     console.log("7", groupControl.selectedGroup);

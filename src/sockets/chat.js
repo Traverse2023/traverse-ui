@@ -41,20 +41,18 @@ class ChatSocket {
         this.socket.on('disconnectCallListener', callback)
     }
 
-    joinRoom(groupId) {
+    joinRoom(groupId, selectedTextChannel) {
         console.log("injoinroom15")
-        this.socket.emit("joinRoom", groupId)
+        this.socket.emit("joinRoom", groupId, selectedTextChannel)
     }
-
-
 
     joinMessageListener(callback) {
         console.log("20joinMessageReceive")
         this.socket.on('joinMessage', callback);
     }
 
-    addMembers(potentialMembers, groupId) {
-        this.socket.emit("addMembers", potentialMembers, groupId);
+    addMembers(potentialMembers, groupId, selectedTextChannel) {
+        this.socket.emit("addMembers", potentialMembers, groupId, selectedTextChannel);
     }
 
     receiveAddedToGroupNotificationListener(callback) {

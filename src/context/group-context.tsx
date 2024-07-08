@@ -1,9 +1,9 @@
-import {createContext, Dispatch, SetStateAction, useContext, useEffect, useState} from "react";
-import {getMembers} from "../api/withToken.js";
-import {AuthContext} from "./auth-context.js";
-import {SocketContext} from "./friends-socket-context.js";
-import {UID, useRTCClient} from "agora-rtc-react";
-import {useCall, VideoPlayerEnum} from "../hooks/call-hook.js";
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import { getMembers } from "../api/withToken.js";
+import { AuthContext } from "./auth-context.js";
+import { SocketContext } from "./friends-socket-context.js";
+import { UID, useRTCClient } from "agora-rtc-react";
+import { useCall, VideoPlayerEnum } from "../hooks/call-hook.js";
 
 type Member = {
     lastName: string
@@ -19,6 +19,7 @@ interface GroupContextType {
     selectedGroup: string
     // Defines the user selected text channel. User can be part of a text channel as well as a voice channel.
     selectedTextChannel: string
+    setSelectedTextChannel: () => void
     selectedVoiceChannel: string | null,
     setSelectedVoiceChannel: () => void,
     members: Member[],
@@ -44,36 +45,37 @@ interface GroupContextType {
 export const GroupContext = createContext<GroupContextType>({
     selectedGroup: "control-center",
     showVideoView: false,
-    setShowVideoView: () => {},
+    setShowVideoView: () => { },
     selectedTextChannel: "general",
+    setSelectedTextChannel: () => { },
     selectedVoiceChannel: null,
-    setSelectedVoiceChannel: () => {},
+    setSelectedVoiceChannel: () => { },
     members: [],
     messages: [],
     setMembers: () => { },
     inCall: false,
-    setInCall: () => {},
+    setInCall: () => { },
     isMuted: false,
-    setIsMuted: () => {},
+    setIsMuted: () => { },
     videoPlayerType: VideoPlayerEnum.FIT,
-    setVideoPlayerType: () => {},
+    setVideoPlayerType: () => { },
     cameraOn: false,
-    setCameraOn: () => {},
+    setCameraOn: () => { },
     agoraConfig: {},
     //@ts-ignore
-    setAgoraConfig: () => {},
+    setAgoraConfig: () => { },
     speakerUid: null,
     //@ts-ignore
-    setSpeakerUid: () => {},
+    setSpeakerUid: () => { },
     currentUserUid: null,
     //@ts-ignore
-    setCurrentUserUid: () => {}
+    setCurrentUserUid: () => { }
 });
 
 // @ts-ignore
-export const GroupProvider = ({children}) => {
+export const GroupProvider = ({ children }) => {
     const [selectedGroup, setSelectedGroup] = useState(
-        {groupId: "control-center", groupName: "control-center"});
+        { groupId: "control-center", groupName: "control-center" });
 
     const [selectedTextChannel, setSelectedTextChannel] = useState("general");
     const [showVideoView, setShowVideoView] = useState(false)
@@ -81,7 +83,7 @@ export const GroupProvider = ({children}) => {
     const [members, setMembers] = useState([])
     // const [isPortableMediaToggled, setIsPortableMediaToggled] = useState(false)
     // @ts-ignore
-    const {token} = useContext(AuthContext)
+    const { token } = useContext(AuthContext)
 
     //get members whenever group is changed
     useEffect(() => {
@@ -107,7 +109,7 @@ export const GroupProvider = ({children}) => {
             showVideoView: showVideoView,
             setShowVideoView: setShowVideoView,
             ...callHookStates
-            }}>
+        }}>
             {children}
         </GroupContext.Provider>
     )
