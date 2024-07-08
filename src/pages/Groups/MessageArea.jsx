@@ -1,11 +1,10 @@
 import React, {createRef, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import { SocketContext } from "../../context/friends-socket-context";
 import { GroupContext } from "../../context/group-context.tsx";
-import { AuthContext } from "../../context/auth-context";
-import { VideoPlayerEnum } from "../../hooks/call-hook.ts";
 import usePaginatedMessages from "../../hooks/usePaginatedMessages";
 import VideoPlayer from "../../components/VideoPlayer.tsx";
 import {useInView} from 'react-intersection-observer';
+import {useAuth} from "../../hooks/useAuth.tsx";
 
 
 function scrollToBottom(botRef){
@@ -16,16 +15,15 @@ function scrollToBottom(botRef){
     }
 }
 const MessageArea = () => {
+    const {user} = useAuth();
+    const {showVideoView, selectedGroup,selectedTextChannel, members} = useContext(GroupContext);
 
-    const auth = useContext(AuthContext)
-    const {showVideoView, selectedGroup,selectedTextChannel, members, cameraOn, videoPlayerType} = useContext(GroupContext);
     const [typedMsg, setTypedMsg] = useState("")
     const { chatsSocketApi } = useContext(SocketContext)
 
     const [newMessageData, setNewMessageData] = useState("");
     const [page, setPage] = useState(0);
     const { messages, error, loading, hasMore } = usePaginatedMessages(selectedGroup.groupId, selectedTextChannel, page, newMessageData);
-
     const typedMsgChangeHandler = (event) => {
         setTypedMsg(event.target.value);
     }
@@ -46,7 +44,7 @@ const MessageArea = () => {
                 const message_info = {
                     msg: typedMsg,
                     channelName: selectedTextChannel,
-                    email: auth.email,
+                    email: user.username,
                     members: members,
                     groupName: selectedGroup.groupName
                 }
@@ -89,9 +87,13 @@ const MessageArea = () => {
 
     return (
         showVideoView ?
-                <VideoPlayer /> :
 
-        <div className="messageArea">
+            <VideoPlayer />
+
+
+            :
+
+            <div className="messageArea">
             <header># {selectedTextChannel}</header>
             <div className="text-area">
                 <div ref={ref}><li>top</li></div>

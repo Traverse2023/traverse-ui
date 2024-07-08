@@ -66,7 +66,6 @@ const Post = ({type, content}) => {
                 <FeedComments/>
             </div>
             :<div>
-                <NavBar />
                 Post
             </div>
 

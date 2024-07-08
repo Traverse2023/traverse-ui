@@ -1,7 +1,8 @@
-import React, {useState, useCallback, useEffect, useContext} from "react";
+import {useState,  useEffect, useContext} from "react";
 import {SocketContext} from "../context/friends-socket-context.js";
-import {FetchArgs, useRTCClient} from "agora-rtc-react";
-import {AuthContext} from "../context/auth-context.js";
+import {useRTCClient} from "agora-rtc-react";
+import {useAuth} from "./useAuth";
+
 
 export enum VideoPlayerEnum {
     PORTABLE,
@@ -10,8 +11,7 @@ export enum VideoPlayerEnum {
 }
 
 export const useCall = (selectedGroup: any) => {
-    const auth = useContext(AuthContext)
-
+    const {user} = useAuth();
     //call states
     const [inCall, setInCall] = useState(false)
     const [channelUsersMap, setChannelUsersMap] = useState(new Map(["general", "announcements", "events"].map(channelName => [channelName, []])))
@@ -47,10 +47,10 @@ export const useCall = (selectedGroup: any) => {
         client.enableAudioVolumeIndicator()
         // @ts-ignore
         chatsSocketApi.joinCall({
-            email: auth.email,
-            firstName: auth.firstName,
-            lastName: auth.lastName,
-            pfpURL: auth.pfpURL,
+            email: user?.username,
+            firstName: user?.firstName,
+            lastName: user?.lastName,
+            pfpURL: user?.pfpUrl,
             agoraUid: agoraConfig.uid
         }, selectedGroup, selectedVoiceChannel)
         setInCall(true);
@@ -61,11 +61,13 @@ export const useCall = (selectedGroup: any) => {
             joinVoiceChannel().then(res => console.log(res)).catch(err => console.log(err));
         }
     }, [selectedVoiceChannel])
+
+
     useEffect(() => {
         if (!inCall) {
             console.log("removing self from voice channel")
             removeUser(selectedVoiceChannel, {
-                email: auth.email
+                id: user?.id
             })
 
         }
@@ -79,7 +81,7 @@ export const useCall = (selectedGroup: any) => {
             console.log('going thru channels', currChannelName, users)
             for (let i = 0; i < users.length; i++) {
                 const existingUser = users[i]
-                if (existingUser.email === user.email) {
+                if (existingUser.Id === user.id) {
                     console.log('found user in this channel, deleting...')
                     users.splice(i, 1)
                     console.log('new array', users)
@@ -88,7 +90,7 @@ export const useCall = (selectedGroup: any) => {
                 }
             }
         }
-        console.log(user.email, 'disconnected from', channelName)
+        console.log(user.id, 'disconnected from', channelName)
         setChannelUsersMap(updatedChannels);
     }
     const addUser = (channelName: any, user: any) => {
@@ -104,7 +106,7 @@ export const useCall = (selectedGroup: any) => {
             console.log('going thru channels', currChannelName, users)
             for (let i = 0; i < users.length; i++) {
                 const existingUser = users[i]
-                if (existingUser.email === user.email) {
+                if (existingUser.id === user.id) {
                     console.log('found user in this channel, deleting...')
                     users.splice(i, 1)
                     console.log('new array', users)

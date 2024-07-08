@@ -5,7 +5,6 @@ const Search = () => {
     return (
         <div>
             <div className="sticky-top">
-                <NavBar />
                 <div
                     style={{
                         height: "fit-content",

@@ -10,7 +10,6 @@ const Algo = () => {
     ];
     return (
         <div className="algo-container">
-            <NavBar />
             <GridLayout
                 className="layout"
                 layout={layout}
