@@ -1,7 +1,7 @@
 import React from "react";
 import Overlay from "react-bootstrap/Overlay";
 
-export const titleOverlayTargetHandler = (target, show, setShow) => {
+const titleOverlayTargetHandler = (target, show, setShow) => {
     setShow(!show);
     if (show) {
         target.current.innerHTML = "&#8735;";
@@ -42,4 +42,5 @@ const ServerOptsOverlay = ({target, show}) => {
     );
 };
 
-export default ServerOptsOverlay;
+export { ServerOptsOverlay, titleOverlayTargetHandler };
+

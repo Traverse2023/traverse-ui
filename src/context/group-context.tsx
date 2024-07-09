@@ -1,9 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
-import { getMembers } from "../api/withToken.js";
-import { AuthContext } from "./auth-context.js";
-import { SocketContext } from "./friends-socket-context.js";
 import { UID, useRTCClient } from "agora-rtc-react";
 import { useCall, VideoPlayerEnum } from "../hooks/call-hook.js";
+import { getMembers } from "../api/main-service";
 
 type Member = {
     lastName: string
@@ -15,16 +13,16 @@ type Member = {
 
 interface GroupContextType {
     showVideoView: boolean
-    setShowVideoView: () => void
-    selectedGroup: string
+    setShowVideoView: (showVideoView: boolean) => void
+    selectedGroup: { groupId: string, groupName: string }
     // Defines the user selected text channel. User can be part of a text channel as well as a voice channel.
     selectedTextChannel: string
     setSelectedTextChannel: () => void
     selectedVoiceChannel: string | null,
-    setSelectedVoiceChannel: () => void,
+    setSelectedVoiceChannel: (selectedVoiceChannel: boolean) => void,
     members: Member[],
     messages: any,
-    setMembers: () => void,
+    setMembers: (members: Member[]) => void,
     inCall: boolean,
     setInCall: () => void
     isMuted: boolean
@@ -32,7 +30,7 @@ interface GroupContextType {
     videoPlayerType: VideoPlayerEnum
     setVideoPlayerType: (videoPlayerType: VideoPlayerEnum) => void
     cameraOn: boolean
-    setCameraOn: () => void
+    setCameraOn: (cameraOn: boolean) => void
     agoraConfig: any
     setAgoraConfig: () => {}
     speakerUid: number | null
@@ -43,7 +41,7 @@ interface GroupContextType {
 
 
 export const GroupContext = createContext<GroupContextType>({
-    selectedGroup: "control-center",
+    selectedGroup: { groupId: "control-center", groupName: "control-center" },
     showVideoView: false,
     setShowVideoView: () => { },
     selectedTextChannel: "general",
@@ -82,20 +80,17 @@ export const GroupProvider = ({ children }) => {
     const callHookStates = useCall(selectedGroup)
     const [members, setMembers] = useState([])
     // const [isPortableMediaToggled, setIsPortableMediaToggled] = useState(false)
-    // @ts-ignore
-    const { token } = useContext(AuthContext)
+
 
     //get members whenever group is changed
     useEffect(() => {
-        getMembers(token, selectedGroup.groupId)
+        getMembers(selectedGroup.groupId)
             .then((response) => {
                 setMembers(response);
                 console.log('54', response);
             })
-            .catch((err) => console.error(err));
+            .catch((err: any) => console.error(err));
     }, [selectedGroup.groupId]);
-
-
 
 
     return (

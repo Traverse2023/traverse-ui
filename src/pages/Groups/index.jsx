@@ -13,8 +13,8 @@ const Groups = () => {
 
     return (
         <div style={{ height: "100%" }}>
+
             <div className="groupsContainer">
-                <NavBar />
                 <GroupSelector />
                 {selectedGroup.groupId !== "control-center" ? (
                     <>

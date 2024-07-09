@@ -6,52 +6,57 @@ import {useLocalMicrophoneTrack, useRTCClient} from "agora-rtc-react";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import {SocketContext} from "../../context/friends-socket-context.js";
-import {AuthContext} from "../../context/auth-context.js";
+import {useAuth} from "../../hooks/useAuth.tsx";
 
 const MediaControls = () => {
-    const groupControl = useContext(GroupContext)
-    const auth = useContext(AuthContext)
+    const {user} = useAuth()
+    const {setInCall, selectedGroup,
+        selectedVoiceChannel, inCall, setShowVideoView,
+        setIsMuted, setCameraOn, setSelectedVoiceChannel,
+        cameraOn, isMuted, showVideoView} = useContext(GroupContext)
     const { chatsSocketApi } = useContext(SocketContext)
     const client = useRTCClient();
     const { isLoading: isLoadingMic, localMicrophoneTrack } = useLocalMicrophoneTrack();
     const disconnectVoiceChannel = async() => {
-        groupControl.setInCall(false);
+        setInCall(false);
         console.log('localmictrack', localMicrophoneTrack);
 
         await localMicrophoneTrack?.setEnabled(false);
-        await localMicrophoneTrack?.stop();
+        localMicrophoneTrack?.stop();
         await client.leave();
-        groupControl.setSelectedVoiceChannel(null);
+        setSelectedVoiceChannel(null);
         chatsSocketApi.disconnectCall({
-            email: auth.email
-        }, groupControl.selectedGroup, groupControl.selectedVoiceChannel)
+            id: user.id
+        }, selectedGroup, selectedVoiceChannel)
         // groupControl.setTriggerDisconnect(prevState => !prevState)
     }
     const mute = async () => {
         console.log('mute')
-        groupControl.setIsMuted(true)
+        setIsMuted(true)
         // await localMicrophoneTrack?.setMuted(true);
     }
     const unmute = async () => {
-        groupControl.setIsMuted(false)
+        setIsMuted(false)
         console.log('unmute')
         // await localMicrophoneTrack?.setEnabled(true);
     }
 
     const turnOnCamera = () => {
         console.log("turning on camera")
-        groupControl.setCameraOn(true)
+        setCameraOn(true)
     }
 
     useEffect(() => {
-        console.log('invoking cameraON', groupControl.cameraOn)
-    }, [groupControl.cameraOn]);
+        console.log('invoking cameraON', cameraOn)
+    }, [cameraOn]);
+
+
 
     return (
-        groupControl.inCall ?
+        inCall ?
             <div className="media-controls">
                 {
-                    groupControl.isMuted ?
+                    isMuted ?
                         <OverlayTrigger
                             placement="top"
                             delay={{ show: 250, hide: 400 }}
@@ -73,7 +78,7 @@ const MediaControls = () => {
                         </OverlayTrigger>
 
                 }
-                {groupControl.cameraOn ?
+                {cameraOn ?
                     <OverlayTrigger
                         placement="top"
                         delay={{ show: 250, hide: 400 }}
@@ -81,7 +86,11 @@ const MediaControls = () => {
                             <Tooltip className="tooltip">Turn Off Camera</Tooltip>
                         }
                     >
-                        <FontAwesomeIcon onClick={() => groupControl.setCameraOn(prevState => !prevState)} icon={faVideoSlash} className="media-control-icon"/>
+                            <FontAwesomeIcon onClick={() => {
+                                setCameraOn(false)
+                                console.log(`Camera on: ${cameraOn} in controls`)
+                            }
+                            } icon={faVideoSlash} className="media-control-icon"/>
                     </OverlayTrigger>
                     :
                     <OverlayTrigger
@@ -92,8 +101,9 @@ const MediaControls = () => {
                         }
                     >
                         <FontAwesomeIcon onClick={() => {
-                            groupControl.setCameraOn(prevState => !prevState)
-                            groupControl.setShowVideoView(true)
+                            setCameraOn(true)
+                            setShowVideoView(true)
+                            console.log(`Camera on: ${cameraOn}\nShowVideoView: ${showVideoView}`)
                         }} icon={faVideo} className="media-control-icon"/>
                     </OverlayTrigger>
                 }

@@ -3,33 +3,76 @@ import {Link} from "react-router-dom";
 import Modal from "../components/Modal";
 import {ToastContainer, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
-import {login, register} from "../api/auth";
-import {AuthContext} from "../context/auth-context";
-import Creator from "../components/Creator.tsx";
+import {useAuth} from "../hooks/useAuth.tsx";
+import * as Yup from "yup";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLinkedin} from "@fortawesome/free-brands-svg-icons";
+import Creator from "../components/Creator.tsx";
 import {faGithub} from "@fortawesome/free-brands-svg-icons";
 
+
+
 const Landing = () => {
-    const notify = (msg) => toast.error(msg, {position: "top-center"})
-    const registerToast = useRef(null)
-    const loginToast = useRef(null)
+    const [loginModal, setLoginModal] = React.useState(false);
     const [createModal, setCreateModal] = React.useState(false);
+    const { login, register } = useAuth();
+    const [bioModal, setBioModal] = useState(false);
+    const [selectedCreator, setSelectedCreator] = useState(false)
+    const [loginInfo, setLoginInfo] = React.useState({});
+    const [registerInfo, setRegisterInfo] = React.useState({});
 
-    const auth = React.useContext(AuthContext);
+    const loginValidation = Yup.object().shape({
+        email: Yup.string().required("Email address is required"),
+        password: Yup.string().required("Password is required"),
+    })
 
-    const [userInfo, setUserInfo] = React.useState({});
+    const registerValidation = Yup.object().shape({
+        firstName: Yup.string().required("First name is required"),
+        lastName: Yup.string().required("Last name is required"),
+        email: Yup.string().required("Email address is required"),
+        password: Yup.string().required("Password is required"),
+        // confirmPassword: Yup.string().required(),
+    })
 
+    // Update state when user types in login form
     const userInfoHandler = (event) => {
-        setUserInfo((prev) => {
+        setRegisterInfo((prev) => {
             return {
                 ...prev,
                 [event.target.id]: event.target.value,
             };
         });
     };
-    const [bioModal, setBioModal] = useState(false);
-    const [selectedCreator, setSelectedCreator] = useState(false)
+
+    const loginInfoHandler = (event) => {
+        setLoginInfo((prev) => {
+            return {
+                ...prev,
+                [event.target.id]: event.target.value,
+            };
+        });
+    };
+
+    // Handle registration. Perform input validation then call hook to register
+    const registerHandler = async () => {
+        registerValidation.validate(registerInfo).then(() =>
+            register(loginInfo.firstName, loginInfo.lastName, loginInfo.email, loginInfo.password)
+        ).catch(err => {
+            console.log(`Error validating register ${err}`);
+            toast.warn(err.message, {position: "top-center"});
+        })
+    };
+
+
+    // Validate login inputs then call login hook
+    const loginHandler = async () => {
+        loginValidation.validate(loginInfo).then( () =>
+            login(loginInfo.email, loginInfo.password)
+        ).catch(err => {
+            console.log(`Error validating login: ${err}`);
+            toast.warn(err.message, {position: "top-center"});
+        });
+    };
 
     const members = [
        {
@@ -124,106 +167,14 @@ const Landing = () => {
             position: "Product Manager & Scrum Master"
         }
     ]
-    const registerHandler = () => {
 
-        if ("email" in userInfo && "firstName" in userInfo && "lastName" in userInfo && "password" in userInfo) {
-            registerToast.current = toast.loading("Creating Account...")
-            register(
-                userInfo.email,
-                userInfo.password,
-                userInfo.firstName,
-                userInfo.lastName
-            )
-                .then((value) => {
-                    setCreateModal(false)
-                    toast.update(registerToast.current, {
-                        position: "top-right",
-                        type: "success",
-                        isLoading: false,
-                        render: "Account Created!",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        closeButton: true
-                    })
-                    // toast.success("Account Created!")
-                })
-                .catch((err) => {
-                    toast.update(registerToast.current, {
-                        position: "top-center",
-                        type: "error",
-                        isLoading: false,
-                        render: err.response.data.msg,
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        closeButton: true
-                    })
-                    // notify(err.response.data.msg)
-                    console.log(err);
-                });
-        } else {
-            notify("Please fill out all fields")
-        }
-    };
-
-    const [loginModal, setLoginModal] = React.useState(false);
-    const [loginInfo, setLoginInfo] = React.useState({});
-
-    const loginInfoHandler = (event) => {
-        setLoginInfo((prev) => {
-            return {
-                ...prev,
-                [event.target.id]: event.target.value,
-            };
-        });
-    };
-
-    const loginHandler = () => {
-        if ("email" in loginInfo && "password" in loginInfo) {
-            loginToast.current = toast.loading("Logging In...")
-            login(loginInfo.email, loginInfo.password)
-                .then((value) => {
-                    console.log(value)
-                    auth.acceptLogin(loginInfo.email, value.firstName, value.lastName, value.pfpURL,  value.token);
-                    toast.update(loginToast.current, {
-                        position: "top-right",
-                        type: "success",
-                        isLoading: false,
-                        render: "Logged In!",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        closeButton: true
-                    })
-                })
-                .catch((err) => {
-                    console.log(err);
-                    toast.update(loginToast.current, {
-                        position: "top-center",
-                        type: "error",
-                        isLoading: false,
-                        render: err.response.data.msg,
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        closeButton: true
-                    })
-                });
-        } else {
-            notify("Please fill out all fields.")
-        }
-    };
 
     const iconMap = new Map([
             ["LinkedIn", <FontAwesomeIcon icon={faLinkedin} style={{height: "25px"}} />],
             ["GitHub", <FontAwesomeIcon icon={faGithub} style={{height: "25px"}} />]
         ]
     )
+
 
     return (
         <React.Fragment>
@@ -554,9 +505,9 @@ const Landing = () => {
                 <ul className="menu">
                     <li className="menu__item"><a className="menu__link" href="#">Home</a></li>
                     <li className="menu__item"><a className="menu__link" href="#">About</a></li>
-                    <li class="menu__item"><a class="menu__link" href="#">Services</a></li>
-                    <li class="menu__item"><a class="menu__link" href="#">Team</a></li>
-                    <li class="menu__item"><a class="menu__link" href="#">Contact</a></li>
+                    <li className="menu__item"><a className="menu__link" href="#">Services</a></li>
+                    <li className="menu__item"><a className="menu__link" href="#">Team</a></li>
+                    <li className="menu__item"><a className="menu__link" href="#">Contact</a></li>
 
                 </ul>
                 <p>&copy;2024 Traverse | All Rights Reserved</p>

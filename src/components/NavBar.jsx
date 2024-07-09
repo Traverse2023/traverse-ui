@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useSound from "use-sound";
-import { AuthContext } from "../context/auth-context";
 import { SocketContext } from "../context/friends-socket-context";
 
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -17,10 +16,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GroupContext } from "../context/group-context.tsx";
 import CallContainer from "./CallContainer.tsx";
 import usePaginatedNotifications from "../hooks/usePaginatedNotifications.js";
+import {useAuth} from "../hooks/useAuth.tsx";
 
 
 const NavBar = () => {
-    const auth = useContext(AuthContext);
+    const { logout, user } = useAuth();
     const { notificationsSocketApi} = useContext(SocketContext);
     const [play] = useSound("/audio/notificationsound.mp3");
     const navigate = useNavigate();
@@ -28,7 +28,7 @@ const NavBar = () => {
     const [search, setSearch] = useState();
     const [newData, setNewData] = useState("");
     const [page, setPage] = useState(0);
-    const { notifications, error, loading, hasMore } = usePaginatedNotifications(auth.email, page, newData)
+    const { notifications, error, loading, hasMore } = usePaginatedNotifications( page, newData)
 
     useEffect(() => {
         console.log("Change in notifications:\n", notifications);
@@ -41,8 +41,8 @@ const NavBar = () => {
         play();
     });
 
-    const logout = () => {
-        auth.acceptLogout();
+    const logoutUser = () => {
+        logout();
         window.location = "/";
     };
 
@@ -64,7 +64,7 @@ const NavBar = () => {
 
     const tempHandler = (e, groupId, groupName) => {
         e.preventDefault();
-        groupControl.setSelectedGroup({ groupId, groupName });
+        setSelectedGroup({ groupId, groupName });
         console.log("clickedLink", notifications);
     };
 
@@ -143,7 +143,7 @@ const NavBar = () => {
                                 </Tooltip>
                             }
                         >
-                            <Link to={`/profile/${auth.email}`}>
+                            <Link to={`/profile/${user.id}`}>
                                 <FontAwesomeIcon icon={faUser} />
                             </Link>
                         </OverlayTrigger>
@@ -217,7 +217,7 @@ const NavBar = () => {
                                 </Tooltip>
                             }
                         >
-                            <Link onClick={logout}>
+                            <Link onClick={logoutUser}>
                                 <FontAwesomeIcon icon={faSignOut} />
                             </Link>
                         </OverlayTrigger>
