@@ -50,14 +50,14 @@ export const UserProvider = ({children}: Props) => {
         setIsReady(true);
     }, []);
 
-    useEffect(() => {
-        if (user && token) {
-            localStorage.setItem("user", JSON.stringify(user))
-        } else {
-            logout()
-        }
-
-    }, [user]);
+    // useEffect(() => {
+    //     if (user && token) {
+    //         localStorage.setItem("user", JSON.stringify(user))
+    //     } else {
+    //         logout()
+    //     }
+    //
+    // }, [user]);
 
     // Create user from submitted UI data and perform register call
     const register = async(firstName: string, lastName: string, email: string, password: string) => {
