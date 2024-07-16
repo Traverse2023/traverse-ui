@@ -3,6 +3,8 @@ phases:
   install:
     runtime-versions:
       nodejs: 20.5.1
+    commands:
+      - npm install
   build:
     commands:
       - echo Build started on `date`
