@@ -107,7 +107,7 @@ const Landing = () => {
                     link: "https://github.com/briplomo1"
                 }
             ],
-            quote: "...",
+            quote: "Hi",
             bio: "...",
             pfp: "imgs/bryan.png",
             position: "Founder & Lead Engineer/Architect"
