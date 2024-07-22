@@ -61,7 +61,7 @@ const getFriendsWhoAreNotMembers = (groupId) => {
         console.log(`Get friends who aren't members for group ${groupId}`);
         try {
             const response = await mainService.get(
-                `/group/getFriendsWhoAreNotMembers/${groupId}`,
+                `/main-service/group/getFriendsWhoAreNotMembers/${groupId}`,
             );
             resolve(response.data);
         } catch (err) {
@@ -75,7 +75,7 @@ const getUser = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
-                `/user/getUser`,
+                `/main-service/user/getUser`,
             );
             console.log(response.data);
             resolve(response.data);
@@ -90,7 +90,7 @@ const searchUsers = (searched) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
-                `/search/searchUsers/${searched}`,
+                `/main-service/search/searchUsers/${searched}`,
             );
             console.log(response.data);
             resolve(response.data);
@@ -105,7 +105,7 @@ const getFriends = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
-                `/friends/getFriends`,
+                `/main-service/friends/getFriends`,
             );
             console.log(response.data);
             resolve(response.data);
@@ -120,7 +120,7 @@ const getFriendRequests = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
-                `/friends/getFriendRequests/`,
+                `/main-service/friends/getFriendRequests/`,
             );
             console.log(response.data);
             resolve(response.data);
@@ -135,7 +135,7 @@ const getMutualFriends = (otherUserId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
-                `/friends/getMutualFriends/${otherUserId}`,
+                `/main-service/friends/getMutualFriends/${otherUserId}`,
             );
             console.log(response.data);
             resolve(response.data);
@@ -150,7 +150,7 @@ const getFriendshipStatus = (friendUserId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
-                `/friends/getFriendshipStatus/${friendUserId}`,
+                `/main-service/friends/getFriendshipStatus/${friendUserId}`,
             );
             console.log(response.data);
             resolve(response.data);
@@ -165,7 +165,7 @@ const sendFriendRequest = (friendUserId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
-                "/friends/sendFriendRequest",
+                "/main-service/friends/sendFriendRequest",
                 {  friendUserId },
             );
             console.log(response.data);
@@ -179,7 +179,7 @@ const removeFriendRequest = (friendUserId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
-                `/friends/removeFriendRequest/${friendUserId}`,
+                `/main-service/friends/removeFriendRequest/${friendUserId}`,
             );
             console.log(response.data);
             resolve(response.data);
@@ -194,7 +194,7 @@ const acceptFriendRequest = (friendUserId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
-                "/friends/acceptFriendRequest",
+                "/main-service/friends/acceptFriendRequest",
                 { friendUserId },
             );
             console.log(response.data);
@@ -210,7 +210,7 @@ const savePFP = (pfpURL) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
-                "/user/savePFP",
+                "/main-service/user/savePFP",
                 {  pfpURL },
             );
             console.log(response.data);
@@ -226,7 +226,7 @@ const getAgoraRTCToken = (channelId) => {
     return new Promise(async (resolve, reject) => {
         try {
             console.log("Getting agora token with channelId: ", channelId)
-            const response = await mainService.get('/agora/getToken/' + channelId);
+            const response = await mainService.get('/main-service/agora/getToken/' + channelId);
             console.log(response);
             resolve(response);
         } catch (err) {

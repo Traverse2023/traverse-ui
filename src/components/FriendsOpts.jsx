@@ -92,7 +92,7 @@ const FriendOpts = ({ user2Id, locationState = null, index, component = null, tr
         triggers.forEach(fn => fn())
     };
 
-    if (user2Id === user.id) {
+    if (user.id === user2Id) {
         return (
             <div className="inner-options">
                 <p className="friend-options">You </p>

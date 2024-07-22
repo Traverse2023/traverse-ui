@@ -35,6 +35,7 @@ const UserRes = () => {
     return (
         <ul className="people">
             {userResults.length ? userResults.map((user, i) => {
+                console.log("GETUSERS: ", user);
                 return (
                     <>
                         <li className="person">
