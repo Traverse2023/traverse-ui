@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const storageService = axios.create({
-    baseURL: import.meta.env.VITE_APP_BACKEND_URL + "/storage-service",
+    baseURL: import.meta.env.VITE_APP_BACKEND_URL,
 });
 
 function setStorageServiceToken(token) {
@@ -13,7 +13,7 @@ const getMessages = (groupId, channelName, cursor) => {
     console.log(channelName);
     console.log(`Getting messages for ${groupId}/${channelName}...`);
     return new Promise(async (resolve, reject) => {
-        let url = `/messages/${groupId}/${channelName}`;
+        let url = `storage-service/messages/${groupId}/${channelName}`;
         try {
             url += cursor ? `?cursor=${cursor}` : "";
             const response = await storageService.get(url);
@@ -29,7 +29,7 @@ const getMessages = (groupId, channelName, cursor) => {
 const getNotifications = (cursor) => {
     return new Promise(async (resolve, reject) => {
 
-        let url = `/notifications/getNotifications`
+        let url = `storage-service/notifications/getNotifications`
 
         try {
             url += cursor ? `?cursor=${cursor}` : "";
@@ -46,7 +46,7 @@ const getNotifications = (cursor) => {
 const deleteNotification = (userId, notificationSortKey) => {
      return new Promise(async(resolve, reject) => {
          try {
-             const response = await storageService.delete(`/notifications/deleteNotification/`,
+             const response = await storageService.delete(`storage-service/notifications/deleteNotification/`,
              {data: {"pk": userId, "sk": notificationSortKey}});
              console.log(`Delete notification for user ${userId} : ${response.data}`)
              resolve(response.data)

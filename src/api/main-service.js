@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const mainService = axios.create({
-    baseURL: import.meta.env.VITE_APP_BACKEND_URL + "/main-service",
+    baseURL: import.meta.env.VITE_APP_BACKEND_URL,
 });
 
 function setMainServiceToken(token) {
@@ -12,7 +12,7 @@ const createGroup = ( groupInfo) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
-                "/group/createGroup",
+                "/main-service/group/createGroup",
                 { groupName: groupInfo.groupName },
             );
             console.log(response.data);
@@ -28,7 +28,7 @@ const getGroups = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.get(
-                `/group/getGroups`,
+                `/main-service/group/getGroups`,
             );
             console.log(response.data);
             resolve(response.data);
@@ -46,7 +46,7 @@ const getMembers = (groupId) => {
 
         try {
             const response = await mainService.get(
-                `/group/getMembers/${groupId}`,
+                `/main-service/group/getMembers/${groupId}`,
             );
             resolve(response.data);
         } catch (err) {
