@@ -1,11 +1,6 @@
 import axios from "axios";
 
-
-const mainService = axios.create({
-    baseURL: import.meta.env.VITE_APP_BACKEND_URL + "/main-service",
-});
-
-const authService = axios.create({
+const backend = axios.create({
     baseURL: import.meta.env.VITE_APP_BACKEND_URL,
 });
 
@@ -15,14 +10,14 @@ const loginUser = (email, password) => {
     console.log("Authenticating user...")
     return new Promise(async (resolve, reject) => {
         try {
-            const authResponse = await authService.post("/auth/login", {
+            const authResponse = await backend.post("/auth/login", {
                 "username": email,
                 "password": password,
             });
             console.log(`Login response: ${authResponse.data}`);
             let {accessToken, refreshToken} = authResponse.data;
 
-            const getUserResponse = await mainService.get("/user/getUser",
+            const getUserResponse = await backend.get("/main-service/user/getUser",
                 {
                     headers: {
                         Authorization : `Bearer ${accessToken}`
@@ -43,7 +38,7 @@ const loginUser = (email, password) => {
 const registerUser = (email, password, firstName, lastName) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await authService.post("/auth/register", {
+            const response = await backend.post("/auth/register", {
                 email,
                 firstName,
                 lastName,
