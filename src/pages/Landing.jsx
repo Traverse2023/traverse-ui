@@ -55,8 +55,10 @@ const Landing = () => {
 
     // Handle registration. Perform input validation then call hook to register
     const registerHandler = async () => {
-        registerValidation.validate(registerInfo).then(() =>
-            register(loginInfo.firstName, loginInfo.lastName, loginInfo.email, loginInfo.password)
+        registerValidation.validate(registerInfo).then(() => {
+                register(registerInfo.firstName, registerInfo.lastName, registerInfo.email, registerInfo.password)
+                setCreateModal(false);
+            }
         ).catch(err => {
             console.log(`Error validating register ${err}`);
             toast.warn(err.message, {position: "top-center"});
