@@ -40,10 +40,10 @@ const FriendOpts = ({ user2Id, locationState = null, index, component = null, tr
     })
 
     useEffect(() => {
-        console.log('infriendsopt50', friendshipStatusState, user.id, user2Id);
+        console.log(`Getting friendship status for users ${user.id} and ${user2Id}`);
         getFriendshipStatus(user.id, user2Id)
             .then(({ friendshipStatus, initiatedUser }) => {
-                console.log('49fo', initiatedUser, friendshipStatus)
+                console.log('Friendship status: ' + friendshipStatus)
                 setFriendshipStatusState({
                     friendshipStatus,
                     initiatedUser,

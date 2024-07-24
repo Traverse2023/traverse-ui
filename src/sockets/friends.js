@@ -4,7 +4,8 @@ class FriendsSocket {
     socket;
     constructor(userId, token) {
         this.userId = userId;
-        this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}/friends`, {
+        this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}`, {
+            path: '/friends',
             query: {
                 userId: userId,
                 access_token: token
