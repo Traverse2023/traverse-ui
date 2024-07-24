@@ -35,15 +35,10 @@ const loginUser = (email, password) => {
     });
 };
 
-const registerUser = (email, password, firstName, lastName) => {
+const registerUser = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await backend.post("/auth/register", {
-                email,
-                firstName,
-                lastName,
-                password,
-            });
+            const response = await backend.post("/auth/register", user);
             console.log(response.data);
             resolve(response.data);
         } catch (err) {
