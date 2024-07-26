@@ -1,5 +1,5 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faMicrophone, faMicrophoneSlash, faPhone, faVideo, faVideoSlash} from "@fortawesome/free-solid-svg-icons";
+import {faMicrophone, faMicrophoneSlash, faPhone, faVideo, faVideoSlash, faPlaneSlash, faPlane} from "@fortawesome/free-solid-svg-icons";
 import React, {useContext, useEffect} from "react";
 import {GroupContext} from "../../context/group-context.tsx";
 import {useLocalMicrophoneTrack, useRTCClient} from "agora-rtc-react";
@@ -13,7 +13,7 @@ const MediaControls = () => {
     const {setInCall, selectedGroup,
         selectedVoiceChannel, inCall, setShowVideoView,
         setIsMuted, setCameraOn, setSelectedVoiceChannel,
-        cameraOn, isMuted, showVideoView} = useContext(GroupContext)
+        cameraOn, isMuted, showVideoView, shareScreen, setShareScreen} = useContext(GroupContext)
     const { chatsSocketApi } = useContext(SocketContext)
     const client = useRTCClient();
     const { isLoading: isLoadingMic, localMicrophoneTrack } = useLocalMicrophoneTrack();
@@ -107,6 +107,35 @@ const MediaControls = () => {
                         }} icon={faVideo} className="media-control-icon"/>
                     </OverlayTrigger>
                 }
+
+                {shareScreen ?
+                    <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={
+                            <Tooltip className="tooltip">Share Screen</Tooltip>
+                        }
+                    >
+                        <FontAwesomeIcon onClick={() => {
+                            setShareScreen(prevState => !prevState)
+                        }} icon={faPlaneSlash} className="media-control-icon"/>
+                    </OverlayTrigger>
+                    :
+                    <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={
+                            <Tooltip className="tooltip">Share Screen</Tooltip>
+                        }
+                    >
+                        <FontAwesomeIcon onClick={() => {
+                            setShareScreen(prevState => !prevState)
+                            setShowVideoView(true)
+                        }} icon={faPlane} className="media-control-icon"/>
+                    </OverlayTrigger>
+
+                }
+
                 <OverlayTrigger
                     placement="top"
                     delay={{ show: 250, hide: 400 }}

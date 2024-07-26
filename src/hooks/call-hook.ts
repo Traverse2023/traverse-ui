@@ -32,6 +32,8 @@ export const useCall = (selectedGroup: any) => {
 
     const [videoPlayerType, setVideoPlayerType] = useState<VideoPlayerEnum>(VideoPlayerEnum.FIT)
 
+    const [shareScreen, setShareScreen] = useState(false)
+
     const { chatsSocketApi } = useContext(SocketContext);
     const joinCallSound = new Audio("/audio/joincall.wav")
     const leaveCallSound = new Audio("/audio/leavecall.wav")
@@ -139,5 +141,5 @@ export const useCall = (selectedGroup: any) => {
     }, [chatsSocketApi]);
 
 
-    return { currentUserUid, setCurrentUserUid, speakerUid, setSpeakerUid, cameraOn, setCameraOn, selectedVoiceChannel, setSelectedVoiceChannel, inCall, setInCall, isMuted, setIsMuted, channelUsersMap, videoPlayerType, setVideoPlayerType, agoraConfig, setAgoraConfig };
+    return { shareScreen, setShareScreen, currentUserUid, setCurrentUserUid, speakerUid, setSpeakerUid, cameraOn, setCameraOn, selectedVoiceChannel, setSelectedVoiceChannel, inCall, setInCall, isMuted, setIsMuted, channelUsersMap, videoPlayerType, setVideoPlayerType, agoraConfig, setAgoraConfig };
 };

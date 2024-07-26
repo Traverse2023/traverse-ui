@@ -19,6 +19,8 @@ interface GroupContextType {
     selectedTextChannel: string
     selectedVoiceChannel: string | null,
     setSelectedVoiceChannel: (selectedVoiceChannel: boolean) => void,
+    shareScreen: boolean,
+    setShareScreen: () => void,
     members: Member[],
     messages: any,
     setMembers: (members: Member[]) => void,
@@ -49,6 +51,8 @@ export const GroupContext = createContext<GroupContextType>({
     members: [],
     messages: [],
     setMembers: () => { },
+    shareScreen: false,
+    setShareScreen: () => {},
     inCall: false,
     setInCall: () => {},
     isMuted: false,
