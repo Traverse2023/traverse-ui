@@ -5,7 +5,7 @@ import usePaginatedMessages from "../../hooks/usePaginatedMessages";
 import VideoPlayer from "../../components/VideoPlayer.tsx";
 import {useInView} from 'react-intersection-observer';
 import {useAuth} from "../../hooks/useAuth.tsx";
-
+import AddMediaButton from "@/components/AddMediaButton";
 
 function scrollToBottom(botRef){
     if (botRef.current) {
@@ -124,7 +124,7 @@ const MessageArea = () => {
             </div>
                 <>
                     <div className="msg-input-div">
-                        <button className="plus">+</button>
+                        <AddMediaButton />
                         {/*<button onClick={() => setStreamJoined(prevState => !prevState)}>{streamJoined? "Leave Stream" : "Join Stream"}</button>*/}
                         <textarea value={typedMsg} rows={0} className="msg-input" onChange={typedMsgChangeHandler} onKeyDown={sendMsg} />
                     </div>

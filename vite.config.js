@@ -9,10 +9,15 @@ export default defineConfig(({ mode }) => {
     return {
         base: "",
         plugins: [react(), viteTsconfigPaths()],
+        resolve: {
+            alias: {
+                "@": path.resolve(__dirname, "./src"),
+            },
+        },
         server: {
             open: false,
             port: 3000,
-            host: true
+            host: true,
         },
         build: {
             target: browserslistToEsbuild([
