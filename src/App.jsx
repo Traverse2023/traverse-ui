@@ -12,7 +12,7 @@ import FriendsSocket from "./sockets/friends";
 import {SocketContext} from "./context/friends-socket-context";
 import ChatSocket from "./sockets/chat";
 import Post from "./pages/Feed/Post";
-import AgoraRTC, {AgoraRTCProvider, useRTCClient} from "agora-rtc-react";
+import AgoraRTC, {AgoraRTCProvider, AgoraRTCScreenShareProvider, useRTCClient} from "agora-rtc-react";
 import {GroupProvider} from "./context/group-context.tsx";
 import NotificationSocket from "./sockets/notifications.js";
 import {getGroups} from "./api/main-service.js";
@@ -24,6 +24,7 @@ import NavBar from "./components/NavBar.jsx";
 function App() {
     const { user, token, isLoggedIn } = useAuth();
     const client = useRTCClient(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
+    const screenShareClient = useRTCClient(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
 
     let routes;
     let friendsSocket;
@@ -45,21 +46,23 @@ function App() {
                 chatsSocketApi: chatsSocket,
                 notificationsSocketApi: notificationsSocket}}>
                 <AgoraRTCProvider client={client}>
-                    <GroupProvider>
-                        <Router>
-                            <CallContainer />
-                            <NavBar/>
-                            <div className="content"><Routes>
-                                <Route path="/" element={<Home />} />
-                                <Route path="/groups" element={<Groups />} />
-                                <Route path="/profile/:userId" element={<Profile />} />
-                                <Route path="/search" element={<Search />} />
-                                <Route path="/post" element={<Post type="page" />} />
-                                <Route path="/algo" element={<Algo />} />
-                                {/*<Route path="*" element={<Navigate to="/" />} />*/}
-                            </Routes></div>
-                        </Router>
-                    </GroupProvider>
+                    <AgoraRTCScreenShareProvider client={screenShareClient}>
+                        <GroupProvider>
+                            <Router>
+                                <CallContainer />
+                                <NavBar/>
+                                <div className="content"><Routes>
+                                    <Route path="/" element={<Home />} />
+                                    <Route path="/groups" element={<Groups />} />
+                                    <Route path="/profile/:userId" element={<Profile />} />
+                                    <Route path="/search" element={<Search />} />
+                                    <Route path="/post" element={<Post type="page" />} />
+                                    <Route path="/algo" element={<Algo />} />
+                                    {/*<Route path="*" element={<Navigate to="/" />} />*/}
+                                </Routes></div>
+                            </Router>
+                        </GroupProvider>
+                    </AgoraRTCScreenShareProvider>
                 </AgoraRTCProvider>
             </SocketContext.Provider>
         );

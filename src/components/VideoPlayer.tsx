@@ -3,7 +3,7 @@ import {GroupContext} from "../context/group-context.jsx";
 import {
     LocalVideoTrack,
     RemoteVideoTrack,
-    useLocalCameraTrack,
+    useLocalCameraTrack, useLocalScreenTrack,
     usePublish,
     useRemoteUsers,
     useRemoteVideoTracks
@@ -14,43 +14,26 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const VideoPlayer = () => {
 
-    const { cameraOn, videoPlayerType, setVideoPlayerType, selectedVoiceChannel , isMuted, setIsMuted} = useContext(GroupContext)
+    const { cameraOn, videoPlayerType, setVideoPlayerType, selectedVoiceChannel , isMuted, setIsMuted, shareScreen} = useContext(GroupContext)
+
+    const {localCameraTrack} = useLocalCameraTrack(cameraOn)
+    const {screenTrack} = useLocalScreenTrack(shareScreen, {}, "disable")
 
     useEffect(() => {
-        console.log('Video player rendered with states:' +
-            `\nvideoPlayerType: ${videoPlayerType}\nselectedVoiceChannel: ${selectedVoiceChannel}
-            \nisMuted: ${isMuted}`)
-    }, []);
-
-    const {localCameraTrack} = useLocalCameraTrack()
-
-    useEffect(() => {
-        console.log('invoking cameraOn3', cameraOn)
         localCameraTrack?.setEnabled(cameraOn)
     }, [cameraOn]);
 
-    usePublish([localCameraTrack])
+    useEffect(() => {
+        screenTrack?.setEnabled(shareScreen)
+    }, [shareScreen]);
+
+    usePublish([localCameraTrack, screenTrack])
 
     const remoteUsers = useRemoteUsers()
     const {videoTracks} = useRemoteVideoTracks(remoteUsers)
 
-    // useEffect(() => {
-    //     console.log('invoking videoTracks', videoTracks)
-    //     console.log('invoking remoteUsers', remoteUsers)
-    // }, [videoTracks])
-
     const [page, setPage] = useState(0);
     const max = 10
-
-    // const remoteUsers = useRemoteUsers()
-    // const {localCameraTrack} = useLocalCameraTrack()
-    // const {videoTracks} = useRemoteVideoTracks(remoteUsers)
-
-    useEffect(() => {
-        console.log('invoking localTrack', localCameraTrack)
-        console.log('invoking remoteUsers', remoteUsers)
-        console.log('invoking remoteTracks', videoTracks)
-    }, [localCameraTrack, remoteUsers, videoTracks])
 
     const next = () => {
         setPage((prev) => {
@@ -69,18 +52,25 @@ const VideoPlayer = () => {
         // @ts-ignore
         let x = []
         if (page === 0) {
-            x = [<LocalVideoTrack track={localCameraTrack} play={true} style={{width: "300px", height: "200px", zIndex: "99999999999999"}}/>];
-        }
-        console.log('invoking videoTracks in curr children', remoteUsers)
-        for (let i = page * max; i < page * max + max; i++) {
-            if (i >= page * max && i < page * max + max && i < remoteUsers.length) {
-                console.log('invoking videoTrack', remoteUsers[i])
-                console.log('invoking i', i)
-                x.push(<RemoteVideoTrack track={remoteUsers[i].videoTrack} play={true}  style={{width: "300px", height: "200px", zIndex: "99999999999999"}}/>);
+            if (cameraOn) {
+                x.push(<LocalVideoTrack track={localCameraTrack} play={true}
+                                      style={{width: "300px", height: "200px", zIndex: "99999999999999"}}/>);
+            } else {
+                x.push(<div style={{width: "300px", height: "200px", zIndex: "99999999999999", backgroundColor: "white"}}></div>)
+            }
+            if (shareScreen) {
+                x.push(<LocalVideoTrack track={screenTrack} play={true}
+                                        style={{width: "300px", height: "200px", zIndex: "99999999999999"}}/>)
             }
         }
-        // @ts-ignore
-        console.log('invoking x', x)
+        for (let i = page * max; i < page * max + max; i++) {
+            if (i >= page * max && i < page * max + max && i < remoteUsers.length) {
+                //TODO potential problem is screen share and video call both use same field in remoteUsers(videoTracks).
+                // It seems like the most recently selected option is selected i.e. you can't have video camera and screenshare. not ideal.
+                // maybe look at to see if screensharagoraprovider client can be brought here and be used to differentiate with the og client.
+                x.push(remoteUsers[i].hasVideo ? <RemoteVideoTrack track={remoteUsers[i].videoTrack} play={true}  style={{width: "300px", height: "200px", zIndex: "99999999999999", cursor: "pointer"}}/> : <div style={{width: "300px", height: "200px", zIndex: "99999999999999", backgroundColor: "white"}}></div>)
+            }
+        }
         // @ts-ignore
         return x;
     };
@@ -103,11 +93,6 @@ const VideoPlayer = () => {
             position: 'absolute', width: '100%', height: '100%', backgroundColor: 'black', top: "50%", left: "50%", transform: "translate(-50%, -50%)"
         }
     }
-
-
-    useEffect(() => {
-        console.log('invoking isMuted', isMuted)
-    }, [isMuted]);
 
     return (
         <div style={videoPlayerStyle} className="video-player-area">
