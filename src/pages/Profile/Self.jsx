@@ -1,16 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import {
-    getFriends,
-    getUser,
-    getFriendRequests,
-    savePFP,
-} from "../../api/main-service.js";
+import React, { useEffect, useState } from "react";
+import { getFriends, getFriendRequests } from "../../api/main-service.js";
 import FriendOpts from "../../components/FriendsOpts";
-
 import { useNavigate } from "react-router-dom";
-
-import ReactS3 from "react-s3";
 import {useAuth} from "../../hooks/useAuth.tsx";
+
 
 const FriendsTable = ({ allFriends, location, triggers }) => {
     const navigate = useNavigate();
@@ -69,6 +62,8 @@ const Self = () => {
     const [numOfFriends, setNumOfFriends] = useState();
     const [tabState, setTabState] = useState("posts");
     const [friendsTabState, setFriendsTabState] = useState("friends");
+    const validPfpTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+
     useEffect(() => {
         // TODO: Not needed if user is in global state?
         // console.log("mounted", user.pfpUrl);
@@ -195,27 +190,27 @@ const Self = () => {
         );
     }
 
-    const config = {
-        bucketName: "traverse-profile-pics",
-        dirName: "photos",
-        region: "us-east-1",
-        accessKeyId: "AKIAWINDQUAYFPE5N6SF",
-        secretAccessKey: "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",
-    };
-
     const uploadPfp = (e) => {
-        // TODO: Do not interact with s3 directly. Make bucket private
-        console.log(e.target.files[0]);
-        ReactS3.uploadFile(e.target.files[0], config)
-            .then((data) => {
-                console.log(data);
-                savePFP(data.location).then((url) =>{
-                    updatePfp(data.location);
-                } );
+        console.log("Getting pfp bytes...");
+        let pfpFile = e.target.files[0];
+        // Transform file to bytes and add bytes to byte array
 
-            })
-            .catch((err) => alert(err));
+        if (validPfpTypes.find(type => type === pfpFile.type)) {
+            // TODO: Display error
+            console.log("Invalid pfp upload file type!");
+            return
+        }
+        let form = new FormData();
+        form.append('image', pfpFile);
+
+        console.log("Image bytes: ");
+        console.log("Image bytes: " );
+        savePFP(form).then((r) => {
+            console.log("Profile pic uploaded successfully!")
+        }).catch(error => console.log(error)) // TODO: Display error
+
     };
+
 
     return (
         <div style={{ height: "100%" }}>
@@ -235,6 +230,7 @@ const Self = () => {
                             style={{ height: "30px" }}
                         />
                         <input
+                            // TODO: allow only image file types
                             type="file"
                             onChange={uploadPfp}
                             className="pfp-input"

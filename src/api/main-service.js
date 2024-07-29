@@ -206,12 +206,13 @@ const acceptFriendRequest = (friendUserId) => {
     });
 };
 
-const savePFP = (pfpURL) => {
+
+const savePFP = (formData) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
                 "/main-service/user/savePFP",
-                {  pfpURL },
+                formData,
             );
             console.log(response.data);
             resolve(response.data);
