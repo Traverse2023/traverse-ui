@@ -2,15 +2,13 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import React, {useContext, useEffect, useState} from "react";
 import {GroupContext} from "../../context/group-context.tsx";
+import {SocketContext} from "../../context/friends-socket-context";
 
 
 const TextChannel = ({channelName}) => {
-    const {showVideoView, selectedTextChannel, setSelectedTextChannel, setShowVideoView} = useContext(GroupContext);
+    const {showVideoView, selectedTextChannel, setSelectedTextChannel, setShowVideoView, selectedGroup} = useContext(GroupContext);
     const [channelStyle, setChannelStyle] = React.useState("channel inactive");
-
-    useEffect(() => {
-
-    }, [showVideoView]);
+    const { chatsSocketApi } = useContext(SocketContext)
 
     useEffect(() => {
         if (showVideoView){
@@ -23,6 +21,10 @@ const TextChannel = ({channelName}) => {
             }
         }
     }, [selectedTextChannel, showVideoView])
+    
+    useEffect(() => {
+        chatsSocketApi.joinRoom(selectedGroup.groupId, selectedTextChannel)
+    }, [selectedTextChannel])
 
     return (
         <div className={channelStyle} onClick={() => {

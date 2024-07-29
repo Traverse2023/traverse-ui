@@ -32,7 +32,7 @@ const GroupSelector = () => {
     const groupClickHandler = (event) => {
         window.history.replaceState({}, document.title)
         groupControl.setSelectedGroup({groupId: event.target.id, groupName: event.target.getAttribute("data-name")});
-        chatsSocketApi.joinRoom(event.target.id)
+        chatsSocketApi.joinRoom(event.target.id, "general")
     };
 
     return (
