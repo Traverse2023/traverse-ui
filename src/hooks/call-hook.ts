@@ -81,7 +81,7 @@ export const useCall = (selectedGroup: any) => {
             console.log('going thru channels', currChannelName, users)
             for (let i = 0; i < users.length; i++) {
                 const existingUser = users[i]
-                if (existingUser.Id === user.id) {
+                if (existingUser.id === user.id) {
                     console.log('found user in this channel, deleting...')
                     users.splice(i, 1)
                     console.log('new array', users)
