@@ -1,16 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import {
-    getFriends,
-    getUser,
-    getFriendRequests,
-    savePFP,
-} from "../../api/main-service.js";
+import React, { useEffect, useState } from "react";
+import {getFriends, getFriendRequests, savePfp} from "../../api/main-service.js";
 import FriendOpts from "../../components/FriendsOpts";
-
 import { useNavigate } from "react-router-dom";
-
-import ReactS3 from "react-s3";
 import {useAuth} from "../../hooks/useAuth.tsx";
+
 
 const FriendsTable = ({ allFriends, location, triggers }) => {
     const navigate = useNavigate();
@@ -62,13 +55,14 @@ const FriendsTable = ({ allFriends, location, triggers }) => {
 
 const Self = () => {
     const {user, updatePfp} = useAuth();
-    const [profile, setProfile] = useState(false);
     const [allFriends, setAllFriends] = useState([]);
     const [friendRequests, setFriendRequests] = useState([]);
     const [numOfFriendRequests, setNumOfFriendRequests] = useState([]);
     const [numOfFriends, setNumOfFriends] = useState();
     const [tabState, setTabState] = useState("posts");
     const [friendsTabState, setFriendsTabState] = useState("friends");
+    const validPfpTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+    const [_, setPfp] = useState(user.pfpUrl);
     useEffect(() => {
         // TODO: Not needed if user is in global state?
         // console.log("mounted", user.pfpUrl);
@@ -77,6 +71,10 @@ const Self = () => {
         // });
         getFriendsAndReqs();
     }, []);
+
+    useEffect(() => {
+        console.log(`User updated on self profile view: ${JSON.stringify(user)}`);
+    },[user])
 
     const getFriendsAndReqs = () => {
         getFriendRequests()
@@ -195,27 +193,27 @@ const Self = () => {
         );
     }
 
-    const config = {
-        bucketName: "traverse-profile-pics",
-        dirName: "photos",
-        region: "us-east-1",
-        accessKeyId: "AKIAWINDQUAYFPE5N6SF",
-        secretAccessKey: "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",
-    };
-
+    // Get file from event. Validate file is of desired image type.
+    // Add image to form and send api request with form data
     const uploadPfp = (e) => {
-        // TODO: Do not interact with s3 directly. Make bucket private
-        console.log(e.target.files[0]);
-        ReactS3.uploadFile(e.target.files[0], config)
-            .then((data) => {
-                console.log(data);
-                savePFP(data.location).then((url) =>{
-                    updatePfp(data.location);
-                } );
+        let pfpFile = e.target.files[0];
+        console.log(`Uploading file: ${pfpFile.type}`);
+        if (!validPfpTypes.find(type => type === pfpFile.type)) {
+            // TODO: Display error
+            console.log("Invalid pfp upload file type!");
+            return
+        }
+        let form = new FormData();
+        form.append('file', pfpFile);
 
-            })
-            .catch((err) => alert(err));
+        savePfp(form).then((res) => {
+            console.log(`Profile pic uploaded to ${JSON.stringify(res)}!`);
+            updatePfp(`${res}?${Date.now()}`);
+            // TODO: Display error
+        }).catch(error => console.log(`An error occurred uploading profile pic: ${error}`));
+        console.log(`PFP: ${user.pfpUrl}`);
     };
+
 
     return (
         <div style={{ height: "100%" }}>
@@ -224,6 +222,7 @@ const Self = () => {
             <div className="profile">
                 <header>
                     <img
+                        key={Date.now()}
                         onClick={() => console.log("185", user.pfpUrl)}
                         src={user.pfpUrl}
                         className="pfp-profile"

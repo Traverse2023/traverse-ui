@@ -206,18 +206,19 @@ const acceptFriendRequest = (friendUserId) => {
     });
 };
 
-const savePFP = (pfpURL) => {
+
+const savePfp = (formData) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
-                "/main-service/user/savePFP",
-                {  pfpURL },
+                "/main-service/user/updatePfp",
+                formData,
             );
-            console.log(response.data);
-            resolve(response.data);
+            console.log(`Uploaded pfp url: ${response.data.pfpUrl}`);
+            resolve(response.data.pfpUrl);
         } catch (err) {
-            console.log(err);
-            reject(err);
+            console.log(err.message);
+            reject(err.message);
         }
     });
 };
@@ -254,5 +255,5 @@ export {
     getMembers,
     getFriendsWhoAreNotMembers,
     getFriendRequests,
-    savePFP,
+    savePfp,
 };
