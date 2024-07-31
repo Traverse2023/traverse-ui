@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getFriends, getFriendRequests } from "../../api/main-service.js";
+import {getFriends, getFriendRequests, savePfp} from "../../api/main-service.js";
 import FriendOpts from "../../components/FriendsOpts";
 import { useNavigate } from "react-router-dom";
 import {useAuth} from "../../hooks/useAuth.tsx";
@@ -55,7 +55,6 @@ const FriendsTable = ({ allFriends, location, triggers }) => {
 
 const Self = () => {
     const {user, updatePfp} = useAuth();
-    const [profile, setProfile] = useState(false);
     const [allFriends, setAllFriends] = useState([]);
     const [friendRequests, setFriendRequests] = useState([]);
     const [numOfFriendRequests, setNumOfFriendRequests] = useState([]);
@@ -72,6 +71,10 @@ const Self = () => {
         // });
         getFriendsAndReqs();
     }, []);
+
+    useEffect(() => {
+        console.log(`User updated on self profile view: ${JSON.stringify(user)}`);
+    },[user])
 
     const getFriendsAndReqs = () => {
         getFriendRequests()
@@ -190,25 +193,25 @@ const Self = () => {
         );
     }
 
+    // Get file from event. Validate file is of desired image type.
+    // Add image to form and send api request with form data
     const uploadPfp = (e) => {
-        console.log("Getting pfp bytes...");
         let pfpFile = e.target.files[0];
-        // Transform file to bytes and add bytes to byte array
-
-        if (validPfpTypes.find(type => type === pfpFile.type)) {
+        console.log(`Uploading file: ${pfpFile.type}`);
+        if (!validPfpTypes.find(type => type === pfpFile.type)) {
             // TODO: Display error
             console.log("Invalid pfp upload file type!");
             return
         }
         let form = new FormData();
-        form.append('image', pfpFile);
+        form.append('file', pfpFile);
 
-        console.log("Image bytes: ");
-        console.log("Image bytes: " );
-        savePFP(form).then((r) => {
-            console.log("Profile pic uploaded successfully!")
-        }).catch(error => console.log(error)) // TODO: Display error
-
+        savePfp(form).then((res) => {
+            console.log(`Profile pic uploaded to ${JSON.stringify(res)}!`);
+            updatePfp(res);
+            // TODO: Display error
+        }).catch(error => console.log(`An error occurred uploading profile pic: ${error}`));
+        console.log(`PFP: ${user.pfpUrl}`);
     };
 
 
@@ -230,7 +233,6 @@ const Self = () => {
                             style={{ height: "30px" }}
                         />
                         <input
-                            // TODO: allow only image file types
                             type="file"
                             onChange={uploadPfp}
                             className="pfp-input"

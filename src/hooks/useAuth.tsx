@@ -50,15 +50,6 @@ export const UserProvider = ({children}: Props) => {
         setIsReady(true);
     }, []);
 
-    // useEffect(() => {
-    //     if (user && token) {
-    //         localStorage.setItem("user", JSON.stringify(user))
-    //     } else {
-    //         logout()
-    //     }
-    //
-    // }, [user]);
-
     // Create user from submitted UI data and perform register call
     const register = async(firstName: string, lastName: string, email: string, password: string) => {
         const user: User = {
@@ -77,11 +68,18 @@ export const UserProvider = ({children}: Props) => {
         })
     }
 
+    // Update user state then set user in local stprage
     const updatePfp = async(pfpUrl: string) => {
         if (user !== null) {
-            user.pfpUrl = pfpUrl
+            setUser((prev) =>{
+                const user: User = {...prev!, pfpUrl};
+                const userStr = JSON.stringify(user)
+                console.log(`Updated user: ${userStr}`);
+                localStorage.setItem("user", userStr);
+                return user;
+            });
         } else {
-            logout()
+            logout();
         }
     }
 
