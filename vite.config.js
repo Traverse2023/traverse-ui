@@ -6,7 +6,7 @@ import browserslistToEsbuild from "browserslist-to-esbuild";
 export default defineConfig(({ mode }) => {
     const { NODE_ENV } = loadEnv(mode, process.cwd(), "");
     return {
-        base: process.env.PUBLIC_URL ? process.env.PUBLIC_URL : '',
+        base: '.',
         plugins: [react(), viteTsconfigPaths()],
         server: {
             open: false,
