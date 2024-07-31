@@ -42,9 +42,9 @@ class ChatSocket {
         this.socket.on('disconnectCallListener', callback)
     }
 
-    joinRoom(groupId) {
-        console.log("injoinroom15")
-        this.socket.emit("joinRoom", groupId)
+    joinRoom(groupId, channelName) {
+        console.log("injoinroom15", groupId, channelName)
+        this.socket.emit("joinRoom", groupId, channelName)
     }
 
 
