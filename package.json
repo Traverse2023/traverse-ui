@@ -3,7 +3,6 @@
     "version": "0.1.0",
     "private": true,
     "type": "module",
-    "homepage": "./",
     "scripts": {
         "start": "vite --host",
         "server": "node server.js",
