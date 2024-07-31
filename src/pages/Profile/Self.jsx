@@ -62,7 +62,7 @@ const Self = () => {
     const [tabState, setTabState] = useState("posts");
     const [friendsTabState, setFriendsTabState] = useState("friends");
     const validPfpTypes = ['image/jpg', 'image/jpeg', 'image/png'];
-
+    const [_, setPfp] = useState(user.pfpUrl);
     useEffect(() => {
         // TODO: Not needed if user is in global state?
         // console.log("mounted", user.pfpUrl);
@@ -208,7 +208,7 @@ const Self = () => {
 
         savePfp(form).then((res) => {
             console.log(`Profile pic uploaded to ${JSON.stringify(res)}!`);
-            updatePfp(res);
+            updatePfp(`${res}?${Date.now()}`);
             // TODO: Display error
         }).catch(error => console.log(`An error occurred uploading profile pic: ${error}`));
         console.log(`PFP: ${user.pfpUrl}`);
@@ -222,6 +222,7 @@ const Self = () => {
             <div className="profile">
                 <header>
                     <img
+                        key={Date.now()}
                         onClick={() => console.log("185", user.pfpUrl)}
                         src={user.pfpUrl}
                         className="pfp-profile"
