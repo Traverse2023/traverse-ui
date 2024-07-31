@@ -4,8 +4,9 @@ class ChatSocket {
     socket
     constructor(userId, token) {
         this.userId = userId
-        this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}/groups`, {
+        this.socket = io(`${import.meta.env.VITE_APP_BACKEND_URL}`, {
             query: {
+                path: '/groups',
                 userId: userId,
                 access_token: token,
             }
