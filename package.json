@@ -6,7 +6,7 @@
     "scripts": {
         "start": "vite --host",
         "server": "node server.js",
-        "build": "vite build --base=",
+        "build": "vite build",
         "preview": "vite preview",
         "watch": "nodemon --watch src --ext js,json,jsx,mjs --exec \"npm run build && npm run start\""
     },
