@@ -6,7 +6,7 @@ import browserslistToEsbuild from "browserslist-to-esbuild";
 export default defineConfig(({ mode }) => {
 
     return {
-        base: process.env.BACKEND_URL || '',
+        base: process.env.BASE_URL || '',
         plugins: [react(), viteTsconfigPaths()],
         server: {
             open: false,
