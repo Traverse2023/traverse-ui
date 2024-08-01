@@ -4,10 +4,9 @@ import viteTsconfigPaths from "vite-tsconfig-paths";
 import browserslistToEsbuild from "browserslist-to-esbuild";
 
 export default defineConfig(({ mode }) => {
-    const { NODE_ENV } = loadEnv(mode, process.cwd(), "");
 
     return {
-        base: "",
+        base: process.env.BACKEND_URL || '',
         plugins: [react(), viteTsconfigPaths()],
         server: {
             open: false,
