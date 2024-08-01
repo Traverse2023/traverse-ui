@@ -3,7 +3,11 @@ import react from "@vitejs/plugin-react-swc";
 import viteTsconfigPaths from "vite-tsconfig-paths";
 import browserslistToEsbuild from "browserslist-to-esbuild";
 
-export default defineConfig( {
+export default defineConfig(({ mode }) => {
+    const { NODE_ENV } = loadEnv(mode, process.cwd(), "");
+
+    return {
+        base: "",
         plugins: [react(), viteTsconfigPaths()],
         server: {
             open: false,
@@ -20,4 +24,5 @@ export default defineConfig( {
                 transformMixedEsModules: true,
             },
         },
+    };
 });
