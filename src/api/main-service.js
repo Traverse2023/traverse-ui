@@ -8,7 +8,7 @@ function setMainServiceToken(token) {
     mainService.defaults.headers["Authorization"] = "Bearer " + token;
 }
 
-const createGroup = ( groupInfo) => {
+const createGroup = (groupInfo) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await mainService.post(
@@ -166,7 +166,7 @@ const sendFriendRequest = (friendUserId) => {
         try {
             const response = await mainService.post(
                 "/main-service/friends/sendFriendRequest",
-                {  friendUserId },
+                { friendUserId },
             );
             console.log(response.data);
         } catch (err) {
@@ -237,6 +237,19 @@ const getAgoraRTCToken = (channelId) => {
     });
 }
 
+const getUsersInChannel = (groupId, channelName) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await mainService.get(`/main-service/group/getUsersInVoiceChannel/${groupId}/${channelName}`);
+            console.log("getting users in channel", response)
+            resolve(response)
+        } catch (err) {
+            console.log(err);
+            reject(err);
+        }
+    })
+}
+
 
 
 export {
@@ -256,4 +269,5 @@ export {
     getFriendsWhoAreNotMembers,
     getFriendRequests,
     savePfp,
+    getUsersInChannel
 };

@@ -1,8 +1,8 @@
-import React, {useContext} from "react";
+import React, { useContext, useEffect } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Modal from "../../components/Modal";
-import  {
+import {
     titleOverlayTargetHandler,
     ServerOptsOverlay
 } from "./ServerOptsOverlay";
@@ -11,15 +11,19 @@ import VoiceChannel from "./VoiceChannel.jsx";
 import TextChannel from "./TextChannel.jsx";
 import MediaControls from "./MediaControls.jsx";
 
-//TODO - change this to a tsx file and import group-context.jsx
-import {GroupContext} from "../../context/group-context.tsx";
+import { GroupContext } from "../../context/group-context.tsx";
+import { getUsersInChannel } from "../../api/main-service";
 
 const SubGroupSelector = () => {
 
     const [show, setShow] = React.useState(false);
     const target = React.useRef(null);
     const [createModal, setCreateModal] = React.useState(false);
-    const {channelUsersMap, selectedGroup} = useContext(GroupContext);
+    const { channelUsersMap, selectedVoiceChannel, selectedGroup } = useContext(GroupContext);
+
+    // useEffect(() => {
+    //     let result = getUsersInChannel(selectedGroup.groupId, selectedVoiceChannel)
+    // }, [selectedVoiceChannel])
 
     return (
         <div className="subGroupSelector">
@@ -67,8 +71,8 @@ const SubGroupSelector = () => {
                         <p>Some text in the Modal..</p>
                     </Modal>
                 </div>
-                <TextChannel channelName="general"/>
-                <TextChannel channelName="plans"/>
+                <TextChannel channelName="general" />
+                <TextChannel channelName="plans" />
             </div>
             <div className="text-channel">
                 <div className="text-channel-header">

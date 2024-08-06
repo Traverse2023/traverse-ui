@@ -1,7 +1,7 @@
-import {useState,  useEffect, useContext} from "react";
-import {SocketContext} from "../context/friends-socket-context.js";
-import {useRTCClient} from "agora-rtc-react";
-import {useAuth} from "./useAuth";
+import { useState, useEffect, useContext } from "react";
+import { SocketContext } from "../context/friends-socket-context.js";
+import { useRTCClient } from "agora-rtc-react";
+import { useAuth } from "./useAuth";
 
 
 export enum VideoPlayerEnum {
@@ -11,11 +11,11 @@ export enum VideoPlayerEnum {
 }
 
 export const useCall = (selectedGroup: any) => {
-    const {user} = useAuth();
+    const { user } = useAuth();
     //call states
     const [inCall, setInCall] = useState(false)
     const [channelUsersMap, setChannelUsersMap] = useState(new Map(["general", "announcements", "events"].map(channelName => [channelName, []])))
-    const [agoraConfig, setAgoraConfig] = useState({appid: "", channel: "", token: "", uid: undefined})
+    const [agoraConfig, setAgoraConfig] = useState({ appid: "", channel: "", token: "", uid: undefined })
 
     useEffect(() => {
         console.log('invoking agoraconfighook', agoraConfig)
@@ -38,7 +38,7 @@ export const useCall = (selectedGroup: any) => {
     const joinCallSound = new Audio("/audio/joincall.wav")
     const leaveCallSound = new Audio("/audio/leavecall.wav")
     const client = useRTCClient()
-    const disconnectVoiceChannel = async() => {
+    const disconnectVoiceChannel = async () => {
         setInCall(false);
         // console.log('localmictrack', localMicrophoneTrack);
         // await localMicrophoneTrack?.setEnabled(false);
@@ -62,6 +62,7 @@ export const useCall = (selectedGroup: any) => {
         if (selectedVoiceChannel) {
             joinVoiceChannel().then(res => console.log(res)).catch(err => console.log(err));
         }
+        console.log("channel change detected", selectedVoiceChannel)
     }, [selectedVoiceChannel])
 
 
