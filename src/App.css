@@ -1039,19 +1039,15 @@ border-radius: 8px;
   padding-left: 20px;
 }
 
-.msg-input-div{
-  padding-left: 20px;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  background-color: #EEEFF1;
+.msg-input-div {
   grid-area: msgInputDiv;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: flex-start; /* Align items to the start horizontally */
+  align-items: flex-end; /* Align items to the bottom vertically */
   margin-left: 20px;
   margin-right: 20px;
-  border-radius: 10px;
 }
+
 
 .plus{
   border: none;
@@ -1074,11 +1070,9 @@ border-radius: 8px;
   flex-grow: 0.9;
 }
 
-.msg-input::-webkit-scrollbar{
+/* .msg-input::-webkit-scrollbar{
   display: none;
-}
-
-
+} */
 
 .msg-input:focus{
   outline: none;

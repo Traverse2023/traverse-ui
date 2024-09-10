@@ -1,0 +1,130 @@
+/* message-input.module.css */
+
+.editorContainer {
+    position: relative;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0px 5px;
+    z-index: 1000;
+}
+
+.selectButton {
+    margin-right: 10px;
+    margin-top: 9px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    align-self: flex-start;
+}
+
+.dropdownMenu {
+    position: absolute;
+    top: -150px;
+    left: 0px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdownMenu button {
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
+.dropdownMenu button:hover {
+    background-color: #f0f0f0;
+}
+
+.submitButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    align-self: flex-end;
+    margin-bottom: 8px;
+}
+
+.tox-tinymce {
+    border: none !important;
+}
+
+.tox-editor-container {
+    border: none !important;
+}
+
+.tox {
+    border: none !important;
+}
+
+.tox .tox-edit-area__iframe {
+    border: none !important;
+    width: 100%;
+    background-color: #fff;
+}
+
+.toolbarContainer {
+    display: flex;
+    align-items: center;
+}
+
+.textarea {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+    max-height: 50vh; 
+}
+
+.tox .tox-edit-area {
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.mce-content-body.mce-edit-focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.mce-content-body:focus,
+.mce-content-body:focus-visible,
+.tox-tinymce:focus,
+.tox-tinymce:focus-visible,
+.tox-tinymce-inline:focus,
+.tox-tinymce-inline:focus-visible,
+.tox-tinymce-inline .tox-edit-area__iframe:focus,
+.tox-tinymce-inline .tox-edit-area__iframe:focus-visible,
+.mce-content-body[data-mce-focus="1"] {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Ensure these elements remain hidden */
+.tox-tinymce-inline[aria-hidden="true"],
+.tox-throbber {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    display: none !important;
+}
+
+.tox-tinymce-inline .tox-editor-header,
+.tox-tinymce-inline .tox-editor-header--empty,
+.ChatEditor_toolbarContainer__z_MXe {
+    display: none !important;
+}
+
+
