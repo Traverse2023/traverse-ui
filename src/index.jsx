@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { UserProvider } from "./hooks/useAuth.tsx";
 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <UserProvider>

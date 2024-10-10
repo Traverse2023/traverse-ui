@@ -177,343 +177,184 @@ const Landing = () => {
 
 
     return (
-        <React.Fragment>
-            <section className="welcome">
-                <nav className="nav">
-                    <div className="logo">
-                        <h1>Traverse</h1>
-                    </div>
-                    <div className="typewriter2">
-                        {/*<h1 id="typetext2">Compete. Collaborate. Code.</h1>*/}
-                        <h1 id="typetext2">welcomeToCodeCentral()</h1>
-                    </div>
-                    <div className="right-side">
-                        <div className="middleOpt">
-                            <Link to={"#"}>About</Link>
-                            <Link to={"#"}>Features</Link>
-                            <Link to={"#"}>Partners</Link>
-                            <ToastContainer/>
-                        </div>
-                        <div className="authOpt">
-                            <button
-                                className="minimalBtn"
-                                onClick={() => {
-                                    setLoginModal(true);
-                                }}
-                            >
-                                Sign In
-                            </button>
-                            <Modal
-                                show={loginModal}
-                                setModalStatus={setLoginModal}
-                            >
-                                <h1 style={{
-                                    textAlign: "center",
-                                    color: "rgb(127, 86, 217)",
-                                    fontWeight: "bolder"
-                                }}>Login</h1>
-                                <br/>
-                                <div className="icon-input-container">
-                                    <div className="edge"></div>
-                                    <i className="fa-solid fa-user" style={{color: "rgb(127, 86, 217)"}}></i>
-                                    <input
-                                        id="email"
-                                        className="auth-input"
-                                        placeholder="Email"
-                                        onChange={loginInfoHandler}
-                                    />
-                                    <div className="edge"></div>
-                                </div>
-                                <br/>
-                                <div className="icon-input-container">
-                                    <div className="edge"></div>
-                                    <i className="fa-solid fa-lock" style={{color: "rgb(127, 86, 217)"}}></i>
-                                    <input
-                                        id="password"
-                                        className="auth-input"
-                                        placeholder="Password"
-                                        onChange={loginInfoHandler}
-                                    />
-                                    <div className="edge"></div>
-                                </div>
-                                <br/>
-                                <button className="auth-btn" onClick={loginHandler}>Login</button>
-                                <br/><br/>
-                                <p style={{fontSize: "12px", textAlign: "center"}}>Dont' have an account? <span
-                                    style={{color: "rgb(127, 86, 217)", cursor: "pointer"}} onClick={() => {
-                                    setLoginModal(false)
-                                    setCreateModal(true)
-                                }}>Create Account.</span></p>
-                            </Modal>
-                            <button
-                                className="btn"
-                                onClick={() => {
-                                    setCreateModal(true);
-                                }}
-                            >
-                                Create Account
-                            </button>
-                            <Modal
-                                show={createModal}
-                                setModalStatus={setCreateModal}
-                            >
-                                <h1 style={{
-                                    textAlign: "center",
-                                    color: "rgb(127, 86, 217)",
-                                    fontWeight: "bolder"
-                                }}>Register</h1>
-                                <br/>
-                                <div className="icon-input-container">
-                                    <div className="edge"></div>
-                                    <i className="fa-solid fa-user" style={{color: "rgb(127, 86, 217)"}}></i>
-                                    <input
-                                        id="firstName"
-                                        className="auth-input"
-                                        placeholder="First Name"
-                                        onChange={userInfoHandler}
-                                    />
-                                    <div className="edge"></div>
-                                </div>
-                                <br/>
+       <div>
+        {/* Navbar */}
 
-                                <div className="icon-input-container">
-                                    <div className="edge"></div>
-                                    <i className="fa-solid fa-user" style={{color: "rgb(127, 86, 217)"}}></i>
-                                    <input
-                                        id="lastName"
-                                        className="auth-input"
-                                        placeholder="Last Name"
-                                        onChange={userInfoHandler}
-                                    />
-                                    <div className="edge"></div>
-                                </div>
-                                <br/>
+        <div className="fixed w-full h-24 bg-white flex justify-center items-center opacity-90">
+            <div className="absolute left-20"><img className="scale-105" src="/public/imgs/logo.svg"/></div>
+            <div className="w-1/3 text-md flex justify-around rounded-3xl">
+                <div>Features</div>
+                <div>Team</div>
+                <div>FAQ</div>
+                <div>Contact</div>
+            </div>
+            <div className="absolute right-20"><button className="px-6 py-2 bg-honey rounded-xl">Login</button></div>
+        </div>
 
-                                <div className="icon-input-container">
-                                    <div className="edge"></div>
-                                    <i className="fa-solid fa-envelope" style={{color: "rgb(127, 86, 217)"}}></i>
-                                    <input
-                                        id="email"
-                                        className="auth-input"
-                                        placeholder="Email"
-                                        onChange={userInfoHandler}
-                                    />
-                                    <div className="edge"></div>
-                                </div>
-                                <br/>
-                                <div className="icon-input-container">
-                                    <div className="edge"></div>
-                                    <i className="fa-solid fa-lock" style={{color: "rgb(127, 86, 217)"}}></i>
-                                    <input
-                                        id="password"
-                                        className="auth-input"
-                                        placeholder="Password"
-                                        onChange={userInfoHandler}
-                                    />
-                                    <div className="edge"></div>
-                                </div>
-                                <br/>
-                                <button onClick={registerHandler} className="auth-btn">
-                                    Register
-                                </button>
-                                <br/><br/>
-                                <p style={{fontSize: "12px", textAlign: "center"}}>Already have an account? <span
-                                    style={{color: "rgb(127, 86, 217)", cursor: "pointer"}} onClick={() => {
-                                    setCreateModal(false)
-                                    setLoginModal(true)
-                                }}>Log in.</span></p>
-                            </Modal>
+        {/* Hero Section */}
+        <div className="h-screen pt-36 text-black flex flex-col justify-center items-center">
+            <div className="text-black text-7xl font-bold flex flex-col items-center">
+                <h1 className="mt-6">Hive to <span className="text-honey">Collaborate.</span></h1>
+                <h1 className="mt-6">Buzz to <span className="text-honey">Compete.</span></h1>
+                <h1 className="mt-6">Sweeten your <span className="text-honey">Code.</span></h1>
+            </div>
+
+            <div className="mt-20 text-2xl text-gray-500 text-center font-thin">
+                <h3>Work with friends or battle against rivals to sharpen </h3>
+                <h3>your programming skills.</h3>
+            </div>
+
+            <div className="w-1/4 mt-20 flex justify-evenly ">
+                <button className="w-40 py-3 bg-honey text-xl rounded-xl cursor-not-allowed">Get Started</button>
+                <button className="w-40 py-3 bg-coal text-white text-xl rounded-xl cursor-pointer">FAQ</button>
+            </div>
+        </div>
+
+        {/* Features Section */}
+        <div>
+
+            {/* Hive Mentality */}
+            <div className="h-screen text-7xl flex flex-col justify-center items-center">
+                <h1>Give <span className="text-honey">hive-mentality</span></h1>
+                <h1 className="mt-4">a new <span className="text-honey">meaning</span>.</h1>
+            </div>
+
+            {/* Collaborate Section */}
+            <div className="h-screen py-36">
+                <div className="w-full h-1/3 flex justify-center">
+                    <div className="w-3/4 h-1/3 text-7xl flex">
+                        <div>
+                            <h1 className="">Work <span className="text-honey">together</span> to <span className="text-honey">solve</span></h1>
+                            <h1 className="ml-96">complex <span className="text-honey">problems</span>.</h1>
                         </div>
-                    </div>
-                </nav>
-                <div className="middleSec">
-                    <div className="slogan">
-                        <div className="sloganContainer">
-                            <div>
-                                <div className="slogan-line">
-                                    <span>Work to</span>{" "}
-                                    <span style={{color: "#7F56D9"}}>
-                                        Collaborate
-                                    </span>
-                                </div>
-                                <div className="slogan-line">
-                                    <span>Drive to</span>{" "}
-                                    <span style={{color: "#7F56D9"}}>
-                                        Compete
-                                    </span>
-                                </div>
-                                <div className="slogan-line">
-                                    <span>Improve your</span>{" "}
-                                    <span style={{color: "#7F56D9"}}>
-                                        Code!
-                                    </span>
-                                </div>
-                            </div>
-                            <div>
-                                <p>
-                                    Provides you with the best collaborative and competitive multiplayer coding experience.
-                                </p>
-                                <p></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="sampleUser">
-                        <div className="botLeftBubble">
-                            <h2 style={{width: "50%"}}>2K+</h2>
-                            <p
-                                style={{
-                                    bottom: "10px",
-                                    fontWeight: "400",
-                                    fontSize: "15px",
-                                    lineHeight: "18.15px",
-                                    color: "#101828",
-                                    opacity: "0.5",
-                                }}
-                            >
-                                Users completely online
-                            </p>
-                        </div>
-                        {/* <div className='upperRightBubble'>
-                        Hey
-                    </div>
-                    <div className='botRightBubble'>
-                        Hey
-                    </div> */}
-                        <img src="imgs/user.png"/>
+
                     </div>
                 </div>
-                <div className="supported">
-                    <div className="supporters">
-                        <h1>10+</h1>
-                        <p>Partners</p>
+                
+
+                <div className="w-full h-5/6 flex justify-center items-center ">
+                <div className="w-5/12 h-5/6">
+                    <div className="w-full h-full bg-black text-white rounded-xl flex justify-center items-center">
+                        functionality to be added
                     </div>
-                    <img
-                        className="google"
-                        src="imgs/google.png"
-                        style={{width: "130px"}}
-                    />
-                    <img
-                        className="amzn"
-                        src="imgs/amzn.png"
-                        style={{height: "60px", marginTop: "20px"}}
-                    />
-                    <img
-                        className="apple"
-                        src="imgs/apple.png"
-                        style={{height: "105px"}}
-                    />
-                    <img
-                        className="microsoft"
-                        src="imgs/microsoft.png"
-                        style={{height: "90px", width: "250px"}}
-                    />
+                    <div className="w-full h-12  flex items-center justify-center">
+                        <div className="w-1/3 flex justify-evenly">
+                            <div className="w-3 h-3  bg-slate-300 rounded-xl"></div>
+                            <div className="w-12 h-3 bg-slate-300  rounded-xl"></div>
+                            <div className="w-3 h-3  bg-slate-300 rounded-xl"></div>
+                            <div className="w-3 h-3  bg-slate-300 rounded-xl"></div>
+                                </div>                
+                    </div>
                 </div>
-                <img
-                    src="imgs/arrow.svg"
-                    className="arrow"
-                    onClick={() => (window.location = "/#team")}
-                />
-            </section>
+                     
 
-            <section id="team" style={{paddingTop: "70px", textAlign: "center", height: "100%"}}>
-                <h1>Meet the Team!</h1>
-                <div style={{width: "1158px", margin: 'auto', display: "flex", justifyContent: "flex-start", gap: "20px", flexWrap: "wrap"}}>
-                    {members.map(member => {
-                        return (
-                            <Creator setBioModal={setBioModal} creator={member} setSelectedCreator={setSelectedCreator}
-                                     socials={[
-                                         {
-                                         socialMediaName: "LinkedIn",
-                                         link: "https://www.linkedin.com/in/isfar-oshir/"
-                                     },
-                                         {
-                                             socialMediaName: "Github",
-                                             link: "https://github.com/iao233"
-                                         }
-                                     ]}
-                            />
-                        )
-                    })
-                    }
-                    <Modal show={bioModal} setModalStatus={setBioModal} style={{ height: 'fit-content', width: '800px' }}>
-                        <div style={{ display: "flex" }}>
-                            <div>
-                                <img src={selectedCreator?.pfp} style={{ width: "300px" }} />
-                            </div>
-                            <div style={{ marginLeft: "20px" }}>
-                                <div>
-                                    <h1 style={{
-                                        textAlign: "left",
-                                        marginRight: "10px",
-                                    }}>{selectedCreator.firstName} {selectedCreator.lastName}</h1>
-                                    <div style={{ display: "flex", alignItems: "center", marginTop: "5px" }}>
-                                        {selectedCreator?.socials?.map(({ socialMediaName, link }) => (
-                                            <div key={socialMediaName} style={{ marginRight: "10px" }}>
-                                                {socialMediaName === "LinkedIn" && (
-                                                    <a href={link} target="_blank" rel="noopener noreferrer">
-                                                        <FontAwesomeIcon icon={faLinkedin} style={{ height: "25px" }} />
-                                                    </a>
-                                                )}
-                                                {socialMediaName === "Github" && (
-                                                    <a href={link} target="_blank" rel="noopener noreferrer">
-                                                        <FontAwesomeIcon icon={faGithub} style={{ height: "25px" }} />
-                                                    </a>
-                                                )}
-                                                {socialMediaName === "Twitter" && (
-                                                    <a href={link} target="_blank" rel="noopener noreferrer">
-                                                        <FontAwesomeIcon icon={faTwitter} style={{ height: "25px" }} />
-                                                    </a>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                                <h4 style={{
-                                    textAlign: "left",
-                                    color: "#7F56D9",
-                                    marginBottom: "5px"
-                                }}>{selectedCreator.position}</h4>
-                                <p style={{ textAlign: "left", marginTop: "0" }}>{selectedCreator.bio}</p>
-                            </div>
+                    <div className="m-24">
+                        <h4>Caption for wtv is in carousel</h4>
+                    </div>
+                </div>
+                
+
+               
+            </div>
+
+            {/* Compete Section */}
+            <div className="h-screen py-36">
+                <div className="w-full h-1/3 text-7xl flex justify-center">
+                    <div className="flex flex-col items-center">
+                        <h1 className="">Or <span className="text-honey">compete</span> against</h1>
+                        <h1 className="">other <span className="text-honey">programmers</span>.</h1>
+                    </div>
+                </div>
+
+                <div className="w-full h-1/3 mt-36 flex justify-center items-center">
+                    <div className="flex items-center">
+                        <div className=""><img className="scale-80" src="/public/imgs/roundHexagon.svg"/></div>
+                        <h2 className="text-6xl mx-24 ">vs.</h2>
+                        <div className=""><img className="scale-80" src="/public/imgs/roundHexagon.svg"/></div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Code Section */}
+            <div className="h-screen py-36">
+                <div className="text-7xl ml-24">
+                    <h1><span className="text-honey">Reinvent</span> your <span className="text-honey">code</span></h1>
+                    <h1>like <span className="text-honey">never</span> before.</h1>
+                </div>
+
+                <div className="w-full px-24 mt-20 flex justify-between items-between">
+                    <div>
+                        <div className="w-full">
+                            <h4>Lorem ipsum blah blah blah blah blah. Yap yappatron yippee lorem ipsum...</h4>
                         </div>
-                    </Modal>
+
+                        <div className="mt-24 text-3xl flex flex-col">
+                            <code> if (usedCodeHive) {`{`}</code>
+                            <code className="ml-8"> becomeBetter();</code>
+                            <code> {`}`}</code>
+                        </div>
+                    </div>
+                    
+                    <div className="w-1/2 py-52 ml-72 bg-black text-white rounded-xl flex justify-center items-center"> 
+                        Graph
+                    </div>
                 </div>
-            </section>
+                
+            </div>
+
+        </div>
+
+        {/* Team Section */}
+        <div className="h-screen py-36">
+            <div className="flex justify-center text-6xl">
+                <h1>Meet the <span className="text-honey">bees</span>.</h1>
+            </div>
+
+            <div className="flex justify-center items-center h-3/4">
+                Need to create hexagonal profile components.
+            </div>
+        </div>
+
+        {/* FAQ Section */}
+        <div className="h-screen py-36 mx-32 flex justify-evenly">
+            <div className="w-1/3 h-full">
+                <div className="text-5xl leading-normal">
+                    <h1><span className="text-6xl text-honey">F</span>requently</h1>
+                    <h1><span className="text-6xl text-honey">A</span>sked</h1>
+                    <h1><span className="text-6xl text-honey">Q</span>uestions</h1>
+                </div>
+
+                <div className="w-5/6 h-10 mt-12 border-2 border-honey rounded-2xl flex items-center justify-evenly">
+                    <div className="text-slate-400">Bzz bzz... bzzzz bzz bzzz?</div>
+                    <div><img className="scale-[0.65]" src="/public/imgs/Search.svg"/></div>
+                </div>
+            </div>
+            
+            <div className="w-2/3 h-full ml-24 bg-black">
+                FAQs
+            </div>
+        </div>
 
 
-            <footer className="footer">
-                <div className="waves">
-                    <div className="wave" id="wave1"></div>
-                    <div className="wave" id="wave2"></div>
-                    <div className="wave" id="wave3"></div>
-                    <div className="wave" id="wave4"></div>
-                </div>
-                <ul className="social-icon">
-                    <li className="social-icon__item"><a className="social-icon__link" href="#">
-                        <ion-icon name="logo-facebook"></ion-icon>
-                    </a></li>
-                    <li className="social-icon__item"><a className="social-icon__link" href="#">
-                        <ion-icon name="logo-twitter"></ion-icon>
-                    </a></li>
-                    <li className="social-icon__item"><a className="social-icon__link" href="#">
-                        <ion-icon name="logo-linkedin"></ion-icon>
-                    </a></li>
-                    <li className="social-icon__item"><a className="social-icon__link" href="#">
-                        <ion-icon name="logo-instagram"></ion-icon>
-                    </a></li>
+        <footer className="h-64 bg-honey flex flex-col justify-evenly items-center">
+                
+                <ul className="w-1/6 flex justify-between">
+                    <li className=""><a href="#"><ion-icon name="logo-facebook"></ion-icon></a></li>
+                    <li className=""><a href="#"><ion-icon name="logo-twitter"></ion-icon></a></li>
+                    <li className=""><a href="#"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+                    <li className=""><a href="#"><ion-icon name="logo-instagram"></ion-icon></a></li>
                 </ul>
-                <ul className="menu">
-                    <li className="menu__item"><a className="menu__link" href="#">Home</a></li>
-                    <li className="menu__item"><a className="menu__link" href="#">About</a></li>
-                    <li className="menu__item"><a className="menu__link" href="#">Services</a></li>
-                    <li className="menu__item"><a className="menu__link" href="#">Team</a></li>
-                    <li className="menu__item"><a className="menu__link" href="#">Contact</a></li>
-
+                <ul className="w-1/3 flex justify-between">
+                    <li className=""><a href="#">Home</a></li>
+                    <li className=""><a href="#">About</a></li>
+                    <li className=""><a href="#">Services</a></li>
+                    <li className=""><a href="#">Team</a></li>
+                    <li className=""><a href="#">Contact</a></li>
                 </ul>
-                <p>&copy;2024 Traverse | All Rights Reserved</p>
-            </footer>
+                <p>&copy;2024 CodeHive | All Rights Reserved</p>
+        </footer>
 
-        </React.Fragment>
+       </div>
     );
 };
 
