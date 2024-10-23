@@ -1,14 +1,14 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Link} from "react-router-dom";
-import Modal from "../components/Modal";
 import {ToastContainer, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 import {useAuth} from "../hooks/useAuth.tsx";
 import * as Yup from "yup";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLinkedin} from "@fortawesome/free-brands-svg-icons";
-import Creator from "../components/Creator.tsx";
 import {faGithub} from "@fortawesome/free-brands-svg-icons";
+import { motion, useInView } from 'framer-motion';
+import FAQ from "../components/Question";
+
 
 
 
@@ -20,6 +20,8 @@ const Landing = () => {
     const [selectedCreator, setSelectedCreator] = useState(false)
     const [loginInfo, setLoginInfo] = React.useState({});
     const [registerInfo, setRegisterInfo] = React.useState({});
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true });
 
     const loginValidation = Yup.object().shape({
         email: Yup.string().required("Email address is required"),
@@ -180,8 +182,19 @@ const Landing = () => {
        <div>
         {/* Navbar */}
 
-        <div className="fixed w-full h-24 bg-white flex justify-center items-center opacity-90">
-            <div className="absolute left-20"><img className="scale-105" src="/public/imgs/logo.svg"/></div>
+        <div className="fixed w-full h-24 bg-white flex justify-center items-center opacity-90 z-50">
+            <motion.div 
+                className="absolute left-20"
+                variants={{
+                    hidden: { rotate: 0 },
+                    visible: { rotate: 360 }
+                    }}
+                    initial= "hidden"
+                    animate= "visible"
+                    transition={{duration: 3, delay: 0.25}}
+                >
+                    <img className="scale-105" src="/public/imgs/logo.svg"/>
+                </motion.div>
             <div className="w-1/3 text-md flex justify-around rounded-3xl">
                 <div>Features</div>
                 <div>Team</div>
@@ -194,30 +207,100 @@ const Landing = () => {
         {/* Hero Section */}
         <div className="h-screen pt-36 text-black flex flex-col justify-center items-center">
             <div className="text-black text-7xl font-bold flex flex-col items-center">
-                <h1 className="mt-6">Hive to <span className="text-honey">Collaborate.</span></h1>
-                <h1 className="mt-6">Buzz to <span className="text-honey">Compete.</span></h1>
-                <h1 className="mt-6">Sweeten your <span className="text-honey">Code.</span></h1>
+                <motion.h1 
+                className="mt-6"
+                variants={{
+                    hidden: {opacity: 0, y:-50},
+                    visible: {opacity: 100, y:0}
+                }}
+                initial= "hidden"
+                animate= "visible"
+                transition={{duration: 1, delay: 0.25}}
+                >
+                    Hive to <span className="text-honey">Collaborate.</span>
+
+                </motion.h1>
+
+
+                <motion.h1 
+                className="mt-6"
+                variants={{
+                    hidden: {opacity: 0, y:-50},
+                    visible: {opacity: 100, y:0}
+                }}
+                initial= "hidden"
+                animate= "visible"
+                transition={{duration: 1, delay: 1}}
+                >
+                    Buzz to <span className="text-honey">Compete.</span>
+
+                </motion.h1>
+
+
+                <motion.h1 
+                className="mt-6"
+                variants={{
+                    hidden: {opacity: 0, y:-50},
+                    visible: {opacity: 100, y:0}
+                }}
+                initial= "hidden"
+                animate= "visible"
+                transition={{duration: 1, delay: 1.75}}
+                >
+                    Sweeten your <span className="text-honey">Code.</span>
+
+                </motion.h1>
             </div>
 
-            <div className="mt-20 text-2xl text-gray-500 text-center font-thin">
+            <motion.div 
+            className="mt-20 text-2xl text-gray-500 text-center font-thin"
+            variants={{
+                hidden: {opacity: 0},
+                visible: {opacity: 100}
+            }}
+            initial= "hidden"
+            animate= "visible"
+            transition={{duration: 1.5, delay: 2.75}}
+            >
+
+
                 <h3>Work with friends or battle against rivals to sharpen </h3>
                 <h3>your programming skills.</h3>
-            </div>
+            </motion.div>
 
-            <div className="w-1/4 mt-20 flex justify-evenly ">
+            <motion.div 
+            className="w-1/4 mt-20 flex justify-evenly "
+            variants={{
+                hidden: {opacity: 0},
+                visible: {opacity: 100}
+            }}
+            initial= "hidden"
+            animate= "visible"
+            transition={{duration: 1.5, delay: 2.75}}
+            >
                 <button className="w-40 py-3 bg-honey text-xl rounded-xl cursor-not-allowed">Get Started</button>
-                <button className="w-40 py-3 bg-coal text-white text-xl rounded-xl cursor-pointer">FAQ</button>
-            </div>
+                <button className="w-40 py-3 ml-12 bg-coal text-white text-xl rounded-xl cursor-pointer">FAQ</button>
+            </motion.div>
         </div>
 
         {/* Features Section */}
         <div>
 
             {/* Hive Mentality */}
-            <div className="h-screen text-7xl flex flex-col justify-center items-center">
-                <h1>Give <span className="text-honey">hive-mentality</span></h1>
-                <h1 className="mt-4">a new <span className="text-honey">meaning</span>.</h1>
-            </div>
+            <motion.div
+                ref={ref}
+                className="h-screen text-7xl flex flex-col justify-center items-center"
+                initial={{ opacity: 0, scale: 2 }} // Start hidden and slightly offscreen
+                animate={{ opacity: isInView ? 1 : 0, scale: isInView ? 2 : 50 }} // Animate to visible
+                transition={{ duration: 2, ease: 'easeOut' }} // Customize the timing
+                >
+                <h1>
+                    Give <span className="text-honey">hive-mentality</span>
+                </h1>
+                <h1 className="mt-4">
+                    a new <span className="text-honey">meaning</span>.
+                </h1>
+            </motion.div>
 
             {/* Collaborate Section */}
             <div className="h-screen py-36">
@@ -330,8 +413,8 @@ const Landing = () => {
                 </div>
             </div>
             
-            <div className="w-2/3 h-full ml-24 bg-black">
-                FAQs
+            <div className="w-2/3 h-full ml-24 flex flex-col justify-between">
+                <FAQ/>
             </div>
         </div>
 

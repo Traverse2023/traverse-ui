@@ -18,6 +18,7 @@ import NotificationSocket from "./sockets/notifications.js";
 import {getGroups} from "./api/main-service.js";
 import CallContainer from "./components/CallContainer.tsx";
 import NavBar from "./components/NavBar.jsx";
+import Loading from "./pages/Loading";
 
 
 
@@ -67,8 +68,9 @@ function App() {
         routes = (
             <Router>
                 <Routes>
-                    <Route path="/" element={<Landing />} />
+                    <Route path="/" element={<Landing/>} />
                      {/*<Route path="*" element={<Navigate to="/" replace />} />*/}
+                     <Route path="/loading" element={<Loading/>} />
                 </Routes>
             </Router>
         );
