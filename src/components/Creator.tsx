@@ -51,7 +51,7 @@ const Creator = ({setBioModal, creator, setSelectedCreator}: {
                 flexGrow: '25px'
             }}></div>
             <div style={{
-                backgroundColor: "#886dd3",
+                backgroundColor: "#F0B62B",
                 margin: "auto",
                 borderRadius: "10px",
                 padding: "2px 2px 2px 2px",
@@ -61,7 +61,7 @@ const Creator = ({setBioModal, creator, setSelectedCreator}: {
                 <img src={creator.pfp} style={{width: "100px", height: "100px", borderRadius: "10px"}}/>
             </div>
             <h2 style={{marginBottom: "0px"}}>{creator.firstName} {creator.lastName}</h2>
-            <h3 style={{color: "#7F56D9", flexGrow: '25px', marginBottom: "0"}}>{creator.position}</h3>
+            <h3 style={{color: "#F0B62B", flexGrow: '25px', marginBottom: "0"}}>{creator.position}</h3>
             <p style={{flexGrow: '25px'}}>{creator.quote}</p>
             <div style={{
                 display: 'flex',
