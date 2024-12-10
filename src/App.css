@@ -147,7 +147,7 @@ html{
 
 }
 .auth-input:focus {
-  /*background-color: #7F56D9;*/
+  /*background-color: #F0B62B;*/
   outline: none;
 }
 
@@ -177,7 +177,7 @@ html{
   width: 200px;
   padding-top: 10px;
   padding-bottom: 10px;
-  background-color: rgb(127, 86, 217);
+  background-color: #F0B62B;
   color: white;
   border-radius: 3px;
   border-style: none;
@@ -188,7 +188,7 @@ html{
 }
 
 .auth-btn:hover {
-  background-color: rgba(127, 86, 217, 0.7)
+  background-color: #e6bd51
 }
 
 nav{
@@ -298,7 +298,7 @@ position: relative;
 } */
 
 .botLeftBubble{
-  background-color: #7F56D9;
+  background-color: #F0B62B;
   border-radius: 18.36px;
   width: 285.16px;
   height: 90.84px;
@@ -306,7 +306,7 @@ position: relative;
   top: 350px;
   z-index: 2;
   background-color: #F5F5F4;
-  border: solid #7F56D9;
+  border: solid #F0B62B;
   border-width: 0.76px;
   box-shadow: 0px 18.360000610351562px 38.25px 0px rgba(0, 0, 0, 0.15);
   text-align: left;
@@ -315,7 +315,7 @@ position: relative;
 }
 /* 
 .upperRightBubble{
-  background-color: #7F56D9;
+  background-color: #F0B62B;
   border-radius: 18.36px;
   width: 116.72px;
   height: 189.2px;
@@ -323,13 +323,13 @@ position: relative;
   right: 200px;
   z-index: 2;
   background-color: #F5F5F4;
-  border: solid #7F56D9;
+  border: solid #F0B62B;
   border-width: 0.76px;
   box-shadow: 0px 18.360000610351562px 38.25px 0px rgba(0, 0, 0, 0.15);
 }
 
 .botRightBubble{
-  background-color: #7F56D9;
+  background-color: #F0B62B;
   border-radius: 18.36px;
   width: 169.92px;
   height: 85.68px;
@@ -338,7 +338,7 @@ position: relative;
   left: 550px;
   z-index: 2;
   background-color: #F5F5F4;
-  border: solid #7F56D9;
+  border: solid #F0B62B;
   border-width: 0.76px;
   box-shadow: 0px 18.360000610351562px 38.25px 0px rgba(0, 0, 0, 0.15);
 } */
@@ -380,6 +380,13 @@ padding-right: 20vh;
 .microsoft{
   grid-area: microsoft;
 } */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+}
 
 .logo2{
   font-weight: 800;
@@ -433,7 +440,7 @@ padding-right: 20vh;
   grid-area: typewriter;
   
   overflow: hidden; /* Ensures the content is not revealed until the animation */
-  border-right: .15em solid #7F56D9; /* The typwriter cursor */
+  border-right: .15em solid #F0B62B; /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
   margin: 0 auto; /* Gives that scrolling effect as the typing happens */
   animation: 
@@ -451,7 +458,7 @@ padding-right: 20vh;
 
 @keyframes blink-caret {
   from, to { border-color: transparent }
-  50% { border-color: #7F56D9; }
+  50% { border-color: #F0B62B; }
 }
 
 /* .middleOpt{
@@ -493,7 +500,7 @@ a, .minimalBtn {
   font-family: 'Inter', sans-serif;
   cursor: pointer;
   border: none;
-  background-color: #7F56D9;
+  background-color: #F0B62B;
   padding: 10px 16px 10px 16px;
   color: white;
   font-weight: 600;
@@ -564,9 +571,17 @@ border-radius: 8px;
   flex-grow: 0.3;
   cursor: pointer;
 }
+.code-font {
+  font-family: "Source Code Pro", monospace;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
 
 .logo-wrapper {
   width: 150px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .logo-wrapper:hover {
@@ -719,14 +734,14 @@ border-radius: 8px;
   overflow-y: hidden;
   display: grid;
   height: 100%;
-  grid-template-columns: 200px 240px 5fr 240px;
+  grid-template-columns: 169px 240px 5fr 240px;
   grid-template-rows: 1fr;
   grid-template-areas: "groupSelector subGroupSelector messageArea members";
 }
 
 .groupSelector{
   grid-area: groupSelector;
-  background-color: #DFE1E5;
+  background-color: white;
   overflow-y: scroll;
   padding-top: 20px;
   padding-left: 10px;
@@ -764,7 +779,7 @@ border-radius: 8px;
 }
 
 .groupSelected{
-  background-color: rgb(127, 86, 1000);
+  background-color: #F0B62B;
   color: white;
 }
 
@@ -776,12 +791,14 @@ border-radius: 8px;
 
 .subGroupSelector{
   grid-area: subGroupSelector;
-  background-color: #EEEFF1;
+  background-color: #FFFFFF;
   position: relative;
+  border-left: 0.5px solid black;
+  border-right: 0.5px solid black;
 }
 
 .groupTitle{
-  border-bottom: solid gray;
+  /*border-bottom: solid gray;*/
   border-width: 0.5px;
   margin: 0;
   padding-top: 15px;
@@ -865,7 +882,7 @@ border-radius: 8px;
 }
 
 .channel.inactive:hover{
-  background-color: lightgray;
+  background-color: #F0B62B;
 }
 
 .channel h1{
@@ -888,7 +905,7 @@ border-radius: 8px;
 }
 
 .channel.active {
-  background-color: lightgray;
+  background-color: #F0B62B;
 }
 
 .bottom-tab{
@@ -1025,7 +1042,7 @@ border-radius: 8px;
 .pfp{
   height: 35px;
   width: 35px;
-  background-color: green;
+  background-color: #F0B62B;
   border-radius: 50%;
 }
 
@@ -1086,8 +1103,9 @@ border-radius: 8px;
 
 .members{
   grid-area: members;
-  background-color: #EEEFF1;
+  background-color: white;
   padding-left: 20px;
+  border-left: 0.5px solid black;
 }
 
 .members ul{
@@ -1110,7 +1128,7 @@ border-radius: 8px;
 .navbar{
   grid-area: navbar;
   z-index: 2;
-  background-color: white;
+  background: #F5F5F5;
 }
 
 /* Profile */
@@ -1411,7 +1429,7 @@ border-radius: 8px;
 }
 
 .friend-options:hover{
-  background-color: #7F56D9;
+  background-color: #F0B62B;
   color: white;
 }
 
@@ -1766,7 +1784,7 @@ border-radius: 8px;
 
 .question {
   grid-area: question;
-  background-color: #7F56D9;
+  background-color: #F0B62B;
   height: 100% !important;
   width: 50%;
 }
@@ -1786,7 +1804,7 @@ border-radius: 8px;
 .footer {
   position: relative;
   width: 100%;
-  background: #3586ff;
+  background: #F0B62B;
   min-height: 100px;
   padding: 20px 50px;
   display: flex;
@@ -1973,7 +1991,7 @@ border-radius: 8px;
 }
 
 .button-container button {
-  background-color: rgb(127, 86, 1000);
+  background-color: #F0B62B;
   color: white;
   padding: 5px 10px;
   border: none;
@@ -2080,7 +2098,7 @@ div.modal-content {
 }
 
 .create-group-button {
-  background-color: rgb(127, 86, 1000);
+  background-color: #F0B62B;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -2092,7 +2110,7 @@ div.modal-content {
 }
 
 .create-group-button:hover {
-  background-color: #0056b3;
+  background-color: #f2ca4e;
 }
 
 input[type="text"] {

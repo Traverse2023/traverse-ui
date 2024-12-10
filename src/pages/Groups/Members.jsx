@@ -12,8 +12,9 @@ const FriendsComponent = ({ arr }) => {
             {arr.map((user) => {
                 return (
                     <li key={user.id}>
-                        <Link to={`/profile/${user.id}`}>
-                            <img className="pfp" src={user.pfpURL} alt="profile" /> <span>{`${user.firstName} ${user.lastName}`}</span>
+                        <Link to={`/profile/${user.id}`} style={{display: "flex", alignItems: "center", gap: "5px"}}>
+                            {/*<img className="pfp" src={user.pfpURL} /> <span>{`${user.firstName} ${user.lastName}`}</span>*/}
+                            <img className="pfp" src="./imgs/bryan.png" /> <span>{`${user.firstName} ${user.lastName}`}</span>
                         </Link>
                     </li>
                 );
@@ -155,7 +156,7 @@ const Members = () => {
                     disabled={selectedFriends.length === 0}
                     className="add-button"
                     style={{
-                        backgroundColor: selectedFriends.length === 0 ? 'gray' : '#7F56D9',
+                        backgroundColor: selectedFriends.length === 0 ? 'gray' : '#F0B62B',
                         color: 'white'
                     }}
                 >Add Members

@@ -17,6 +17,7 @@ import { GroupContext } from "../context/group-context.tsx";
 import CallContainer from "./CallContainer.tsx";
 import usePaginatedNotifications from "../hooks/usePaginatedNotifications.js";
 import {useAuth} from "../hooks/useAuth.tsx";
+import Logo from "./Logo.tsx";
 
 
 const NavBar = () => {
@@ -72,10 +73,8 @@ const NavBar = () => {
         <div className="navbar">
             <div className="logo2">
                 <div className="logo-wrapper">
-                    <img
-                        src="imgs/logo-svg.svg"
-                        style={{ height: "40px", paddingTop: "7px" }}
-                    />
+                    <Logo />
+                    <div style={{lineHeight: "15px", letterSpacing: "2px", fontSize: "12px"}}><p className="code-font" style={{margin: 0, height: "fit-content"}}>Code</p><p className="code-font" style={{margin: 0}}>Hive</p></div>
                 </div>
             </div>
             <input
